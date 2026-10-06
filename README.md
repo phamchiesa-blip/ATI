@@ -1,77 +1,119 @@
-# Data & Feature Engineering — hướng dẫn dùng
+# AI Movie Recommendation
 
-Module này lo phần "Data Storage" + "Movie Feature Vector" trong kiến trúc hệ
-thống (mục 4.1 báo cáo). Ba bạn còn lại (Sơn, Võ, Đôn) không cần đụng vào các
-file bên trong `src/`, chỉ cần import và gọi các hàm ở cuối file này.
+Hệ thống gợi ý phim dựa trên AI, sử dụng Content-Based Filtering với Cosine Similarity.
 
-## 1. Chuẩn bị dữ liệu
+## Cấu trúc dự án
+
+```
+ATI/
+│
+├── main.py                          # Chạy pipeline xây dựng database
+├── evaluate.py                      # Chạy evaluation Precision/Recall/F1@K
+│
+├── backend/
+│   ├── api/
+│   │   ├── auth.py                  # Route: đăng ký / đăng nhập
+│   │   ├── movies.py                # Route: tìm phim, xem chi tiết
+│   │   ├── feedback.py              # Route: like / dislike
+│   │   ├── onboarding.py            # Route: onboarding chọn genre
+│   │   └── recommendations.py      # Route: lấy gợi ý
+│   │
+│   ├── models/
+│   │   ├── user.py                  # Data model: User
+│   │   ├── movie.py                 # Data model: Movie
+│   │   └── feedback.py             # Data model: Feedback
+│   │
+│   ├── services/
+│   │   ├── auth_service.py          # Logic: xác thực người dùng
+│   │   ├── movie_service.py         # Logic: tìm kiếm, phim phổ biến
+│   │   ├── profile_service.py       # Logic: quản lý User Profile (onboarding/like/dislike)
+│   │   └── recommendation_service.py # Logic: gọi AI pipeline
+│   │
+│   └── database/
+│       └── database.py              # SQLite: lưu/đọc dữ liệu, API chung
+│
+├── ai/
+│   ├── preprocessing.py             # Bước 1: đọc CSV, làm sạch dữ liệu
+│   ├── feature_engineering.py       # Bước 2: xây vector đặc trưng
+│   ├── tfidf.py                     # TF-IDF + SVD cho overview
+│   ├── user_profile.py              # Xây dựng User Profile từ like/dislike
+│   ├── similarity.py                # Cosine Similarity
+│   ├── ranking.py                   # Re-ranking: similarity + rating + popularity + recency
+│   ├── baseline.py                  # Baseline: average profile, không re-rank
+│   ├── neural_network.py            # Tier 2: SGDClassifier online learner
+│   ├── evaluation.py                # Evaluation: Precision/Recall/F1@K + simulated users
+│   └── recommender.py              # Orchestrator: profile -> similarity -> ranking
+│
+├── data/
+│   └── movies.csv                   # Đặt file TMDB CSV ở đây
+│
+├── tests/
+│   └── mock_data.py                 # Dữ liệu giả để test khi chưa có movies.db
+│
+├── frontend/                        # React project
+│
+├── requirements.txt
+└── README.md
+```
+
+## Cách dùng
+
+### 1. Chuẩn bị dữ liệu
 
 Tải 2 file CSV từ Kaggle **TMDB 5000 Movie Dataset**:
 - `tmdb_5000_movies.csv`
 - `tmdb_5000_credits.csv`
 
-Đặt vào một thư mục bất kỳ (không cần bỏ vào repo, file khá nặng).
+Đặt vào thư mục `data/`.
 
-## 2. Chạy pipeline (chỉ cần chạy 1 lần, hoặc mỗi khi dataset đổi)
+### 2. Xây dựng database (chạy 1 lần)
 
 ```bash
-cd src
-pip install -r ../requirements.txt
-python build_dataset.py --movies path/to/tmdb_5000_movies.csv \
-                         --credits path/to/tmdb_5000_credits.csv \
-                         --db movies.db
+pip install -r requirements.txt
+
+python main.py \
+    --movies data/tmdb_5000_movies.csv \
+    --credits data/tmdb_5000_credits.csv \
+    --db movies.db
 ```
 
-Lệnh trên sẽ tạo ra file `movies.db` (SQLite) chứa:
-- **`movies`**: thông tin gốc của phim (title, genres, director, cast, rating, popularity, release_date) — tương ứng "Movie Dataset" + "Movie Rating" trong sơ đồ kiến trúc.
-- **`movie_feature_vectors`**: vector đặc trưng đã xử lý của từng phim (324 chiều: genre + director + cast + overview (SVD) + rating/popularity/release year đã chuẩn hóa) — tương ứng "Movie Feature Vectors".
-- **`user_interaction_history`**: bảng trống ban đầu, để trống cho Sơn ghi Like/Dislike của user vào.
+Pipeline sẽ tạo file `movies.db` (SQLite) chứa:
+- **`movies`**: thông tin phim (title, genres, director, cast, rating...)
+- **`movie_feature_vectors`**: vector đặc trưng (genre + director + cast + TF-IDF + numeric)
+- **`user_interaction_history`**: bảng ghi like/dislike
+- **`user_profiles`**: vector User Profile đã persist (khởi tạo từ onboarding, cập nhật mỗi like/dislike)
 
-Chạy thử trên dataset thật (4803 phim), pipeline chạy hết khoảng 7-8 giây, ra 4772 phim sau khi làm sạch (bỏ phim thiếu overview/genre).
-
-## 3. API dùng chung (import từ `feature_store.py`)
+### 3. API cho các module khác
 
 ```python
-from feature_store import (
-    get_movie_vector,        # lấy vector của 1 phim
-    get_all_vectors,         # lấy toàn bộ vector 1 lần (dùng cho Cosine Similarity)
-    get_movie_metadata,      # lấy thông tin hiển thị (title, genres, rating...)
-    log_interaction,         # ghi lại 1 lượt Like/Dislike
-    get_user_interactions,   # lấy lịch sử Like/Dislike của 1 user
+from backend.database.database import (
+    get_movie_vector,        # vector của 1 phim
+    get_all_vectors,         # toàn bộ vector (dùng cho Cosine Similarity)
+    get_movie_metadata,      # thông tin hiển thị (title, genres, rating...)
+    log_interaction,         # ghi Like/Dislike
+    get_user_interactions,   # lịch sử Like/Dislike của 1 user
 )
+
+from backend.services.recommendation_service import recommend_for_user
+
+recs = recommend_for_user(user_id="user123", top_n=10, db_path="movies.db")
 ```
 
-**Cho Sơn (Recommendation Core):**
-```python
-vector = get_movie_vector(movie_id, db_path="movies.db")          # 1 phim
-movie_ids, matrix = get_all_vectors(db_path="movies.db")          # toàn bộ, để tính Cosine Similarity
-log_interaction(user_id, movie_id, "like", db_path="movies.db")   # khi user bấm Like
-history = get_user_interactions(user_id, db_path="movies.db")     # để dựng lại User Profile
-```
+### 4. Kiểm tra chất lượng vector
 
-**Cho Võ (Frontend):**
-```python
-info = get_movie_metadata(movie_id, db_path="movies.db")
-# info = {"title": ..., "genres": [...], "director": ..., "cast": [...],
-#         "vote_average": ..., "popularity": ..., "release_date": ...}
-```
+Cosine Similarity giữa *Iron Man* và *Iron Man 2* ~ **0.83**, trong khi giữa *Iron Man* và phim không liên quan ~ **0.33** — vector phản ánh đúng nội dung phim.
 
-**Cho Đôn (Ranking/NN/Evaluation):** dùng `get_movie_metadata()` để lấy `vote_average`, `popularity`, `release_date` (thô, chưa chuẩn hóa) cho bước Ranking (mục 3.7), và `get_all_vectors()` nếu cần train Neural Network.
+## Module AI
 
-## 4. Cấu trúc file trong `src/`
-
-| File | Việc gì |
-|---|---|
-| `data_pipeline.py` | Đọc 2 CSV, merge, làm sạch, parse cột JSON (genres/cast/crew) |
-| `feature_engineering.py` | Xây vector đặc trưng (genre, director, cast, overview, rating/popularity/newness) |
-| `feature_store.py` | Lưu vào SQLite + toàn bộ API public ở trên |
-| `build_dataset.py` | Script chạy toàn bộ pipeline, tạo `movies.db` |
-
-## 5. Đã kiểm tra
-
-Sanity check: độ giống nhau (Cosine Similarity) giữa *Iron Man* và *Iron Man 2* là **0.83**, trong khi giữa *Iron Man* và một phim không liên quan chỉ **0.33** — cho thấy vector đặc trưng phản ánh đúng nội dung phim.
-
-## Có thể chỉnh sau nếu cần
-
-- Số chiều overview (SVD), số director/cast top-K trong `FeatureConfig` (đầu file `feature_engineering.py`) — tăng lên nếu muốn vector chi tiết hơn, giảm nếu muốn nhẹ/nhanh hơn.
-- Trọng số giữa các phần feature (hiện đang cộng thẳng, chưa có trọng số riêng) — nếu sau này thấy gợi ý bị lệch quá nhiều theo 1 yếu tố (ví dụ toàn theo overview), có thể nhân hệ số cho từng khối trước khi ghép.
+| File | Chức năng |
+|------|-----------|
+| `preprocessing.py` | Đọc 2 CSV, merge, làm sạch, parse cột JSON |
+| `feature_engineering.py` | Xây vector (genre, director, cast, overview, numeric) |
+| `tfidf.py` | TF-IDF + SVD cho phần overview |
+| `user_profile.py` | Tổng hợp profile user từ lịch sử like/dislike (α=1.0, β=0.5) + init từ genre onboarding |
+| `similarity.py` | Cosine Similarity giữa profile và toàn bộ phim |
+| `ranking.py` | Re-rank theo similarity + rating + popularity + recency + diversity |
+| `baseline.py` | Baseline: average profile, sort cosine, không re-rank (để so sánh) |
+| `recommender.py` | Orchestrator: gọi toàn bộ pipeline AI |
+| `neural_network.py` | Tier 2: SGDClassifier online learner (partial_fit), re-score Tier-1 |
+| `evaluation.py` | Simulated users, Precision/Recall/F1@K, cold-start test |
