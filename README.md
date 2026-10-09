@@ -16,10 +16,12 @@ Tải 2 file CSV từ Kaggle **TMDB 5000 Movie Dataset**:
 
 ```bash
 cd src
+```
+```bash
 pip install -r ../requirements.txt
-python build_dataset.py --movies path/to/tmdb_5000_movies.csv \
-                         --credits path/to/tmdb_5000_credits.csv \
-                         --db movies.db
+```
+```bash
+python build_dataset.py --movies path/to/tmdb_5000_movies.csv \ --credits path/to/tmdb_5000_credits.csv \ --db movies.db
 ```
 
 Lệnh trên sẽ tạo ra file `movies.db` (SQLite) chứa:
