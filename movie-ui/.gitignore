@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Dữ liệu sinh ra trên máy mỗi người (tạo lại bằng build_dataset.py)
+movies.db
+accounts.db
+*.csv
+
+# Bí mật
+.env
+.env.*
+!.env.example
+
+# Node / giao diện
+node_modules/
+dist/
+*.local
+
+# Hệ điều hành / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

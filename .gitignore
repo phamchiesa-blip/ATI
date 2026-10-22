@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Dữ liệu sinh ra trên máy mỗi người (tạo lại bằng build_dataset.py)
+*.db
+*.db*
+*.csv
+
+# Bí mật
+.env
+.env.*
+!.env.example
+
+# Node / giao diện
+node_modules/
+dist/
+*.local
+
+# Hệ điều hành / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

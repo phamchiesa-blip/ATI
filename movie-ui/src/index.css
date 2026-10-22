@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f2f5fa;
+  --color-ink: #14213d;
+  --color-mute: #56607a;
+  --color-cobalt: #2f4bff;
+  --color-lemon: #ffd23f;
+  --color-coral: #e5484d;
+  --font-display: "Bricolage Grotesque", "Be Vietnam Pro", sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-cobalt);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
