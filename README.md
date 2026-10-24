@@ -77,3 +77,6 @@ Sanity check: độ giống nhau (Cosine Similarity) giữa *Iron Man* và *Iron
 
 - Số chiều overview (SVD), số director/cast top-K trong `FeatureConfig` (đầu file `feature_engineering.py`) — tăng lên nếu muốn vector chi tiết hơn, giảm nếu muốn nhẹ/nhanh hơn.
 - Trọng số giữa các phần feature (hiện đang cộng thẳng, chưa có trọng số riêng) — nếu sau này thấy gợi ý bị lệch quá nhiều theo 1 yếu tố (ví dụ toàn theo overview), có thể nhân hệ số cho từng khối trước khi ghép.
+
+
+<!-- python -m uvicorn api:app --reload --port 8000 -->
