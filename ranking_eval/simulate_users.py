@@ -321,7 +321,14 @@ def prepare_simulated_user(
     onboarding_scale: float = 1.0,
     k_deep: int = 50,
 ) -> dict[str, Any]:
-    """Setup user, onboard, record interactions, and retrieve candidate pool."""
+    """Setup user, onboard, record interactions, and retrieve candidate pool.
+
+    Interaction generation rules:
+    - If m_likes == 0: no likes or dislikes are recorded (onboarding only; dislike_count is not used).
+    - If m_likes > 0: generates m_likes (with noise_ratio from outside the persona pool)
+      and dislike_count dislikes sampled from eligible non-pool movies.
+      (In run_benchmark: dislike_count is 2 for m in {1, 3}, and 3 for m in {5, 10}).
+    """
     rng = random.Random(seed)
 
     onboard_user(user_id, db_path=db_path, selected_genres=persona.genres)
@@ -430,7 +437,15 @@ def simulate_single_user(
     ranking_weights: Any = None,
     neural_weight: float = 0.20,
 ) -> dict[str, Any]:
-    """Run one complete user simulation across all 5 rankers."""
+    """Run one complete user simulation across all 6 rankers:
+    (0a) Random, (0b) Popular, (1) Baseline Cosine, (2) Tier 1 Ranking,
+    (3a) Tier 2 Old (Prob mode), (3b) Tier 2 New (Logit MinMax mode).
+
+    Dislike count convention:
+    - m = 0: 0 dislikes (onboarding only)
+    - m in {1, 3}: 2 dislikes
+    - m in {5, 10}: 3 dislikes
+    """
     prep = prepare_simulated_user(
         persona=persona,
         scenario=scenario,
@@ -455,17 +470,26 @@ def simulate_single_user(
         tier1_rows = rank_candidates(candidates)[:k_deep]
     tier1_recs = [row["movie_id"] for row in tier1_rows]
 
-    # Tier 2
-    tier2_rows = _apply_neural_reranking(user_id, tier1_rows, db_path=db_path, neural_weight=neural_weight)[:k_deep]
-    tier2_recs = [row["movie_id"] for row in tier2_rows]
-    neural_used = bool(tier2_rows[0].get("neural_used", False)) if tier2_rows else False
+    # Tier 2 Old (mode='prob', legacy unscaled)
+    tier2_old_rows = _apply_neural_reranking(
+        user_id, tier1_rows, db_path=db_path, neural_weight=neural_weight, score_mode="prob"
+    )[:k_deep]
+    tier2_old_recs = [row["movie_id"] for row in tier2_old_rows]
+    neural_used = bool(tier2_old_rows[0].get("neural_used", False)) if tier2_old_rows else False
+
+    # Tier 2 New (mode='logit_minmax', standardized features)
+    tier2_new_rows = _apply_neural_reranking(
+        user_id, tier1_rows, db_path=db_path, neural_weight=neural_weight, score_mode="logit_minmax"
+    )[:k_deep]
+    tier2_new_recs = [row["movie_id"] for row in tier2_new_rows]
 
     metrics = {
         "0a_Random": evaluate_top_k_for_ranker(prep["random_recs"], test_relevant_ids, k=k, k_deep=k_deep),
         "0b_Popular": evaluate_top_k_for_ranker(prep["popular_recs"], test_relevant_ids, k=k, k_deep=k_deep),
         "1_Baseline": evaluate_top_k_for_ranker(prep["baseline_recs"], test_relevant_ids, k=k, k_deep=k_deep),
         "2_Tier1": evaluate_top_k_for_ranker(tier1_recs, test_relevant_ids, k=k, k_deep=k_deep),
-        "3_Tier2": evaluate_top_k_for_ranker(tier2_recs, test_relevant_ids, k=k, k_deep=k_deep),
+        "3_Tier2_Old": evaluate_top_k_for_ranker(tier2_old_recs, test_relevant_ids, k=k, k_deep=k_deep),
+        "3_Tier2_New": evaluate_top_k_for_ranker(tier2_new_recs, test_relevant_ids, k=k, k_deep=k_deep),
     }
 
     _rec._registry._profiles.pop(user_id, None)
