@@ -1,6 +1,9 @@
 import os
 import sys
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 sys.path.insert(0, os.path.dirname(__file__))
 _DATA_MODULE_SRC = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "data_module", "src")

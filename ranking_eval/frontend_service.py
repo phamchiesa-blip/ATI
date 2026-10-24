@@ -29,12 +29,57 @@ from recommender import (
 
 from .integration import get_ranked_recommendations
 
+DEFAULT_ONBOARDING_TOP_N: int = 8
+
 
 def _decode_movie(row):
     item = dict(row)
     item["genres"] = json.loads(item.get("genres") or "[]")
     item["cast"] = json.loads(item.get("cast") or "[]")
     return item
+
+
+def get_popular_movies(
+    *,
+    db_path: str,
+    limit: int = 10,
+    min_vote_count: int = 500,
+    min_vote_average: float = 6.5,
+    exclude_ids: set[int] | None = None,
+    exclude_genres: set[str] | None = None,
+) -> list[dict]:
+    """Retrieve popular and well-rated movies, excluding specified movie IDs
+    and movies containing any excluded (hated) genres.
+
+    Shared between api.py and ranking_eval/integration.py for fallback when a
+    user has no profile or interaction history yet, or only has dislikes.
+    """
+    exclude = exclude_ids or set()
+    hated_genres = {g.casefold() for g in (exclude_genres or set())}
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    query = """
+        SELECT * FROM movies
+        WHERE vote_count >= ? AND vote_average >= ?
+        ORDER BY popularity DESC
+    """
+    raw_rows = conn.execute(query, (min_vote_count, min_vote_average)).fetchall()
+    conn.close()
+
+    results = []
+    for r in raw_rows:
+        mid = int(r["movie_id"])
+        if mid in exclude:
+            continue
+        decoded = _decode_movie(r)
+        if hated_genres:
+            movie_genres = {g.casefold() for g in decoded.get("genres", [])}
+            if movie_genres.intersection(hated_genres):
+                continue
+        results.append(decoded)
+        if len(results) >= limit:
+            break
+    return results
 
 
 def list_movies(
@@ -78,25 +123,43 @@ def onboard_user(
     db_path: str,
     selected_genres: list[str] | None = None,
     favorite_movie_ids: list[int] | None = None,
+    top_n_per_genre: int = DEFAULT_ONBOARDING_TOP_N,
 ) -> dict:
     """Seed Part II's initial profile from favorite movies or chosen genres.
 
     If favorite movie IDs are provided, use those as the stronger signal.
-    Otherwise, seed from the vectors of all stored movies matching the chosen
-    genre(s). The Part II profile builder then averages those movie vectors.
+    Otherwise, seed from top N prominent movies (sorted by popularity and
+    vote_count) for each chosen genre, avoiding profile dilution. The Part II
+    profile builder then averages those movie vectors.
     """
     genres = [genre.strip() for genre in (selected_genres or []) if genre.strip()]
     movie_ids = list(dict.fromkeys(int(mid) for mid in (favorite_movie_ids or [])))
     source = "favorite_movies"
     if not movie_ids and genres:
         conn = sqlite3.connect(db_path)
-        rows = conn.execute("SELECT movie_id, genres FROM movies").fetchall()
+        conn.row_factory = sqlite3.Row
+        # Order by popularity DESC, vote_count DESC, movie_id ASC for stable deterministic ordering
+        rows = conn.execute(
+            """SELECT movie_id, genres FROM movies
+               WHERE genres IS NOT NULL AND genres != '[]'
+               ORDER BY popularity DESC, vote_count DESC, movie_id ASC"""
+        ).fetchall()
         conn.close()
-        wanted = {genre.casefold() for genre in genres}
-        for movie_id, genres_json in rows:
-            stored_genres = json.loads(genres_json or "[]")
-            if wanted.intersection(genre.casefold() for genre in stored_genres):
-                movie_ids.append(int(movie_id))
+
+        merged_ids = []
+        for genre in genres:
+            wanted = genre.casefold()
+            genre_found = 0
+            for row in rows:
+                stored_genres = [g.casefold() for g in json.loads(row["genres"] or "[]")]
+                if wanted in stored_genres:
+                    merged_ids.append(int(row["movie_id"]))
+                    genre_found += 1
+                    if genre_found >= top_n_per_genre:
+                        break
+
+        # Deduplicate while preserving deterministic order
+        movie_ids = list(dict.fromkeys(merged_ids))
         source = "selected_genres"
 
     if not movie_ids:

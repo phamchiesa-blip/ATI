@@ -1,4 +1,4 @@
-﻿"""
+"""
 user_profile.py
 ---------------
 Quan ly User Profile duoi dang vector dac trung, khoi tao tu onboarding
@@ -43,6 +43,7 @@ class UserProfile:
         self.user_id = user_id
         self.alpha = alpha
         self.beta = beta
+        self.is_onboarded: bool = False
         self._vector: "np.ndarray | None" = (
             vector.astype(np.float32).copy() if vector is not None else None
         )
@@ -63,6 +64,7 @@ class UserProfile:
             return
         stacked = np.vstack([v.astype(np.float32) for v in movie_vectors])
         self._vector = stacked.mean(axis=0)
+        self.is_onboarded = True
 
     def _ensure_initialized(self, reference_vector: np.ndarray) -> None:
         """Neu profile chua co vector, khoi tao bang zero vector cung chieu."""

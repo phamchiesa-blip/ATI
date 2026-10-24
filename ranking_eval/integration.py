@@ -24,6 +24,9 @@ from .evaluation import precision_recall_f1_at_k
 from .ranking import baseline_rank, rank_candidates
 
 
+CLEARLY_HATED_GENRE_THRESHOLD: float = 0.5
+
+
 def get_ranked_recommendations(
     user_id: str,
     *,
@@ -37,17 +40,89 @@ def get_ranked_recommendations(
     ``candidate_k`` is how many cosine recommendations Part II supplies.
     ``top_n`` is how many reranked recommendations to return.
     """
-    cosine_results = get_cosine_recommendations(
-        user_id, k=candidate_k, db_path=db_path
+    from collections import Counter
+    import recommender as _rec
+    from feature_store import get_user_interactions
+    from .frontend_service import get_popular_movies
+
+    history = get_user_interactions(user_id, db_path=db_path)
+    likes = [h for h in history if h["action"] == "like"]
+    dislikes = [h for h in history if h["action"] == "dislike"]
+
+    prof = _rec._registry.get(user_id)
+    is_onboarded = getattr(prof, "is_onboarded", False) if prof else False
+    if not is_onboarded:
+        accounts_db = os.environ.get("ACCOUNTS_DB", "accounts.db")
+        if os.path.exists(accounts_db):
+            try:
+                import sqlite3
+                with sqlite3.connect(accounts_db) as conn:
+                    row = conn.execute(
+                        "SELECT 1 FROM onboarding WHERE user_id = ? AND (genres != '[]' OR favorites != '[]')",
+                        (user_id,),
+                    ).fetchone()
+                    if row:
+                        is_onboarded = True
+            except Exception:
+                pass
+
+    has_positive_signal = (len(likes) > 0) or is_onboarded
+
+    if has_positive_signal:
+        try:
+            cosine_results = get_cosine_recommendations(
+                user_id, k=candidate_k, db_path=db_path
+            )
+            candidates = []
+            for movie_id, cosine_score in cosine_results:
+                metadata = get_movie_metadata(movie_id, db_path=db_path)
+                if metadata is None:
+                    continue
+                candidates.append({
+                    "movie_id": int(movie_id),
+                    "cosine": float(cosine_score),
+                    "title": metadata["title"],
+                    "genres": metadata["genres"],
+                    "director": metadata["director"],
+                    "vote_average": metadata["vote_average"],
+                    "popularity": metadata["popularity"],
+                    "release_date": metadata["release_date"],
+                })
+            ranked = rank_candidates(candidates)
+            return _apply_neural_reranking(
+                user_id, ranked, db_path=db_path, neural_weight=neural_weight
+            )[:top_n]
+        except RuntimeError:
+            pass  # Fall through to popular fallback
+
+    # Fallback for cold start (no interactions) or dislike-only users (no positive signal)
+    rated_ids = {h["movie_id"] for h in history}
+    hated_genres = set()
+    if dislikes:
+        genre_counts = Counter()
+        for d in dislikes:
+            meta = get_movie_metadata(d["movie_id"], db_path=db_path)
+            if meta and meta.get("genres"):
+                for g in meta["genres"]:
+                    genre_counts[g.strip()] += 1
+
+        total_dislikes = len(dislikes)
+        hated_genres = {
+            g for g, count in genre_counts.items()
+            if (count / total_dislikes) >= CLEARLY_HATED_GENRE_THRESHOLD
+        }
+
+    popular = get_popular_movies(
+        db_path=db_path,
+        limit=top_n,
+        exclude_ids=rated_ids,
+        exclude_genres=hated_genres if hated_genres else None,
     )
     candidates = []
-    for movie_id, cosine_score in cosine_results:
-        metadata = get_movie_metadata(movie_id, db_path=db_path)
-        if metadata is None:
-            continue
+    for metadata in popular:
         candidates.append({
-            "movie_id": int(movie_id),
-            "cosine": float(cosine_score),
+            "movie_id": int(metadata["movie_id"]),
+            "cosine": 0.0,
             "title": metadata["title"],
             "genres": metadata["genres"],
             "director": metadata["director"],
@@ -56,9 +131,10 @@ def get_ranked_recommendations(
             "release_date": metadata["release_date"],
         })
     ranked = rank_candidates(candidates)
-    return _apply_neural_reranking(
-        user_id, ranked, db_path=db_path, neural_weight=neural_weight
-    )[:top_n]
+    for row in ranked:
+        row["final_score"] = row["ranking_score"]
+        row["neural_used"] = False
+    return ranked[:top_n]
 
 
 def _apply_neural_reranking(

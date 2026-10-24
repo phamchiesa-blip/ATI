@@ -61,7 +61,7 @@ from feature_store import (                                         # noqa: E402
 import tmdb_client                                                   # noqa: E402
 from similarity import cosine_similarity_bulk                       # noqa: E402
 from ranking_eval.frontend_service import (                        # noqa: E402
-    onboard_user, recommendations as ranked_recommendations,
+    onboard_user, recommendations as ranked_recommendations, get_popular_movies,
 )
 
 app = FastAPI(title="Movie Recommendation API")
@@ -759,15 +759,10 @@ def _ensure_profile(user_id: str) -> None:
 def _popular(user_id: str, k: int) -> dict:
     """Chua co gu: hien phim pho bien, diem tot (de nguoi dung thay danh sach ngay)."""
     rated = _rated_ids(user_id)
-    with _db() as c:
-        ids = [r["movie_id"] for r in c.execute(
-            "SELECT movie_id FROM movies WHERE vote_count >= 500 AND vote_average >= 6.5 "
-            "ORDER BY popularity DESC LIMIT ?", (k + len(rated),))]
+    popular = get_popular_movies(db_path=DB, limit=k, exclude_ids=rated)
     items = []
-    for mid in ids:
-        if mid in rated:
-            continue
-        card = _card(get_movie_metadata(mid, db_path=DB))
+    for meta in popular:
+        card = _card(meta)
         card.update(match_percent=None, reasons=[], neural_used=False)
         items.append(card)
     return {"items": items[:k], "personalized": False}
