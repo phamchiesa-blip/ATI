@@ -4,12 +4,16 @@ import { Play } from "lucide-react";
 import { api } from "./api";
 import { CardButtons, GRID, Notice, PosterLink, PosterTile, Rating, RateButtons, TrailerContext } from "./ui";
 
-const reasonText = (m) =>
-  m.match_percent == null
-    ? "Được nhiều người yêu thích"
-    : m.reasons?.length
-      ? `Vì bạn thích ${m.reasons.join(", ")}`
-      : "Có nội dung gần với những phim bạn đã chọn";
+const reasonText = (m, coldStart, isHero = false) =>
+  (coldStart || m.cold_start)
+    ? (isHero
+        ? "Phim đang được yêu thích, hãy bấm Thích/Không thích để hệ thống hiểu gu của bạn"
+        : "Phim đang được yêu thích")
+    : m.match_percent == null
+      ? "Được nhiều người yêu thích"
+      : m.reasons?.length
+        ? `Vì bạn thích ${m.reasons.join(", ")}`
+        : "Có nội dung gần với những phim bạn đã chọn";
 
 const PARTS = [
   ["cosine", "Giống gu của bạn"],
@@ -20,10 +24,10 @@ const PARTS = [
 ];
 
 // Các thành phần cấu thành điểm gợi ý (module Ranking), thang 0-100 so với các phim ứng viên
-function Breakdown({ data }) {
+function Breakdown({ data, coldStart }) {
   return (
     <ul className="mt-2 grid gap-2">
-      {PARTS.filter(([k]) => data[k] != null).map(([k, label]) => {
+      {PARTS.filter(([k]) => data[k] != null && (!coldStart || k !== "cosine")).map(([k, label]) => {
         const v = Math.round(data[k] * 100);
         return (
           <li key={k}>
@@ -41,7 +45,8 @@ function Breakdown({ data }) {
   );
 }
 
-function Hero({ movie, status, onRate }) {
+function Hero({ movie, status, onRate, coldStart }) {
+  const isCold = coldStart || Boolean(movie.cold_start);
   const openTrailer = useContext(TrailerContext);
   return (
     <section className="grid items-center gap-8 rounded-3xl bg-white p-6 md:grid-cols-[280px_1fr] md:p-10">
@@ -60,10 +65,10 @@ function Hero({ movie, status, onRate }) {
           ))}
         </div>
         <p className="mt-4 line-clamp-4 leading-relaxed text-mute">{movie.overview}</p>
-        <p className="mt-4 text-sm font-medium">{reasonText(movie)}</p>
+        <p className="mt-4 text-sm font-medium">{reasonText(movie, isCold, true)}</p>
 
         <div className="mt-5 flex flex-wrap items-start gap-x-10 gap-y-4">
-          {movie.match_percent != null ? (
+          {!isCold && movie.match_percent != null ? (
             <p className="flex items-baseline gap-2">
               <span className="font-display text-5xl font-extrabold text-cobalt">{movie.match_percent}%</span>
               <span className="text-sm text-mute">độ hợp</span>
@@ -74,7 +79,7 @@ function Hero({ movie, status, onRate }) {
           {movie.breakdown && (
             <div className="min-w-56 flex-1">
               <p className="text-sm font-semibold">Vì sao gợi ý phim này?</p>
-              <Breakdown data={movie.breakdown} />
+              <Breakdown data={movie.breakdown} coldStart={isCold} />
             </div>
           )}
         </div>
@@ -96,9 +101,10 @@ function Hero({ movie, status, onRate }) {
 }
 
 // Poster + "cuống vé": độ hợp, lý do gợi ý và (nếu có) bảng điểm thành phần
-function Ticket({ movie, min, max, status, onRate }) {
+function Ticket({ movie, min, max, status, onRate, coldStart }) {
+  const isCold = coldStart || Boolean(movie.cold_start);
   const [why, setWhy] = useState(false);
-  const personal = movie.match_percent != null;
+  const personal = !isCold && movie.match_percent != null;
   const width = max === min ? 100 : 35 + ((movie.match_percent - min) / (max - min)) * 65;
   return (
     <article>
@@ -122,7 +128,7 @@ function Ticket({ movie, min, max, status, onRate }) {
             <Rating value={movie.vote_average} />
           </p>
         )}
-        <p className="mt-2 text-xs leading-snug text-mute">{reasonText(movie)}</p>
+        <p className="mt-2 text-xs leading-snug text-mute">{reasonText(movie, isCold, false)}</p>
         {movie.breakdown && (
           <>
             <button
@@ -132,7 +138,7 @@ function Ticket({ movie, min, max, status, onRate }) {
             >
               {why ? "Ẩn chi tiết" : "Vì sao gợi ý?"}
             </button>
-            {why && <Breakdown data={movie.breakdown} />}
+            {why && <Breakdown data={movie.breakdown} coldStart={isCold} />}
           </>
         )}
       </div>
@@ -151,6 +157,7 @@ const MODES = [
 export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }) {
   const [items, setItems] = useState([]);
   const [personalized, setPersonalized] = useState(true);
+  const [coldStart, setColdStart] = useState(false);
   const [mode, setMode] = useState("proposed");
   const [state, setState] = useState("loading");
 
@@ -162,6 +169,7 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
         if (off) return;
         setItems(r.items);
         setPersonalized(r.personalized);
+        setColdStart(Boolean(r.cold_start));
         setState("ok");
       })
       .catch(() => !off && setState("error"));
@@ -170,25 +178,26 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
     };
   }, [rev, mode]);
 
+  const isCold = coldStart || !personalized;
   const [hero, ...rest] = items;
   const pcts = rest.map((m) => m.match_percent).filter((p) => p != null);
-  const min = Math.min(...pcts);
-  const max = Math.max(...pcts);
+  const min = pcts.length ? Math.min(...pcts) : 0;
+  const max = pcts.length ? Math.max(...pcts) : 100;
 
   return (
     <main className="mx-auto max-w-[1500px] px-5 py-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl font-extrabold">
-            {personalized ? "Dành cho bạn" : "Đang được yêu thích"}
+            {!isCold ? "Dành cho bạn" : "Đang được yêu thích"}
           </h1>
           <p className="mt-2 text-mute">
-            {personalized
+            {!isCold
               ? "Danh sách tự cập nhật mỗi khi bạn bấm Thích hoặc Không thích."
               : "Những phim nổi tiếng và được đánh giá cao."}
           </p>
         </div>
-        {personalized && (
+        {!isCold && (
           <div>
             <div role="group" aria-label="Cách gợi ý" className="inline-flex rounded-full bg-white p-1 ring-1 ring-ink/15">
               {MODES.map(([id, label]) => (
@@ -213,7 +222,7 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
         )}
       </div>
 
-      {state === "ok" && !personalized && (
+      {state === "ok" && isCold && (
         <div className="mt-6 flex flex-wrap items-center gap-4 rounded-2xl bg-white p-5 ring-1 ring-ink/10">
           <p className="min-w-60 flex-1">
             <strong>Muốn gợi ý riêng cho bạn?</strong> Chọn thể loại bạn thích, hoặc bấm Thích / Không
@@ -244,12 +253,12 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
         )}
         {state === "ok" && hero && (
           <>
-            <Hero movie={hero} status={rated[hero.movie_id]} onRate={onRate} />
+            <Hero movie={hero} status={rated[hero.movie_id]} onRate={onRate} coldStart={isCold} />
             <ul className={`mt-12 ${GRID}`}>
               <AnimatePresence initial={false} mode="popLayout">
                 {rest.map((m) => (
                   <motion.li key={m.movie_id} layout exit={{ opacity: 0, scale: 0.94 }} transition={{ duration: 0.25 }}>
-                    <Ticket movie={m} min={min} max={max} status={rated[m.movie_id]} onRate={onRate} />
+                    <Ticket movie={m} min={min} max={max} status={rated[m.movie_id]} onRate={onRate} coldStart={isCold} />
                   </motion.li>
                 ))}
               </AnimatePresence>

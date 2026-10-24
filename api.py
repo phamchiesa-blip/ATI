@@ -763,9 +763,9 @@ def _popular(user_id: str, k: int) -> dict:
     items = []
     for meta in popular:
         card = _card(meta)
-        card.update(match_percent=None, reasons=[], neural_used=False)
+        card.update(match_percent=None, reasons=[], neural_used=False, cold_start=True)
         items.append(card)
-    return {"items": items[:k], "personalized": False}
+    return {"items": items[:k], "personalized": False, "cold_start": True}
 
 
 class OnboardingBody(BaseModel):
@@ -842,10 +842,14 @@ def recommendations(k: int = 12, mode: str = "proposed", user: dict = Depends(cu
     rows = [r for r in rows_all if r["movie_id"] not in seeds][:k]
 
     # Ly do goi y: genre trung voi the loai da chon / phim da thich
-    sel = _selection(uid) or {"genres": []}
+    sel = _selection(uid) or {"genres": [], "favorites": []}
+    has_onboarding = bool(sel.get("genres") or sel.get("favorites"))
+    user_history = get_user_interactions(uid, db_path=DB)
+    likes = [h["movie_id"] for h in user_history if h["action"] == "like"]
+    is_cold_start = (len(likes) == 0) and not has_onboarding
+
     liked_genres = Counter(sel["genres"])
-    liked = list(seeds) + [h["movie_id"] for h in get_user_interactions(uid, db_path=DB)
-                           if h["action"] == "like"]
+    liked = list(seeds) + likes
     for mid in liked:
         m = get_movie_metadata(mid, db_path=DB)
         if m:
@@ -867,8 +871,14 @@ def recommendations(k: int = 12, mode: str = "proposed", user: dict = Depends(cu
             "newness": round(r["newness_score"], 3),
             "neural": round(r["nn_like_probability"], 3) if r.get("neural_used") else None,
         }
+        card["cold_start"] = is_cold_start
         items.append(card)
-    return {"items": items, "personalized": True, "mode": mode}
+    return {
+        "items": items,
+        "personalized": not is_cold_start,
+        "cold_start": is_cold_start,
+        "mode": mode,
+    }
 
 
 @app.get("/api/history")
