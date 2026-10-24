@@ -12,7 +12,7 @@ import numpy as np
 from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import StandardScaler
 
-ONLINE_SCORE_MODE: str = "prob"  # "prob" (legacy) | "logit_minmax" (new standardized)
+ONLINE_SCORE_MODE: str = "logit_minmax"  # "prob" (legacy) | "logit_minmax" (new standardized)
 
 _SCALER_CACHE: dict[str, StandardScaler] = {}
 
