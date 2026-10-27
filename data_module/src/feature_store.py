@@ -20,20 +20,38 @@ Public functions other teammates should use:
 """
 
 import json
+import os
+from pathlib import Path
 import sqlite3
 from datetime import datetime, timezone
 
 import numpy as np
 
-DEFAULT_DB_PATH = "movies.db"
+DEFAULT_DB_PATH = str(Path(__file__).resolve().parent / "movies.db")
 
 
-def _connect(db_path=DEFAULT_DB_PATH):
+def check_db_exists(db_path: str = DEFAULT_DB_PATH) -> None:
+    """Kiểm tra sự tồn tại của cơ sở dữ liệu movies.db.
+
+    Nếu file không tồn tại, báo lỗi rõ ràng bằng tiếng Việt và hướng dẫn cách tạo,
+    tuyệt đối không tự tạo database rỗng.
+    """
+    if not os.path.exists(db_path):
+        raise FileNotFoundError(
+            f"Cơ sở dữ liệu movies.db không tồn tại tại '{db_path}'.\n"
+            "Vui lòng tạo cơ sở dữ liệu trước bằng cách chạy lệnh:\n"
+            "  python data_module/src/build_dataset.py --movies path/to/tmdb_5000_movies.csv --credits path/to/tmdb_5000_credits.csv --db data_module/src/movies.db"
+        )
+
+
+def _connect(db_path=DEFAULT_DB_PATH, check_exists=True):
+    if check_exists:
+        check_db_exists(db_path)
     return sqlite3.connect(db_path)
 
 
 def create_schema(db_path=DEFAULT_DB_PATH):
-    conn = _connect(db_path)
+    conn = _connect(db_path, check_exists=False)
     cur = conn.cursor()
     cur.executescript(
         """

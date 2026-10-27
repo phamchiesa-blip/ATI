@@ -1,3 +1,10 @@
+import sys
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+from pathlib import Path
 """
 api.py  (v2)
 ------------
@@ -5,7 +12,7 @@ Lop API giua giao dien React va backend cua nhom. Dat o THU MUC GOC cua repo,
 cung cap voi data_module/, recommendation/ va ranking_eval/.
 
 Chay:
-    pip install -r requirements-api.txt
+    pip install -r requirements.txt
     uvicorn api:app --reload --port 8000
 Tai lieu API tu dong: http://localhost:8000/docs
 
@@ -45,17 +52,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # ── Cho phep import code cua nhom (cac module dung import phang) ────────────
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = str(Path(__file__).resolve().parent)
 for _p in (ROOT, os.path.join(ROOT, "data_module", "src"), os.path.join(ROOT, "recommendation")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-DB = os.environ.get("MOVIES_DB", os.path.join(ROOT, "data_module", "src", "movies.db"))
-ACCOUNTS_DB = os.environ.get("ACCOUNTS_DB", os.path.join(ROOT, "accounts.db"))
+DB = os.environ.get("MOVIES_DB", str(Path(__file__).resolve().parent / "data_module" / "src" / "movies.db"))
+ACCOUNTS_DB = os.environ.get("ACCOUNTS_DB", str(Path(__file__).resolve().parent / "accounts.db"))
 
 import recommender as _rec                                          # noqa: E402
 from recommender import like, dislike                               # noqa: E402
-from feature_store import (                                         # noqa: E402
+from feature_store import (
+    check_db_exists,                                         # noqa: E402
     get_all_vectors, get_movie_metadata, get_movie_vector, get_user_interactions,
 )
 import tmdb_client                                                   # noqa: E402
@@ -63,6 +71,9 @@ from similarity import cosine_similarity_bulk                       # noqa: E402
 from ranking_eval.frontend_service import (                        # noqa: E402
     onboard_user, recommendations as ranked_recommendations, get_popular_movies,
 )
+
+# Kiem tra movies.db ton tai truoc khi khoi dong
+check_db_exists(DB)
 
 app = FastAPI(title="Movie Recommendation API")
 # Cho phep giao dien chay o bat ky cong localhost nao (Vite doi cong neu 5173 ban).
@@ -82,6 +93,8 @@ app.add_middleware(
 
 @contextmanager
 def _conn(path):
+    if path == DB:
+        check_db_exists(path)
     c = sqlite3.connect(path)
     c.row_factory = sqlite3.Row
     try:

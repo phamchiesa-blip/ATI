@@ -1,3 +1,4 @@
+from pathlib import Path
 """
 fetch_tmdb_posters.py
 ---------------------
@@ -18,10 +19,11 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import tmdb_client
+from feature_store import check_db_exists
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-DB = os.environ.get("MOVIES_DB", os.path.join(ROOT, "data_module", "src", "movies.db"))
-ACCOUNTS_DB = os.environ.get("ACCOUNTS_DB", os.path.join(ROOT, "accounts.db"))
+ROOT = str(Path(__file__).resolve().parent)
+DB = os.environ.get("MOVIES_DB", str(Path(__file__).resolve().parent / "data_module" / "src" / "movies.db"))
+ACCOUNTS_DB = os.environ.get("ACCOUNTS_DB", str(Path(__file__).resolve().parent / "accounts.db"))
 
 SCHEMA = """CREATE TABLE IF NOT EXISTS tmdb_cache (
     movie_id INTEGER PRIMARY KEY, poster_path TEXT, trailer_key TEXT,
@@ -29,6 +31,12 @@ SCHEMA = """CREATE TABLE IF NOT EXISTS tmdb_cache (
 
 
 def main():
+    try:
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+    check_db_exists(DB)
     ap = argparse.ArgumentParser()
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--limit", type=int, default=0, help="chi tai N phim dau (de thu)")

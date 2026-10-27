@@ -1,8 +1,11 @@
 import os
 import sys
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 sys.path.insert(0, os.path.dirname(__file__))
 _DATA_MODULE_SRC = os.path.abspath(
@@ -10,17 +13,14 @@ _DATA_MODULE_SRC = os.path.abspath(
 )
 sys.path.insert(0, _DATA_MODULE_SRC)
 
+from feature_store import DEFAULT_DB_PATH, check_db_exists, get_movie_metadata
 from recommender import like, dislike, recommend
-from feature_store import get_movie_metadata
 
-DB_PATH = os.path.join(_DATA_MODULE_SRC, "movies.db")
+DB_PATH = DEFAULT_DB_PATH
 
 
 def main():
-    if not os.path.exists(DB_PATH):
-        print(f"[ERROR] Database not found at: {DB_PATH}")
-        print("Please run build_dataset.py first.")
-        return
+    check_db_exists(DB_PATH)
 
     user_id = "test_user_01"
     movie_id_seed = 5

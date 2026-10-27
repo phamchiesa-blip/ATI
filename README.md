@@ -1,82 +1,204 @@
-# Data & Feature Engineering — hướng dẫn dùng
+# Hệ Thống Gợi Ý Phim (Movie Recommendation System)
 
-Module này lo phần "Data Storage" + "Movie Feature Vector" trong kiến trúc hệ
-thống (mục 4.1 báo cáo). Ba bạn còn lại (Sơn, Võ, Đôn) không cần đụng vào các
-file bên trong `src/`, chỉ cần import và gọi các hàm ở cuối file này.
+Dự án xây dựng hệ thống gợi ý phim cá nhân hóa theo nội dung (Content-Based Filtering), kết hợp kỹ thuật xếp hạng đa mục tiêu (Multi-Objective Ranking) và mô hình học trực tuyến (Online Model Reranking), đi kèm giao diện web tương tác hoàn chỉnh.
 
-## 1. Chuẩn bị dữ liệu
+---
 
-Tải 2 file CSV từ Kaggle **TMDB 5000 Movie Dataset**:
-- `tmdb_5000_movies.csv`
-- `tmdb_5000_credits.csv`
+## 1. Yêu Cầu Hệ Thống
 
-Đặt vào một thư mục bất kỳ (không cần bỏ vào repo, file khá nặng).
+- **Python**: Phiên bản `3.10` trở lên (đã kiểm thử tương thích tốt với Python 3.10 – 3.14).
+- **Node.js**: Phiên bản `18.0` trở lên và `npm` (dành cho giao diện web trong `movie-ui/`).
 
-## 2. Chạy pipeline (chỉ cần chạy 1 lần, hoặc mỗi khi dataset đổi)
+---
+
+## 2. Hướng Dẫn Cài Đặt & Khởi Chạy (Từng Bước)
+
+### Bước 1: Tạo môi trường ảo Python
+
+**Trên Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+**Trên Linux / macOS (Bash):**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+---
+
+### Bước 2: Cài đặt các thư viện phụ thuộc
+
+Cài đặt toàn bộ các thư viện backend cần thiết từ file `requirements.txt` duy nhất ở gốc repository:
 
 ```bash
-cd src
+pip install -r requirements.txt
 ```
+
+*(Các thư viện chính bao gồm: `pandas`, `numpy`, `scikit-learn`, `scipy`, `fastapi`, `uvicorn[standard]`, `pydantic`).*
+
+---
+
+### Bước 3: Chuẩn bị dữ liệu phim TMDB 5000
+
+1. Tải bộ dữ liệu **TMDB 5000 Movie Dataset** miễn phí từ Kaggle:
+   - Link: [Kaggle - TMDB 5000 Movie Dataset](https://www.kaggle.com/datasets/tmdb/tmdb-5000-movie-dataset)
+2. Giải nén lấy 2 file:
+   - `tmdb_5000_movies.csv`
+   - `tmdb_5000_credits.csv`
+3. Đặt 2 file CSV này vào thư mục `data/` ở thư mục gốc của dự án (nếu chưa có thư mục, hãy tạo mới `data/`).
+
+---
+
+### Bước 4: Tạo cơ sở dữ liệu `movies.db` (Chỉ cần chạy 1 lần)
+
+Chạy pipeline xử lý dữ liệu và trích xuất đặc trưng (feature engineering) để tạo file SQLite `movies.db`:
+
+**Trên Windows (PowerShell):**
+```powershell
+python data_module/src/build_dataset.py --movies data/tmdb_5000_movies.csv --credits data/tmdb_5000_credits.csv --db data_module/src/movies.db
+```
+
+**Trên Linux / macOS (Bash):**
 ```bash
-pip install -r ../requirements.txt
+python data_module/src/build_dataset.py --movies data/tmdb_5000_movies.csv --credits data/tmdb_5000_credits.csv --db data_module/src/movies.db
 ```
+
+> **Lưu ý**: Lệnh trên sẽ sinh ra file `data_module/src/movies.db` chứa thông tin phim và ma trận vector đặc trưng 324 chiều. Toàn bộ các module trong hệ thống đều mặc định trỏ tới đường dẫn tuyệt đối này.
+
+---
+
+### Bước 5: Khởi chạy Backend API (FastAPI)
+
+Khởi động máy chủ backend tại cổng `8000`:
+
 ```bash
-python build_dataset.py --movies path/to/tmdb_5000_movies.csv \ --credits path/to/tmdb_5000_credits.csv \ --db movies.db
+uvicorn api:app --reload --port 8000
+```
+*(hoặc `python -m uvicorn api:app --reload --port 8000`)*
+
+- Địa chỉ API: `http://localhost:8000`
+- Tài liệu tương tác Swagger UI: `http://localhost:8000/docs`
+
+---
+
+### Bước 6: Khởi chạy Frontend UI (React + Vite)
+
+Mở một cửa sổ dòng lệnh (terminal) mới và khởi động giao diện người dùng:
+
+```bash
+cd movie-ui
+npm install
+npm run dev
 ```
 
-Lệnh trên sẽ tạo ra file `movies.db` (SQLite) chứa:
-- **`movies`**: thông tin gốc của phim (title, genres, director, cast, rating, popularity, release_date) — tương ứng "Movie Dataset" + "Movie Rating" trong sơ đồ kiến trúc.
-- **`movie_feature_vectors`**: vector đặc trưng đã xử lý của từng phim (324 chiều: genre + director + cast + overview (SVD) + rating/popularity/release year đã chuẩn hóa) — tương ứng "Movie Feature Vectors".
-- **`user_interaction_history`**: bảng trống ban đầu, để trống cho Sơn ghi Like/Dislike của user vào.
+- Giao diện web sẽ chạy tại: `http://localhost:5173`
+- Mở trình duyệt và truy cập `http://localhost:5173` để trải nghiệm tìm kiếm, onboarding, xem phim tương tự và nhận gợi ý cá nhân hóa.
 
-Chạy thử trên dataset thật (4803 phim), pipeline chạy hết khoảng 7-8 giây, ra 4772 phim sau khi làm sạch (bỏ phim thiếu overview/genre).
+---
 
-## 3. API dùng chung (import từ `feature_store.py`)
+### Bước 7: Cấu hình Poster & Trailer từ TMDB (Tùy chọn)
 
-```python
-from feature_store import (
-    get_movie_vector,        # lấy vector của 1 phim
-    get_all_vectors,         # lấy toàn bộ vector 1 lần (dùng cho Cosine Similarity)
-    get_movie_metadata,      # lấy thông tin hiển thị (title, genres, rating...)
-    log_interaction,         # ghi lại 1 lượt Like/Dislike
-    get_user_interactions,   # lấy lịch sử Like/Dislike của 1 user
-)
+Hệ thống được thiết kế để **hoạt động bình thường ngay cả khi không có API key** (sử dụng poster placeholder dạng SVG gradient và trailer dự phòng).
+
+Nếu muốn tải poster và trailer chính thức từ TMDB:
+1. Đăng ký tài khoản và lấy API key miễn phí tại: [TheMovieDB API Settings](https://www.themoviedb.org/settings/api).
+2. Thiết lập biến môi trường `TMDB_API_KEY`:
+
+   **Trên Windows (PowerShell):**
+   ```powershell
+   $env:TMDB_API_KEY="dien_khoa_cua_ban_o_day"
+   ```
+
+   **Trên Linux / macOS (Bash):**
+   ```bash
+   export TMDB_API_KEY="dien_khoa_cua_ban_o_day"
+   ```
+
+3. *(Tùy chọn)* Chạy script tải sẵn poster vào database cache `accounts.db`:
+   ```bash
+   python fetch_tmdb_posters.py
+   ```
+
+---
+
+## 3. Chạy Kiểm Thử (Tests)
+
+Hệ thống có 3 bộ kiểm thử tự động, có thể chạy trực tiếp từ thư mục gốc của repository:
+
+1. **Kiểm thử logic cốt lõi (không cần database)**:
+   ```bash
+   python recommendation/test_offline.py
+   ```
+   *Kiểm tra tính đúng đắn của phép cập nhật User Profile ($\alpha, \beta$), tính toán Cosine Similarity và trích xuất Top-K.*
+
+2. **Kiểm thử gợi ý trực tiếp trên `movies.db`**:
+   ```bash
+   python recommendation/test_online.py
+   ```
+   *Kiểm tra luồng đọc vector, like phim và sinh gợi ý trực tiếp từ cơ sở dữ liệu.*
+
+3. **Kiểm thử các ca biên (Edge Cases)**:
+   ```bash
+   python ranking_eval/test_edge_cases.py
+   ```
+   *Kiểm tra cơ chế fallback phim phổ biến cho user mới (cold-start), chống loãng profile khi onboarding (chọn Top N), và cơ chế lọc thể loại bị ghét khi user chỉ bấm Dislike.*
+
+---
+
+## 4. Đánh Giá Hiệu Năng & Offline Benchmark
+
+Hệ thống tích hợp bộ công cụ benchmark toàn diện, mô phỏng 8 nhóm người dùng (Persona) với 5 kịch bản tương tác (từ cold-start $m=0$ đến $m=10$ lượt tương tác Like/Dislike):
+
+```bash
+python -m ranking_eval.run_benchmark --reps 10
 ```
 
-**Cho Sơn (Recommendation Core):**
-```python
-vector = get_movie_vector(movie_id, db_path="movies.db")          # 1 phim
-movie_ids, matrix = get_all_vectors(db_path="movies.db")          # toàn bộ, để tính Cosine Similarity
-log_interaction(user_id, movie_id, "like", db_path="movies.db")   # khi user bấm Like
-history = get_user_interactions(user_id, db_path="movies.db")     # để dựng lại User Profile
+- Toàn bộ dữ liệu giả lập được chạy trên bản sao SQLite tạm thời trong bộ nhớ cache của hệ điều hành và tự động xóa sau khi chạy xong, đảm bảo **an toàn 100% cho `movies.db` và `accounts.db`**.
+- Báo cáo phân tích chuyên sâu kèm kiểm định thống kê Paired Bootstrap 95% Confidence Interval được lưu tự động tại:
+  - `ranking_eval/results/benchmark_report.md`
+  - `ranking_eval/results/benchmark_summary.csv`
+  - `ranking_eval/results/benchmark_detailed.csv`
+
+---
+
+## 5. Kiến Trúc Thư Mục Dự Án
+
+```text
+ATI/
+├── api.py                    # FastAPI server cung cấp REST API cho Frontend
+├── requirements.txt          # Thư viện Python phụ thuộc duy nhất của dự án
+├── fetch_tmdb_posters.py     # Script tải poster & trailer từ TMDB vào cache
+├── tmdb_client.py            # Client gọi API TheMovieDB
+│
+├── data_module/              # Module xử lý dữ liệu và trích xuất đặc trưng
+│   └── src/
+│       ├── build_dataset.py  # Script chạy pipeline tạo movies.db
+│       ├── data_pipeline.py  # Đọc CSV, làm sạch dữ liệu
+│       ├── feature_engineering.py # Xây dựng vector đặc trưng 324 chiều
+│       └── feature_store.py  # Giao tiếp SQLite movies.db và kiểm tra an toàn DB
+│
+├── recommendation/           # Module thuật toán gợi ý cốt lõi (Tầng 0 / Part II)
+│   ├── user_profile.py       # Quản lý Profile vector người dùng (alpha, beta)
+│   ├── similarity.py         # Tính Cosine Similarity
+│   ├── recommender.py        # Public API gợi ý phim
+│   ├── interaction.py        # Lưu lịch sử tương tác Like/Dislike
+│   ├── test_offline.py       # Test unit offline
+│   └── test_online.py        # Test tích hợp với movies.db
+│
+├── ranking_eval/             # Module Xếp hạng đa mục tiêu & Đánh giá (Part III)
+│   ├── ranking.py            # Tầng 1: Xếp hạng theo Cosine, Rating, Popularity, Newness
+│   ├── online_model.py       # Tầng 2: Online SGD Classifier (chế độ logit_minmax)
+│   ├── integration.py        # Tích hợp luồng gợi ý 3 tầng
+│   ├── frontend_service.py   # Dịch vụ cung cấp dữ liệu cho API web
+│   ├── evaluation.py         # Hàm tính Precision@K, Recall@K, F1@K
+│   ├── simulate_users.py     # Giả lập 8 Persona người dùng
+│   ├── run_benchmark.py      # Runner benchmark và xuất báo cáo markdown
+│   └── test_edge_cases.py    # Test các trường hợp biên
+│
+└── movie-ui/                 # Giao diện web người dùng (React 18 + Vite)
+    ├── package.json          # Cấu hình phụ thuộc Node.js
+    └── src/                  # Mã nguồn giao diện (Browse, Recommend, Taste, Detail...)
 ```
-
-**Cho Võ (Frontend):**
-```python
-info = get_movie_metadata(movie_id, db_path="movies.db")
-# info = {"title": ..., "genres": [...], "director": ..., "cast": [...],
-#         "vote_average": ..., "popularity": ..., "release_date": ...}
-```
-
-**Cho Đôn (Ranking/NN/Evaluation):** dùng `get_movie_metadata()` để lấy `vote_average`, `popularity`, `release_date` (thô, chưa chuẩn hóa) cho bước Ranking (mục 3.7), và `get_all_vectors()` nếu cần train Neural Network.
-
-## 4. Cấu trúc file trong `src/`
-
-| File | Việc gì |
-|---|---|
-| `data_pipeline.py` | Đọc 2 CSV, merge, làm sạch, parse cột JSON (genres/cast/crew) |
-| `feature_engineering.py` | Xây vector đặc trưng (genre, director, cast, overview, rating/popularity/newness) |
-| `feature_store.py` | Lưu vào SQLite + toàn bộ API public ở trên |
-| `build_dataset.py` | Script chạy toàn bộ pipeline, tạo `movies.db` |
-
-## 5. Đã kiểm tra
-
-Sanity check: độ giống nhau (Cosine Similarity) giữa *Iron Man* và *Iron Man 2* là **0.83**, trong khi giữa *Iron Man* và một phim không liên quan chỉ **0.33** — cho thấy vector đặc trưng phản ánh đúng nội dung phim.
-
-## Có thể chỉnh sau nếu cần
-
-- Số chiều overview (SVD), số director/cast top-K trong `FeatureConfig` (đầu file `feature_engineering.py`) — tăng lên nếu muốn vector chi tiết hơn, giảm nếu muốn nhẹ/nhanh hơn.
-- Trọng số giữa các phần feature (hiện đang cộng thẳng, chưa có trọng số riêng) — nếu sau này thấy gợi ý bị lệch quá nhiều theo 1 yếu tố (ví dụ toàn theo overview), có thể nhân hệ số cho từng khối trước khi ghép.
-
-
-<!-- python -m uvicorn api:app --reload --port 8000 -->
