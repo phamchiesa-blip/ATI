@@ -25,7 +25,7 @@ from ranking_eval.frontend_service import onboard_user, get_popular_movies, DEFA
 from ranking_eval.integration import get_ranked_recommendations
 import recommender as _rec
 
-DB_PATH = os.path.join(_DATA_SRC, "movies.db")
+DB_PATH = os.environ.get("ATI_TEST_DB_PATH", os.path.join(_DATA_SRC, "movies.db"))
 
 
 def test_cold_start_fallback():

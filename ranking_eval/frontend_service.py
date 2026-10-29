@@ -184,14 +184,22 @@ def record_interaction(
     action: str,
     *,
     db_path: str,
+    preserve_numeric_dislikes: bool = False,
 ) -> dict:
     """Pass Like/Dislike to Part II, which updates profile and stores history."""
     if action not in ("like", "dislike"):
         raise ValueError("action must be 'like' or 'dislike'")
     if get_movie_metadata(int(movie_id), db_path=db_path) is None:
         raise ValueError(f"movie_id={movie_id} does not exist")
-    handler = core_like if action == "like" else core_dislike
-    handler(user_id, int(movie_id), db_path=db_path)
+    if action == "like":
+        core_like(user_id, int(movie_id), db_path=db_path)
+    else:
+        core_dislike(
+            user_id,
+            int(movie_id),
+            db_path=db_path,
+            preserve_numeric=preserve_numeric_dislikes,
+        )
     return {"ok": True, "user_id": user_id, "movie_id": int(movie_id), "action": action}
 
 

@@ -13,7 +13,7 @@ sys.path.insert(0, _DATA_MODULE_SRC)
 from recommender import like, dislike, recommend
 from feature_store import get_movie_metadata
 
-DB_PATH = os.path.join(_DATA_MODULE_SRC, "movies.db")
+DB_PATH = os.environ.get("ATI_TEST_DB_PATH", os.path.join(_DATA_MODULE_SRC, "movies.db"))
 
 
 def main():

@@ -82,14 +82,21 @@ class UserProfile:
         self._ensure_initialized(mv)
         self._vector = self._vector + self.alpha * mv
 
-    def apply_dislike(self, movie_vector: np.ndarray) -> None:
+    def apply_dislike(self, movie_vector: np.ndarray, *, preserve_numeric: bool = False) -> None:
         """Cap nhat profile theo Dislike.
 
-        Profile = Profile - beta * MovieVector
+        Profile = Profile - beta * MovieVector. When preserve_numeric is True,
+        only content dimensions are subtracted; the final three numeric
+        dimensions (rating, popularity, release year) are left unchanged.
         """
         mv = movie_vector.astype(np.float32)
         self._ensure_initialized(mv)
-        self._vector = self._vector - self.beta * mv
+        if preserve_numeric:
+            if mv.size < 3:
+                raise ValueError("Movie vector must contain 3 trailing numeric dimensions")
+            self._vector[:-3] = self._vector[:-3] - self.beta * mv[:-3]
+        else:
+            self._vector = self._vector - self.beta * mv
 
     # ── Truy cap vector ─────────────────────────────────────────────────────
 
