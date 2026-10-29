@@ -202,3 +202,14 @@ ATI/
     ├── package.json          # Cấu hình phụ thuộc Node.js
     └── src/                  # Mã nguồn giao diện (Browse, Recommend, Taste, Detail...)
 ```
+<!-- python -m uvicorn api:app --reload --port 8000 -->
+
+Lời nhắn chung cho cả nhóm (gửi kèm để AI của mỗi người có đủ ngữ cảnh)
+Dự án: hệ thống gợi ý phim content-based (TMDB 5000, vector phim 324 chiều, user profile cập nhật khi Like/Dislike, ranking = Cosine 0.6 + Rating 0.2 + Popularity 0.1 + Newness 0.1, Tầng 2 là online logistic regression làm reranker). Repo: <link GitHub>.
+Quy tắc: 
+1. Tạo nhánh riêng từ main mới nhất (git pull trước). Không push thẳng main.
+2. Không bao giờ commit API key TMDB, file .db, .env, node_modules. Dùng biến môi trường. Không dùng `git add .`, chỉ add đúng file đã sửa.
+3. Không ghi dữ liệu mô phỏng vào movies.db hay accounts.db thật. Mọi thí nghiệm chạy trên bản sao tạm.
+4. Trước khi mở PR: chạy recommendation/test_offline.py, recommendation/test_online.py, ranking_eval/test_edge_cases.py và chạy thử web.
+5. Báo cáo trung thực: nếu thay đổi không cải thiện thì ghi rõ là không cải thiện. Không chỉnh tham số trên dữ liệu test để số đẹp hơn.
+
