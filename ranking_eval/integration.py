@@ -5,6 +5,7 @@ It asks Part II for Top-K, gets metadata from Part I, and reranks that list.
 """
 
 from __future__ import annotations
+from pathlib import Path
 
 import argparse
 import os
@@ -18,7 +19,7 @@ for _path in (_DATA_SRC, _RECOMMENDATION):
     if _path not in sys.path:
         sys.path.insert(0, _path)
 
-from feature_store import get_movie_metadata
+from feature_store import DEFAULT_DB_PATH, check_db_exists, get_movie_metadata
 from recommender import recommend as get_cosine_recommendations
 
 from .evaluation import precision_recall_f1_at_k
@@ -37,7 +38,7 @@ def get_ranked_recommendations(
     *,
     candidate_k: int = 100,
     top_n: int = 10,
-    db_path: str = "movies.db",
+    db_path: str = DEFAULT_DB_PATH,
     neural_weight: float = 0.20,
     score_mode: str | None = None,
 ) -> list[dict]:
@@ -58,7 +59,7 @@ def get_ranked_recommendations(
     prof = _rec._registry.get(user_id)
     is_onboarded = getattr(prof, "is_onboarded", False) if prof else False
     if not is_onboarded:
-        accounts_db = os.environ.get("ACCOUNTS_DB", "accounts.db")
+        accounts_db = os.environ.get("ACCOUNTS_DB", str(Path(__file__).resolve().parent.parent / "accounts.db"))
         if os.path.exists(accounts_db):
             try:
                 import sqlite3
@@ -226,7 +227,7 @@ def evaluate_recommendations(
     *,
     candidate_k: int = 100,
     k: int = 10,
-    db_path: str = "movies.db",
+    db_path: str = DEFAULT_DB_PATH,
     score_mode: str | None = None,
 ) -> dict[str, dict[str, float]]:
     """Compare cosine-only with reranking, given known relevant movie IDs.
@@ -273,7 +274,7 @@ def evaluate_recommendations(
 
 def train_online_model_from_history(
     user_id: str,
-    db_path: str = "movies.db",
+    db_path: str = DEFAULT_DB_PATH,
     *,
     scaler: Any = None,
     score_mode: str | None = None,
@@ -304,13 +305,16 @@ def main():
     # Windows PowerShell may use a legacy code page that cannot print some
     # movie-title characters. Replace unsupported characters instead of
     # crashing halfway through the recommendation list.
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    try:
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(
         description="Use Part II recommendations and rerank them with Part III."
     )
     parser.add_argument("--user-id", required=True)
-    parser.add_argument("--db", default=os.path.join(_DATA_SRC, "movies.db"))
+    parser.add_argument("--db", default=DEFAULT_DB_PATH)
     parser.add_argument("--candidate-k", type=int, default=100)
     parser.add_argument("--top-n", type=int, default=10)
     parser.add_argument(

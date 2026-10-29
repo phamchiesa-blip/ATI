@@ -6,19 +6,23 @@ import sqlite3
 import json
 import numpy as np
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 _ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.insert(0, os.path.join(_ROOT, "data_module", "src"))
 sys.path.insert(0, os.path.join(_ROOT, "recommendation"))
 sys.path.insert(0, os.path.join(_ROOT, "ranking_eval"))
 
-from feature_store import get_movie_vector, get_all_vectors, get_movie_metadata
+from feature_store import DEFAULT_DB_PATH, check_db_exists, get_movie_vector, get_all_vectors, get_movie_metadata
 from user_profile import UserProfile
 from similarity import cosine_similarity_bulk
 
-db = os.path.join(_ROOT, "data_module", "src", "movies.db")
+db = DEFAULT_DB_PATH
+check_db_exists(db)
 conn = sqlite3.connect(db)
 
 # 1. Chon 5 phim Horror pho bien nhat

@@ -17,18 +17,25 @@ Usage:
 """
 
 import argparse
+import sys
 import time
+
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 from data_pipeline import load_raw, clean_and_parse
 from feature_engineering import build_feature_vectors, FeatureConfig
-from feature_store import save_dataset, get_all_vectors, get_movie_metadata
+from feature_store import save_dataset, get_all_vectors, get_movie_metadata, DEFAULT_DB_PATH
 
 
 def main():
     parser = argparse.ArgumentParser(description="Build the movie feature-vector database.")
     parser.add_argument("--movies", required=True, help="path to tmdb_5000_movies.csv")
     parser.add_argument("--credits", required=True, help="path to tmdb_5000_credits.csv")
-    parser.add_argument("--db", default="movies.db", help="output SQLite database path")
+    parser.add_argument("--db", default=DEFAULT_DB_PATH, help="output SQLite database path")
     args = parser.parse_args()
 
     t0 = time.time()

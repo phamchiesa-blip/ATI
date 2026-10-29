@@ -1,4 +1,4 @@
-﻿"""
+"""
 interaction.py
 --------------
 Luu lich su tuong tac (Like/Dislike) cua user vao DB thong qua API
@@ -32,14 +32,14 @@ _DATA_MODULE_SRC = os.path.join(
 )
 sys.path.insert(0, os.path.abspath(_DATA_MODULE_SRC))
 
-from feature_store import log_interaction as _log, get_user_interactions as _get
+from feature_store import DEFAULT_DB_PATH, log_interaction as _log, get_user_interactions as _get
 
 
 def save_interaction(
     user_id: str,
     movie_id: int,
     interaction: str,
-    db_path: str = "movies.db",
+    db_path: str = DEFAULT_DB_PATH,
 ) -> None:
     """Ghi 1 luot Like/Dislike vao User Interaction History.
 
@@ -66,7 +66,7 @@ def save_interaction(
 
 def get_interactions(
     user_id: str,
-    db_path: str = "movies.db",
+    db_path: str = DEFAULT_DB_PATH,
 ) -> list[dict]:
     """Lay toan bo lich su tuong tac cua user (cu nhat truoc).
 

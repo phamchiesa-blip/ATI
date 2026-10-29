@@ -11,8 +11,11 @@ Tests for edge-case handling:
 import os
 import sys
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 _ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 _DATA_SRC = os.path.join(_ROOT, "data_module", "src")
@@ -21,16 +24,17 @@ for _p in (_ROOT, _DATA_SRC, _RECOMMENDATION):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
+from feature_store import DEFAULT_DB_PATH, check_db_exists
 from ranking_eval.frontend_service import onboard_user, get_popular_movies, DEFAULT_ONBOARDING_TOP_N
 from ranking_eval.integration import get_ranked_recommendations
 import recommender as _rec
 
-DB_PATH = os.path.join(_DATA_SRC, "movies.db")
+DB_PATH = DEFAULT_DB_PATH
 
 
 def test_cold_start_fallback():
     print("=== Test 1: Cold start user (no interaction) -> Popular fallback ===")
-    assert os.path.exists(DB_PATH), f"Database not found at {DB_PATH}"
+    check_db_exists(DB_PATH)
 
     new_user_id = "test_user_no_history_999"
     # Ensure user has no in-memory profile

@@ -41,7 +41,7 @@ python -m venv .venv
 .venv\Scripts\activate          # Windows PowerShell
 # source .venv/bin/activate     # macOS / Linux
 
-pip install -r requirements-api.txt
+pip install -r requirements.txt
 ```
 
 ### 2. Tải dữ liệu phim

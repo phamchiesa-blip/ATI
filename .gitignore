@@ -1,18 +1,28 @@
-# Python
+# Python & môi trường ảo
 __pycache__/
 *.pyc
-.venv/
+*.py[cod]
+*$py.class
+.venv*
 venv/
+env/
+ENV/
 
-# Dữ liệu sinh ra trên máy mỗi người (tạo lại bằng build_dataset.py)
+# Dữ liệu & Database
 *.db
 *.db*
+data/
+data/*.csv
 *.csv
 
-# Bí mật
+# Bí mật & API keys
 .env
 .env.*
 !.env.example
+*.key
+*api_key*
+*apikey*
+*secret*
 
 # Node / giao diện
 node_modules/

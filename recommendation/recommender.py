@@ -1,4 +1,4 @@
-﻿"""
+"""
 recommender.py
 --------------
 Dieu phoi toan bo luong Recommendation Core:
@@ -38,7 +38,7 @@ _DATA_MODULE_SRC = os.path.join(
 sys.path.insert(0, os.path.abspath(_DATA_MODULE_SRC))
 
 import numpy as np
-from feature_store import get_movie_vector, get_all_vectors
+from feature_store import DEFAULT_DB_PATH, get_movie_vector, get_all_vectors
 
 from user_profile import UserProfile, UserProfileRegistry, ALPHA, BETA
 from interaction import save_interaction, get_interactions
@@ -73,7 +73,7 @@ def _get_profile(user_id: str, db_path: str) -> UserProfile:
 
 # ─── Public API ──────────────────────────────────────────────────────────────
 
-def like(user_id: str, movie_id: int, db_path: str = "movies.db") -> None:
+def like(user_id: str, movie_id: int, db_path: str = DEFAULT_DB_PATH) -> None:
     """Xu ly su kien user bam Like tren mot phim.
 
     Luong:
@@ -109,7 +109,7 @@ def like(user_id: str, movie_id: int, db_path: str = "movies.db") -> None:
     save_interaction(user_id, movie_id, "like", db_path=db_path)
 
 
-def dislike(user_id: str, movie_id: int, db_path: str = "movies.db") -> None:
+def dislike(user_id: str, movie_id: int, db_path: str = DEFAULT_DB_PATH) -> None:
     """Xu ly su kien user bam Dislike tren mot phim.
 
     Luong:
@@ -147,7 +147,7 @@ def dislike(user_id: str, movie_id: int, db_path: str = "movies.db") -> None:
 def seed_profile_from_onboarding(
     user_id: str,
     seed_movie_ids: "list[int]",
-    db_path: str = "movies.db",
+    db_path: str = DEFAULT_DB_PATH,
 ) -> None:
     """Khoi tao User Profile tu danh sach phim yeu thich trong onboarding.
 
@@ -175,7 +175,7 @@ def seed_profile_from_onboarding(
 def recommend(
     user_id: str,
     k: int = 20,
-    db_path: str = "movies.db",
+    db_path: str = DEFAULT_DB_PATH,
 ) -> "list[tuple[int, float]]":
     """Tra ve Top-K phim phu hop nhat cho user.
 
