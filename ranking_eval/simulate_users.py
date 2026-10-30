@@ -27,7 +27,7 @@ for _p in (_ROOT, _DATA_SRC, _RECOMMENDATION):
 
 import pandas as pd
 import recommender as _rec
-from feature_store import get_movie_metadata
+from feature_store import DEFAULT_DB_PATH, check_db_exists, get_movie_metadata
 from ranking_eval.evaluation import precision_recall_f1_at_k
 from ranking_eval.frontend_service import (
     DEFAULT_ONBOARDING_TOP_N,
@@ -200,6 +200,7 @@ def create_personas_definitions() -> list[Persona]:
 
 def load_personas(db_path: str, csv_path: str) -> list[Persona]:
     """Load the catalog and compute relevant movie pools for all 8 personas."""
+    check_db_exists(db_path)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     rows = conn.execute("SELECT * FROM movies").fetchall()
@@ -256,6 +257,7 @@ def get_onboarding_seed_movies(
     if cache_key in _SEED_CACHE:
         return list(_SEED_CACHE[cache_key])
 
+    check_db_exists(db_path)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     rows = conn.execute(

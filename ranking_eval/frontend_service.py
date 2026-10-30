@@ -20,7 +20,7 @@ for _path in (_DATA_SRC, _RECOMMENDATION):
     if _path not in sys.path:
         sys.path.insert(0, _path)
 
-from feature_store import get_movie_metadata
+from feature_store import DEFAULT_DB_PATH, check_db_exists, get_movie_metadata
 from recommender import (
     dislike as core_dislike,
     like as core_like,
@@ -56,6 +56,7 @@ def get_popular_movies(
     """
     exclude = exclude_ids or set()
     hated_genres = {g.casefold() for g in (exclude_genres or set())}
+    check_db_exists(db_path)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     query = """
@@ -93,6 +94,7 @@ def list_movies(
     """Browse movies with pagination and optional exact genre/title filters."""
     if page < 1 or page_size < 1 or page_size > 100:
         raise ValueError("page must be >= 1 and page_size must be between 1 and 100")
+    check_db_exists(db_path)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     query = "SELECT * FROM movies"
@@ -136,6 +138,7 @@ def onboard_user(
     movie_ids = list(dict.fromkeys(int(mid) for mid in (favorite_movie_ids or [])))
     source = "favorite_movies"
     if not movie_ids and genres:
+        check_db_exists(db_path)
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         # Order by popularity DESC, vote_count DESC, movie_id ASC for stable deterministic ordering
@@ -206,7 +209,7 @@ def record_interaction(
 def recommendations(
     user_id: str,
     *,
-    db_path: str,
+    db_path: str = DEFAULT_DB_PATH,
     limit: int = 10,
     candidate_k: int = 100,
 ) -> dict:

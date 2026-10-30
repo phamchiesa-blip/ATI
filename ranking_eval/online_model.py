@@ -17,7 +17,10 @@ ONLINE_SCORE_MODE: str = "logit_minmax"  # "prob" (legacy) | "logit_minmax" (new
 _SCALER_CACHE: dict[str, StandardScaler] = {}
 
 
-def get_global_movie_feature_scaler(db_path: str = "movies.db") -> StandardScaler:
+def get_global_movie_feature_scaler(db_path: str | None = None) -> StandardScaler:
+    if db_path is None:
+        from feature_store import DEFAULT_DB_PATH
+        db_path = DEFAULT_DB_PATH
     """Fit StandardScaler on the full movie feature matrix once and cache.
     
     Guarantees that scaling parameters are derived strictly from the movie catalog,

@@ -48,6 +48,7 @@ from ranking_eval.integration import (
     _apply_neural_reranking,
     train_online_model_from_history,
 )
+from feature_store import DEFAULT_DB_PATH, check_db_exists
 from ranking_eval.online_model import get_global_movie_feature_scaler
 from ranking_eval.ranking import RankingWeights, _minmax, rank_candidates
 from ranking_eval.simulate_users import (
@@ -1040,7 +1041,7 @@ def main():
     parser.add_argument("--reps", type=int, default=10, help="Number of repetitions per config (default: 10)")
     parser.add_argument("--base-seed", type=int, default=42, help="Base random seed (default: 42)")
     parser.add_argument("--out-dir", default="ranking_eval/results", help="Directory for output reports and CSVs")
-    parser.add_argument("--db", default=os.path.join(_DATA_SRC, "movies.db"), help="Path to original movies.db")
+    parser.add_argument("--db", default=DEFAULT_DB_PATH, help="Path to original movies.db")
     parser.add_argument("--csv", default=os.path.join(_ROOT, "data_module", "data", "tmdb_5000_movies.csv"), help="Path to raw movies CSV")
     args = parser.parse_args()
 
