@@ -16,7 +16,7 @@ sys.path.insert(0, _DATA_MODULE_SRC)
 from feature_store import DEFAULT_DB_PATH, check_db_exists, get_movie_metadata
 from recommender import like, dislike, recommend
 
-DB_PATH = DEFAULT_DB_PATH
+DB_PATH = os.environ.get("ATI_TEST_DB_PATH", DEFAULT_DB_PATH)
 
 
 def main():

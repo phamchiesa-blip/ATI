@@ -322,11 +322,13 @@ def prepare_simulated_user(
     all_catalog_ids: list[int],
     onboarding_scale: float = 1.0,
     k_deep: int = 50,
+    preserve_numeric_dislikes: bool = False,
 ) -> dict[str, Any]:
     """Setup user, onboard, record interactions, and retrieve candidate pool.
 
     Interaction generation rules:
-    - If m_likes == 0: no likes or dislikes are recorded (onboarding only; dislike_count is not used).
+    - If m_likes == 0: no likes are recorded; dislike_count still controls
+      how many dislikes are sampled after onboarding.
     - If m_likes > 0: generates m_likes (with noise_ratio from outside the persona pool)
       and dislike_count dislikes sampled from eligible non-pool movies.
       (In run_benchmark: dislike_count is 2 for m in {1, 3}, and 3 for m in {5, 10}).
@@ -366,9 +368,20 @@ def prepare_simulated_user(
         actual_dislike_count = min(dislike_count, len(dislike_pool))
         dislikes = rng.sample(dislike_pool, actual_dislike_count)
 
-        for mid in dislikes:
-            record_interaction(user_id, mid, "dislike", db_path=db_path)
-            disliked_ids.append(mid)
+    else:
+        eligible_non_pool = sorted(list(catalog_set - pool_set - seed_set))
+        actual_dislike_count = min(dislike_count, len(eligible_non_pool))
+        dislikes = rng.sample(eligible_non_pool, actual_dislike_count)
+
+    for mid in dislikes:
+        record_interaction(
+            user_id,
+            mid,
+            "dislike",
+            db_path=db_path,
+            preserve_numeric_dislikes=preserve_numeric_dislikes,
+        )
+        disliked_ids.append(mid)
 
     interacted_ids = seed_set | set(liked_ids) | set(disliked_ids)
     test_relevant_ids = pool_set - seed_set - set(liked_ids)
@@ -438,6 +451,7 @@ def simulate_single_user(
     onboarding_scale: float = 1.0,
     ranking_weights: Any = None,
     neural_weight: float = 0.20,
+    preserve_numeric_dislikes: bool = False,
 ) -> dict[str, Any]:
     """Run one complete user simulation across all 6 rankers:
     (0a) Random, (0b) Popular, (1) Baseline Cosine, (2) Tier 1 Ranking,
@@ -460,6 +474,7 @@ def simulate_single_user(
         all_catalog_ids=all_catalog_ids,
         onboarding_scale=onboarding_scale,
         k_deep=k_deep,
+        preserve_numeric_dislikes=preserve_numeric_dislikes,
     )
 
     candidates = prep["candidates"]
@@ -508,4 +523,5 @@ def simulate_single_user(
         "seed": seed,
         "neural_used": neural_used,
         "metrics": metrics,
+        "tier1_top10": tier1_rows[:k],
     }

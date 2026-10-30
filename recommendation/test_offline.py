@@ -38,6 +38,17 @@ p.apply_dislike(v_dislike)
 expected_dislike = expected_like - BETA * v_dislike
 assert np.allclose(p.vector, expected_dislike), f"Dislike sai: {p.vector}"
 print(f"  apply_dislike OK:    {p.vector}")
+
+# Optional mode subtracts content dimensions but preserves the trailing three
+# numeric dimensions. The default behavior above remains unchanged.
+p_preserve = UserProfile("user_preserve_numeric")
+p_preserve.seed_from_movies([np.array([0.0, 0.0, 0.2, 0.4, 0.6], dtype=np.float32)])
+p_preserve.apply_dislike(
+    np.array([1.0, 0.5, 0.8, 0.7, 0.9], dtype=np.float32),
+    preserve_numeric=True,
+)
+assert np.allclose(p_preserve.vector, [-0.5, -0.25, 0.2, 0.4, 0.6])
+print(f"  preserve_numeric dislike OK: {p_preserve.vector}")
 print()
 
 # ── 2. Test cosine_similarity ────────────────────────────────────────────────

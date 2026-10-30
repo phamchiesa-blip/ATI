@@ -109,7 +109,13 @@ def like(user_id: str, movie_id: int, db_path: str = DEFAULT_DB_PATH) -> None:
     save_interaction(user_id, movie_id, "like", db_path=db_path)
 
 
-def dislike(user_id: str, movie_id: int, db_path: str = DEFAULT_DB_PATH) -> None:
+def dislike(
+    user_id: str,
+    movie_id: int,
+    db_path: str = DEFAULT_DB_PATH,
+    *,
+    preserve_numeric: bool = False,
+) -> None:
     """Xu ly su kien user bam Dislike tren mot phim.
 
     Luong:
@@ -140,7 +146,7 @@ def dislike(user_id: str, movie_id: int, db_path: str = DEFAULT_DB_PATH) -> None
         raise ValueError(f"movie_id={movie_id} khong ton tai trong DB.")
 
     profile = _get_profile(user_id, db_path)
-    profile.apply_dislike(vec)
+    profile.apply_dislike(vec, preserve_numeric=preserve_numeric)
     save_interaction(user_id, movie_id, "dislike", db_path=db_path)
 
 
