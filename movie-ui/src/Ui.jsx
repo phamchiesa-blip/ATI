@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { Play, Star, ThumbsDown, ThumbsUp } from "lucide-react";
+import { Bookmark, Play, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 
 // Màu poster theo thể loại: [nền, chữ]
 export const TONES = {
@@ -42,6 +42,28 @@ export function useDebounced(value, ms = 300) {
 
 // Mở popup trailer từ bất kỳ thẻ phim nào (App cung cấp hàm này)
 export const TrailerContext = createContext(() => {});
+
+// Danh sách "Xem sau": App cung cấp tập phim đã lưu và hàm bật/tắt
+export const WatchlistContext = createContext({ saved: new Set(), toggle: () => {} });
+
+export function SaveButton({ movie }) {
+  const { saved, toggle } = useContext(WatchlistContext);
+  const on = saved.has(movie.movie_id);
+  const label = on ? "Bỏ khỏi Xem sau" : "Lưu vào Xem sau";
+  return (
+    <button
+      onClick={() => toggle(movie)}
+      aria-pressed={on}
+      aria-label={label}
+      title={label}
+      className={`flex size-9 items-center justify-center rounded-full shadow-md transition-colors ${
+        on ? "bg-lemon text-ink" : "bg-white text-ink hover:bg-paper"
+      }`}
+    >
+      <Bookmark size={18} className={on ? "fill-current" : ""} />
+    </button>
+  );
+}
 
 export const movieHref = (m) => `#/movie/${m.movie_id}`;
 
@@ -207,6 +229,9 @@ export function PosterTile({ movie, status, onRate, className = "" }) {
       <PosterLink movie={movie} inset className={className} />
       <div className="absolute bottom-2.5 left-2.5">
         <RateIcons status={status} onRate={(a) => onRate(movie, a)} />
+      </div>
+      <div className="absolute top-2.5 right-2.5">
+        <SaveButton movie={movie} />
       </div>
     </div>
   );

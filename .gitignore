@@ -13,7 +13,7 @@ ENV/
 *.db*
 data/
 data/*.csv
-*.csv
+tmdb_5000_*.csv
 
 # Bí mật & API keys
 .env

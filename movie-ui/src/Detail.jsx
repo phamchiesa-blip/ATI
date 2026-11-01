@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { ArrowLeft, ExternalLink, Play } from "lucide-react";
+import { ArrowLeft, Bookmark, ExternalLink, Play } from "lucide-react";
 import { api } from "./api";
-import { GRID, MovieCard, Notice, Poster, Rating, RateButtons, TrailerContext, toneOf } from "./ui";
+import { GRID, MovieCard, Notice, Poster, Rating, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
 
 const money = (n) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
@@ -62,6 +62,7 @@ function Fact({ label, children }) {
 
 export default function Detail({ id, rated, onRate, onFilter }) {
   const openTrailer = useContext(TrailerContext);
+  const { saved, toggle } = useContext(WatchlistContext);
   const [movie, setMovie] = useState(null);
   const [similar, setSimilar] = useState([]);
   const [state, setState] = useState("loading");
@@ -154,6 +155,14 @@ export default function Detail({ id, rated, onRate, onFilter }) {
                   className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 font-semibold text-white transition-colors hover:bg-ink/85"
                 >
                   <Play size={16} className="fill-white" /> Xem trailer
+                </button>
+                <button
+                  onClick={() => toggle(movie)}
+                  aria-pressed={saved.has(movie.movie_id)}
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-semibold ring-1 ring-ink/20 transition-colors hover:bg-ink/5"
+                >
+                  <Bookmark size={16} className={saved.has(movie.movie_id) ? "fill-current" : ""} />
+                  {saved.has(movie.movie_id) ? "Đã lưu" : "Xem sau"}
                 </button>
                 {movie.homepage && (
                   <a

@@ -1,10 +1,3 @@
-import sys
-try:
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
-except Exception:
-    pass
-from pathlib import Path
 """
 api.py  (v2)
 ------------
@@ -12,7 +5,7 @@ Lop API giua giao dien React va backend cua nhom. Dat o THU MUC GOC cua repo,
 cung cap voi data_module/, recommendation/ va ranking_eval/.
 
 Chay:
-    pip install -r requirements.txt
+    pip install -r requirements-api.txt
     uvicorn api:app --reload --port 8000
 Tai lieu API tu dong: http://localhost:8000/docs
 
@@ -28,6 +21,7 @@ data_module/, data_module/data/, data_module/src/.
 """
 
 import ast
+import csv
 import glob
 import hashlib
 import hmac
@@ -52,28 +46,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # ── Cho phep import code cua nhom (cac module dung import phang) ────────────
-ROOT = str(Path(__file__).resolve().parent)
+ROOT = os.path.dirname(os.path.abspath(__file__))
 for _p in (ROOT, os.path.join(ROOT, "data_module", "src"), os.path.join(ROOT, "recommendation")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-DB = os.environ.get("MOVIES_DB", str(Path(__file__).resolve().parent / "data_module" / "src" / "movies.db"))
-ACCOUNTS_DB = os.environ.get("ACCOUNTS_DB", str(Path(__file__).resolve().parent / "accounts.db"))
+DB = os.environ.get("MOVIES_DB", os.path.join(ROOT, "data_module", "src", "movies.db"))
+ACCOUNTS_DB = os.environ.get("ACCOUNTS_DB", os.path.join(ROOT, "accounts.db"))
 
 import recommender as _rec                                          # noqa: E402
 from recommender import like, dislike                               # noqa: E402
-from feature_store import (
-    check_db_exists,                                         # noqa: E402
-    get_all_vectors, get_movie_metadata, get_movie_vector, get_user_interactions,
+from feature_store import (                                         # noqa: E402
+    check_db_exists, get_all_vectors, get_movie_metadata, get_movie_vector, get_user_interactions,
 )
 import tmdb_client                                                   # noqa: E402
 from similarity import cosine_similarity_bulk                       # noqa: E402
 from ranking_eval.frontend_service import (                        # noqa: E402
-    onboard_user, recommendations as ranked_recommendations, get_popular_movies,
+    get_popular_movies, onboard_user, recommendations as ranked_recommendations,
 )
 
-# Kiem tra movies.db ton tai truoc khi khoi dong
-check_db_exists(DB)
+check_db_exists(DB)    # bao loi ro rang neu chua tao movies.db (khong tu tao DB rong)
 
 app = FastAPI(title="Movie Recommendation API")
 # Cho phep giao dien chay o bat ky cong localhost nao (Vite doi cong neu 5173 ban).
@@ -93,8 +85,6 @@ app.add_middleware(
 
 @contextmanager
 def _conn(path):
-    if path == DB:
-        check_db_exists(path)
     c = sqlite3.connect(path)
     c.row_factory = sqlite3.Row
     try:
@@ -134,6 +124,10 @@ def _init_accounts():
                 movie_id INTEGER PRIMARY KEY, poster_path TEXT, trailer_key TEXT,
                 trailer_name TEXT, fetched_at REAL NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS watchlist (
+                user_id TEXT NOT NULL, movie_id INTEGER NOT NULL, added_at REAL NOT NULL,
+                PRIMARY KEY (user_id, movie_id)
+            );
             CREATE TABLE IF NOT EXISTS onboarding (
                 user_id TEXT PRIMARY KEY,
                 genres TEXT NOT NULL,           -- JSON list
@@ -148,6 +142,26 @@ def _init_accounts():
 
 
 _init_accounts()
+
+
+def _import_media_csv() -> int:
+    """Nap poster/trailer tu data_module/tmdb_media.csv (file nay duoc commit len git, khong
+    chua bi mat) vao bang tmdb_cache. Chi them phim chua co nen khong ghi de du lieu moi hon."""
+    path = os.environ.get("TMDB_MEDIA_CSV") or next(
+        (p for p in (os.path.join(ROOT, "data_module", "tmdb_media.csv"),
+                     os.path.join(ROOT, "tmdb_media.csv")) if os.path.exists(p)), None)
+    if not path:
+        return 0
+    with open(path, newline="", encoding="utf-8") as f:
+        rows = [(int(r["movie_id"]), r["poster_path"] or None, r["trailer_key"] or None,
+                 r["trailer_name"] or None, 0.0) for r in csv.DictReader(f)]
+    with _acc() as c:
+        before = c.total_changes
+        c.executemany("INSERT OR IGNORE INTO tmdb_cache VALUES (?, ?, ?, ?, ?)", rows)
+        return c.total_changes - before
+
+
+_import_media_csv()
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -770,15 +784,13 @@ def _ensure_profile(user_id: str) -> None:
 
 
 def _popular(user_id: str, k: int) -> dict:
-    """Chua co gu: hien phim pho bien, diem tot (de nguoi dung thay danh sach ngay)."""
-    rated = _rated_ids(user_id)
-    popular = get_popular_movies(db_path=DB, limit=k, exclude_ids=rated)
+    """Du phong cuoi cung khi khong lay duoc goi y: phim pho bien (ham dung chung voi Ranking)."""
     items = []
-    for meta in popular:
-        card = _card(meta)
-        card.update(match_percent=None, reasons=[], neural_used=False, cold_start=True)
+    for m in get_popular_movies(db_path=DB, limit=k, exclude_ids=_rated_ids(user_id)):
+        card = _card(m)
+        card.update(match_percent=None, reasons=[], neural_used=False, cold_start=True, breakdown=None)
         items.append(card)
-    return {"items": items[:k], "personalized": False, "cold_start": True}
+    return {"items": items, "personalized": False, "cold_start": True}
 
 
 class OnboardingBody(BaseModel):
@@ -832,37 +844,50 @@ def feedback(body: FeedbackBody, user: dict = Depends(current_user)):
     return {"ok": True}
 
 
+def _breakdown(r: dict):
+    if "rating_score" not in r:
+        return None
+    return {
+        "cosine": round(r["cosine_score"], 3),
+        "rating": round(r["rating_score"], 3),
+        "popularity": round(r["popularity_score"], 3),
+        "newness": round(r["newness_score"], 3),
+        "neural": round(r["nn_like_probability"], 3) if r.get("neural_used") else None,
+    }
+
+
 @app.get("/api/recommendations")
 def recommendations(k: int = 12, mode: str = "proposed", user: dict = Depends(current_user)):
     """mode=proposed: Ranking + Neural Network cua Don. mode=baseline: chi sap theo cosine
-    (cach don gian de so sanh, muc 3.9 bao cao)."""
+    (cach don gian de so sanh, muc 3.9 bao cao). Nguoi chua co tin hieu tich cuc (moi vao,
+    hoac chi bam Khong thich) duoc Ranking tra ve phim pho bien: cold_start = True."""
     uid = user["id"]
     _ensure_profile(uid)
     seeds = _seeds.get(uid, set())
     want = k + len(seeds)
     mode = "baseline" if mode == "baseline" else "proposed"
     try:
-        if mode == "baseline":
-            rows_all = [{"movie_id": m, "cosine": sc, "final_score": sc}
-                        for m, sc in _rec.recommend(uid, k=want, db_path=DB)]
-        else:
-            rows_all = ranked_recommendations(
-                uid, db_path=DB, limit=want, candidate_k=max(100, want + 20))["items"]
+        ranked = ranked_recommendations(uid, db_path=DB, limit=want, candidate_k=max(100, want + 20))["items"]
     except RuntimeError:
-        return _popular(uid, k)                       # chua co gu: hien phim pho bien
+        return _popular(uid, k)
     except ValueError as e:
         raise HTTPException(400, str(e))
+    cold = bool(ranked) and all(float(r.get("cosine", 0.0)) == 0.0 for r in ranked)
+    if mode == "baseline" and not cold:
+        try:
+            rows_all = [{"movie_id": m, "cosine": sc, "final_score": sc}
+                        for m, sc in _rec.recommend(uid, k=want, db_path=DB)]
+        except RuntimeError:
+            return _popular(uid, k)
+    else:
+        rows_all = ranked
     rows = [r for r in rows_all if r["movie_id"] not in seeds][:k]
 
     # Ly do goi y: genre trung voi the loai da chon / phim da thich
-    sel = _selection(uid) or {"genres": [], "favorites": []}
-    has_onboarding = bool(sel.get("genres") or sel.get("favorites"))
-    user_history = get_user_interactions(uid, db_path=DB)
-    likes = [h["movie_id"] for h in user_history if h["action"] == "like"]
-    is_cold_start = (len(likes) == 0) and not has_onboarding
-
+    sel = _selection(uid) or {"genres": []}
     liked_genres = Counter(sel["genres"])
-    liked = list(seeds) + likes
+    liked = list(seeds) + [h["movie_id"] for h in get_user_interactions(uid, db_path=DB)
+                           if h["action"] == "like"]
     for mid in liked:
         m = get_movie_metadata(mid, db_path=DB)
         if m:
@@ -872,26 +897,15 @@ def recommendations(k: int = 12, mode: str = "proposed", user: dict = Depends(cu
     for r in rows:
         card = _card(get_movie_metadata(r["movie_id"], db_path=DB))
         card["score"] = round(r["final_score"], 4)
-        card["match_percent"] = round(max(0.0, min(1.0, r["final_score"])) * 100)
         card["cosine"] = round(r["cosine"], 4)
         card["neural_used"] = bool(r.get("neural_used"))
-        card["reasons"] = [g for g, _ in liked_genres.most_common() if g in card["genres"]][:3]
-        # Diem thanh phan (0-1, chuan hoa trong danh sach ung vien) cua module Ranking
-        card["breakdown"] = None if "rating_score" not in r else {
-            "cosine": round(r["cosine_score"], 3),
-            "rating": round(r["rating_score"], 3),
-            "popularity": round(r["popularity_score"], 3),
-            "newness": round(r["newness_score"], 3),
-            "neural": round(r["nn_like_probability"], 3) if r.get("neural_used") else None,
-        }
-        card["cold_start"] = is_cold_start
+        card["cold_start"] = cold
+        card["match_percent"] = None if cold else round(max(0.0, min(1.0, r["final_score"])) * 100)
+        card["reasons"] = [] if cold else [
+            g for g, _ in liked_genres.most_common() if g in card["genres"]][:3]
+        card["breakdown"] = _breakdown(r)
         items.append(card)
-    return {
-        "items": items,
-        "personalized": not is_cold_start,
-        "cold_start": is_cold_start,
-        "mode": mode,
-    }
+    return {"items": items, "personalized": not cold, "cold_start": cold, "mode": mode}
 
 
 @app.get("/api/history")
@@ -916,6 +930,277 @@ def reset_profile(user: dict = Depends(current_user)):
         c.execute("DELETE FROM onboarding WHERE user_id = ?", (uid,))
         c.execute("UPDATE accounts SET onboarded = 0 WHERE id = ?", (uid,))
     return {"ok": True}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Xem sau (watchlist): luu phim de xem sau, KHONG anh huong ho so goi y
+# ═══════════════════════════════════════════════════════════════════════════
+
+class WatchBody(BaseModel):
+    movie_id: int
+
+
+@app.get("/api/watchlist")
+def get_watchlist(user: dict = Depends(current_user)):
+    with _acc() as c:
+        rows = c.execute("SELECT movie_id, added_at FROM watchlist WHERE user_id = ? "
+                         "ORDER BY added_at DESC", (user["id"],)).fetchall()
+    items = []
+    for r in rows:
+        meta = get_movie_metadata(r["movie_id"], db_path=DB)
+        if meta:
+            items.append({**_card(meta), "added_at": r["added_at"]})
+    return {"items": items}
+
+
+@app.post("/api/watchlist")
+def add_watchlist(body: WatchBody, user: dict = Depends(current_user)):
+    if get_movie_metadata(body.movie_id, db_path=DB) is None:
+        raise HTTPException(404, "Không tìm thấy phim")
+    with _acc() as c:
+        c.execute("INSERT OR IGNORE INTO watchlist VALUES (?, ?, ?)",
+                  (user["id"], body.movie_id, time.time()))
+    return {"ok": True}
+
+
+@app.delete("/api/watchlist/{movie_id}")
+def remove_watchlist(movie_id: int, user: dict = Depends(current_user)):
+    with _acc() as c:
+        c.execute("DELETE FROM watchlist WHERE user_id = ? AND movie_id = ?", (user["id"], movie_id))
+    return {"ok": True}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Toi nay xem gi?: chon phim theo tam trang + thoi gian ranh
+# (Luat loc do giao dien dat ra, KHONG phai mo hinh hoc tu du lieu.)
+# ═══════════════════════════════════════════════════════════════════════════
+
+MOODS = [
+    {"id": "happy", "label": "Vui vẻ, nhẹ nhàng", "genres": ["Comedy", "Animation", "Family"],
+     "avoid": ["Horror", "War", "Crime"]},
+    {"id": "thrill", "label": "Hồi hộp, căng thẳng", "genres": ["Thriller", "Mystery", "Crime"],
+     "avoid": ["Family", "Animation"]},
+    {"id": "touching", "label": "Cảm động, sâu lắng", "genres": ["Drama", "Romance"], "avoid": ["Horror"]},
+    {"id": "excited", "label": "Phấn khích, mãn nhãn", "genres": ["Action", "Adventure", "Science Fiction"],
+     "avoid": []},
+    {"id": "scary", "label": "Rùng rợn", "genres": ["Horror"], "avoid": ["Comedy", "Family", "Animation"]},
+    {"id": "dreamy", "label": "Mơ mộng, kỳ ảo", "genres": ["Fantasy", "Science Fiction", "Animation"],
+     "avoid": ["Horror", "War"]},
+    {"id": "romantic", "label": "Lãng mạn", "genres": ["Romance"], "avoid": ["Horror", "War"]},
+    {"id": "think", "label": "Suy ngẫm", "genres": ["Drama", "History", "Documentary", "Mystery"],
+     "avoid": ["Comedy", "Family"]},
+]
+TIMES = [
+    {"id": "short", "label": "Dưới 100 phút", "max": 100},
+    {"id": "medium", "label": "Khoảng 2 giờ", "max": 130},
+    {"id": "any", "label": "Không giới hạn", "max": None},
+]
+
+
+@app.get("/api/tonight/options")
+def tonight_options():
+    return {"moods": [{k: m[k] for k in ("id", "label", "genres")} for m in MOODS],
+            "times": [{"id": t["id"], "label": t["label"]} for t in TIMES]}
+
+
+class TonightBody(BaseModel):
+    mood: str
+    time: str = "any"
+    exclude: List[int] = []
+
+
+@app.post("/api/tonight")
+def tonight(body: TonightBody, user: dict = Depends(current_user)):
+    mood = next((m for m in MOODS if m["id"] == body.mood), None)
+    if mood is None:
+        raise HTTPException(400, "Tâm trạng không hợp lệ")
+    limit = next((t["max"] for t in TIMES if t["id"] == body.time), None)
+    uid = user["id"]
+    _ensure_profile(uid)
+    try:       # da co gu thi xep theo gu, chua co thi Ranking tra phim pho bien
+        ranked = ranked_recommendations(uid, db_path=DB, limit=500, candidate_k=500)["items"]
+    except (RuntimeError, ValueError):
+        ranked = []
+    personalized = bool(ranked) and any(float(r.get("cosine", 0.0)) > 0.0 for r in ranked)
+    own = {r["movie_id"] for r in ranked} if personalized else set()
+    # Phim hop gu xep truoc; het thi bo sung theo do pho bien de van du lua chon cho tam trang hiem
+    with _db() as c:
+        filler = [r["movie_id"] for r in c.execute("SELECT movie_id FROM movies ORDER BY popularity DESC")]
+    ranked = [{"movie_id": r["movie_id"]} for r in ranked] + [{"movie_id": m} for m in filler]
+
+    extras = _load_extra()            # thoi luong chi co khi doc duoc file CSV goc
+    skip = set(body.exclude) | _rated_ids(uid)
+    seen = set()
+    want, avoid = set(mood["genres"]), set(mood["avoid"])
+    items = []
+    for r in ranked:
+        mid = r["movie_id"]
+        if mid in seen:
+            continue
+        seen.add(mid)
+        meta = get_movie_metadata(mid, db_path=DB)
+        if mid in skip or meta is None:
+            continue
+        genres = set(meta["genres"])
+        if not genres & want or genres & avoid:
+            continue
+        if (meta.get("vote_count") or 0) < 200 or (meta.get("vote_average") or 0) < 6.2:
+            continue
+        runtime = extras.get(mid, {}).get("runtime")
+        if limit and runtime and runtime > limit:
+            continue
+        card = _card(meta)
+        card["runtime"] = runtime
+        card["why"] = " · ".join(filter(None, [
+            f"Hợp tâm trạng “{mood['label']}”",
+            f"{runtime} phút" if runtime else None,
+            "hợp gu của bạn" if mid in own else "được nhiều người yêu thích"]))
+        items.append(card)
+        if len(items) >= 10:
+            break
+    return {"items": items, "personalized": personalized, "mood": mood["label"],
+            "runtime_filter_applied": bool(extras) and limit is not None}
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Ket qua danh gia he thong: doc cac file Don/nhom xuat ra trong ranking_eval/results/
+# ═══════════════════════════════════════════════════════════════════════════
+
+EVAL_DIR = os.environ.get("EVAL_RESULTS_DIR", os.path.join(ROOT, "ranking_eval", "results"))
+RANKER_LABELS = {
+    "0a_Random": ("Ngẫu nhiên", "reference"),
+    "0b_Popular": ("Phổ biến nhất", "reference"),
+    "1_Baseline": ("Baseline (chỉ cosine)", "baseline"),
+    "2_Tier1": ("Tầng 1 (Ranking)", "tier1"),
+    "3_Tier2_Old": ("Tầng 2 cũ (xác suất)", "tier2old"),
+    "3_Tier2_New": ("Tầng 2 mới (logit chuẩn hóa)", "tier2new"),
+}
+SCENARIO_LABELS = {
+    "ALL": "Tổng thể", "onboarding_only": "Chỉ chọn thể loại", "interactions_m1": "Thích 1 phim",
+    "interactions_m3": "Thích 3 phim", "interactions_m5": "Thích 5 phim", "interactions_m10": "Thích 10 phim",
+}
+EVAL_METRICS = [
+    ("precision_at_10", "Precision@10", "Trong 10 phim đầu được gợi ý, tỷ lệ phim thật sự hợp gu người dùng giả lập."),
+    ("hit_rate_at_10", "Hit rate@10", "Tỷ lệ người dùng giả lập có ít nhất 1 phim hợp gu trong 10 phim đầu."),
+    ("recall_at_10", "Recall@10", "Trong toàn bộ phim hợp gu, tỷ lệ tìm thấy trong 10 phim đầu (thấp là bình thường vì có hàng trăm phim hợp gu)."),
+    ("recall_at_50", "Recall@50", "Như Recall@10 nhưng tính trong 50 phim đầu."),
+    ("f1_at_10", "F1@10", "Điểm cân bằng giữa Precision@10 và Recall@10."),
+]
+_LATEX = {r"\Delta": "Δ", r"\approx": "≈", r"\lambda": "λ", r"\in": "∈", r"\{": "{", r"\}": "}", r"\pm": "±"}
+
+
+def _clean_md(text: str) -> str:
+    for k, v in _LATEX.items():
+        text = text.replace(k, v)
+    return re.sub(r"[*`$]", "", text).replace("\\", "").strip()
+
+
+def _md_tables(text: str) -> list:
+    """Lay moi bang markdown cung tieu de gan nhat phia tren."""
+    out, heading, block = [], "", []
+
+    def flush():
+        if len(block) >= 3:
+            cells = lambda ln: [_clean_md(c) for c in ln.strip().strip("|").split("|")]
+            out.append({"heading": _clean_md(heading.lstrip("# ")), "header": cells(block[0]),
+                        "rows": [cells(ln) for ln in block[2:]]})
+        block.clear()
+
+    for line in text.splitlines():
+        if line.lstrip().startswith("|"):
+            block.append(line.strip())
+            continue
+        flush()
+        if line.startswith("#"):
+            heading = line
+    flush()
+    return out
+
+
+def _numbered(text: str) -> list:
+    """'1. **Tieu de**: noi dung' va cac dong '- y nho' ben duoi -> [{title, text, points}]"""
+    blocks = []
+    for line in text.splitlines():
+        m = re.match(r"^\d+\.\s+\*\*(.+?)\*\*\s*:?\s*(.*)$", line)
+        if m:
+            blocks.append({"title": _clean_md(m.group(1)).rstrip(":"), "text": _clean_md(m.group(2)), "points": []})
+        elif blocks and re.match(r"^\s+[-*]\s+", line):
+            blocks[-1]["points"].append(_clean_md(re.sub(r"^\s+[-*]\s+", "", line)))
+    return blocks
+
+
+def _read(name: str) -> "Optional[str]":
+    path = os.path.join(EVAL_DIR, name)
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8-sig") as f:
+        return f.read().replace("\r\n", "\n")
+
+
+@app.get("/api/evaluation")
+def evaluation():
+    summary_text = _read("benchmark_summary.csv")
+    report = _read("benchmark_report.md")
+    if summary_text is None:
+        return {"available": False}
+    rows = list(csv.DictReader(summary_text.splitlines()))
+    num = lambda v: float(v) if v not in (None, "") else None
+
+    summary, personas = {}, {}
+    for r in rows:
+        if r["group_type"] in ("overall", "scenario"):
+            sid = "ALL" if r["group_type"] == "overall" else r["scenario"]
+            cell = summary.setdefault(sid, {}).setdefault(r["ranker"], {})
+            for key, _, _ in EVAL_METRICS:
+                cell[key] = {"mean": num(r[f"{key}_mean"]), "std": num(r[f"{key}_std"])}
+        elif r["group_type"] == "persona":
+            m = re.match(r"^(\w+)\s*\((.*)\)$", r["persona_id"])
+            pid, pname = (m.group(1), m.group(2)) if m else (r["persona_id"], "")
+            p = personas.setdefault(pid, {"id": pid, "name": pname, "precision": {}})
+            p["precision"][r["ranker"]] = num(r["precision_at_10_mean"])
+    detailed = _read("benchmark_detailed.csv")
+    if detailed:
+        for r in csv.DictReader(detailed.splitlines()):
+            p = personas.get(r["persona_id"])
+            if p is not None and "external" not in p:
+                p["external"] = r["is_external"] == "True"
+                p["pool_size"] = int(float(r["pool_size"]))
+
+    order = ["ALL", "onboarding_only", "interactions_m1", "interactions_m3", "interactions_m5", "interactions_m10"]
+    scenario_ids = [x for x in order if x in summary] + [x for x in summary if x not in order]
+    ranker_ids = sorted({k for sc in summary.values() for k in sc})
+
+    out = {
+        "available": True,
+        "rankers": [{"id": r, "label": RANKER_LABELS.get(r, (r, "other"))[0],
+                     "kind": RANKER_LABELS.get(r, (r, "other"))[1]} for r in ranker_ids],
+        "scenarios": [{"id": x, "label": SCENARIO_LABELS.get(x, x)} for x in scenario_ids],
+        "metrics": [{"id": k, "label": lab, "hint": hint} for k, lab, hint in EVAL_METRICS],
+        "summary": summary,
+        "personas": sorted(personas.values(), key=lambda p: p["id"]),
+        "run_info": [], "paired": None, "conclusions": [], "limitations": [], "dislike": None,
+    }
+    if report:
+        out["run_info"] = [_clean_md(ln.lstrip("> ")) for ln in report.splitlines()[:6] if ln.startswith(">")]
+        out["paired"] = next((t for t in _md_tables(report) if "Bảng 2" in t["heading"]), None)
+        a = report.find("### Nhận định")
+        b = report.find("\n## ", a + 5) if a >= 0 else -1
+        if a >= 0:
+            out["conclusions"] = _numbered(report[a:b if b > 0 else None])
+        c = report.find("## 6.")
+        if c >= 0:
+            out["limitations"] = _numbered(report[c:])
+    dislike = _read("dislike_numeric_report.md")
+    if dislike:
+        tables = _md_tables(dislike)
+        k = dislike.find("## Kết luận")
+        out["dislike"] = {
+            "title": _clean_md(dislike.splitlines()[0].lstrip("# ")),
+            "table": tables[0] if tables else None,
+            "notes": [_clean_md(re.sub(r"^\d+\.\s+", "", ln)) for ln in dislike[k:].splitlines()
+                      if re.match(r"^\d+\.\s+", ln)] if k >= 0 else [],
+        }
+    return out
 
 
 # Xay san chi muc o luong nen de yeu cau dau tien khong phai cho ~vai giay

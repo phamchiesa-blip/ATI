@@ -1,4 +1,4 @@
-# Gu Phim: hệ thống gợi ý phim (AI Movie Recommendation System) - tên lỏ thì đổi sau nha
+# Gu Phim: hệ thống gợi ý phim (AI Movie Recommendation System)
 
 Ứng dụng web gợi ý phim cá nhân hóa dựa trên nội dung phim (content-based) và phản hồi Thích / Không thích của người dùng.
 Dữ liệu phim: **TMDB 5000 Movie Dataset**.
@@ -14,7 +14,7 @@ ATI/
 ├── api.py                  # API cho giao diện (FastAPI)
 ├── tmdb_client.py          # gọi TMDB lấy poster / trailer (tùy chọn)
 ├── fetch_tmdb_posters.py   # tải poster + trailer cho toàn bộ phim (tùy chọn)
-├── requirements.txt    # thư viện Python
+├── requirements-api.txt    # thư viện Python
 ├── data_module/            # phần Data: làm sạch dữ liệu, tạo vector phim
 │   └── src/build_dataset.py
 ├── recommendation/         # phần Recommendation Core: user profile, cosine
@@ -41,20 +41,21 @@ python -m venv .venv
 .venv\Scripts\activate          # Windows PowerShell
 # source .venv/bin/activate     # macOS / Linux
 
-pip install -r requirements.txt
+pip install -r requirements-api.txt
 ```
 
 ### 2. Tải dữ liệu phim
 
 Tải **TMDB 5000 Movie Dataset** trên Kaggle, lấy 2 file `tmdb_5000_movies.csv` và `tmdb_5000_credits.csv`
-rồi đặt vào thư mục `data_module/`. (Hai file này không nằm trong repo vì khá nặng. Giữ nguyên tên file,
-API sẽ tự tìm thấy chúng để lấy thêm thời lượng, diễn viên, từ khóa cho trang chi tiết phim.)
+rồi đặt vào thư mục **`data_module/data/`** (tạo thư mục nếu chưa có; đây là đường dẫn mặc định của `run_benchmark`).
+Hai file này không nằm trong repo vì khá nặng. Giữ nguyên tên file, API sẽ tự tìm thấy chúng
+(trong `data_module/data/`, `data_module/` hoặc `data_module/src/`) để lấy thêm thời lượng, diễn viên, từ khóa.
 
 ### 3. Tạo cơ sở dữ liệu `movies.db` (chỉ cần làm 1 lần)
 
 ```bash
 cd data_module/src
-python build_dataset.py --movies ../tmdb_5000_movies.csv --credits ../tmdb_5000_credits.csv --db movies.db
+python build_dataset.py --movies ../data/tmdb_5000_movies.csv --credits ../data/tmdb_5000_credits.csv --db movies.db
 cd ../..
 ```
 
@@ -75,6 +76,8 @@ Mở **2 cửa sổ terminal** (đều ở thư mục gốc `ATI/`, nhớ kích 
 ```bash
 # Terminal 1: API (phải chạy từ thư mục gốc)
 uvicorn api:app --reload --port 8000
+# hoặc 
+python -m uvicorn api:app --reload --port 8000
 
 # Terminal 2: giao diện
 cd movie-ui
@@ -95,7 +98,11 @@ $env:TMDB_API_KEY="khoa_cua_ban"        # Windows PowerShell
 python fetch_tmdb_posters.py            # khoảng 5 phút, có thể dừng và chạy lại
 ```
 
-Sau đó khởi động lại API. **Không commit key lên git.** Mỗi người dùng key riêng của mình.
+Sau đó khởi động lại API. **Không commit key lên git.**
+
+**Cả nhóm không cần mỗi người một key:** một người chạy xong thì xuất file chia sẻ bằng
+`python fetch_tmdb_posters.py --export`, commit `data_module/tmdb_media.csv`, những người còn lại pull về là có poster và
+trailer mà không cần key. Xem hướng dẫn đầy đủ trong **`MEDIA_SETUP.md`**.
 
 ## Tài khoản
 
@@ -109,9 +116,9 @@ Sau đó khởi động lại API. **Không commit key lên git.** Mỗi ngườ
 
 | Quyền | Endpoint |
 |---|---|
-| Công khai | `GET /api/movies`, `/api/movies/{id}`, `/api/movies/{id}/similar`, `/api/movies/{id}/trailer`, `/api/genres`, `/api/suggest`, `/api/showcase` |
+| Công khai | `GET /api/movies`, `/api/movies/{id}`, `/api/movies/{id}/similar`, `/api/movies/{id}/trailer`, `/api/genres`, `/api/suggest`, `/api/showcase`, `/api/tonight/options`, `/api/evaluation` |
 | Tạo phiên | `POST /api/auth/guest`, `/api/auth/register`, `/api/auth/login` |
-| Cần đăng nhập (khách hoặc thành viên) | `GET /api/auth/me`, `POST /api/auth/logout`, `GET/POST /api/onboarding`, `POST /api/feedback`, `GET /api/recommendations`, `GET /api/history`, `DELETE /api/me/profile` |
+| Cần đăng nhập (khách hoặc thành viên) | `GET /api/auth/me`, `POST /api/auth/logout`, `GET/POST /api/onboarding`, `POST /api/feedback`, `GET /api/recommendations`, `GET /api/history`, `DELETE /api/me/profile`, `GET/POST /api/watchlist`, `DELETE /api/watchlist/{id}`, `POST /api/tonight` |
 
 Các endpoint cần đăng nhập đọc danh tính từ header `Authorization: Bearer <token>`; `user_id` luôn lấy từ token, không nhận từ client.
 
@@ -144,10 +151,6 @@ Muốn người ngoài mạng dùng được thì cần đưa API và giao diệ
 
 ## Làm việc nhóm với Git
 
-- Không commit: `movies.db`, `accounts.db`, file CSV, `node_modules/`, `__pycache__/`, `.env`, TMDB key (đã có trong `.gitignore`).
+- Không commit: `movies.db`, `accounts.db`, file dữ liệu gốc `tmdb_5000_*.csv`, `node_modules/`, `__pycache__/`, `.env`, TMDB key (đã có trong `.gitignore`). Các CSV kết quả (`ranking_eval/results/`, `data_module/tmdb_media.csv`) thì **được** commit.
 - Nếu đã lỡ commit các file `.pyc` hoặc `__pycache__/`, gỡ khỏi git bằng: `git rm -r --cached .` rồi `git add .` và commit lại.
 - Sau mỗi lần `git pull`, nếu `movie-ui/package.json` thay đổi thì chạy lại `npm install`.
-
-## Nhóm thực hiện
-
-Kiều Huy Đôn, Nguyễn Trịnh Võ, Phạm Chuyên, Nguyễn Thái Sơn.

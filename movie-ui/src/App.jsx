@@ -1,14 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { api, getToken, setToken } from "./api";
 import Auth from "./Auth";
 import Onboarding from "./Onboarding";
 import Browse, { presetBrowse } from "./Browse";
 import Taste from "./Taste";
+import Watchlist from "./Watchlist";
+import Tonight from "./Tonight";
+import Evaluation from "./Evaluation";
 import TrailerModal from "./Trailer";
 import Recommend from "./Recommend";
 import Detail from "./Detail";
 import Toast from "./Toast";
-import { Notice, TrailerContext } from "./ui";
+import { Notice, TrailerContext, WatchlistContext } from "./ui";
 
 const parseRoute = () => {
   const m = window.location.hash.match(/^#\/movie\/(\d+)/);
@@ -27,6 +30,7 @@ export default function App() {
   const [rev, setRev] = useState(0); // tăng lên mỗi lần đánh giá để tải lại gợi ý
   const [toast, setToast] = useState(null);
   const [trailerMovie, setTrailerMovie] = useState(null);
+  const [watchlist, setWatchlist] = useState([]); // phim đã lưu "Xem sau"
   const started = useRef(false);
   const ratedCount = useRef(0);
 
@@ -86,6 +90,17 @@ export default function App() {
     api
       .history()
       .then((r) => setRated(Object.fromEntries(r.items.map((m) => [m.movie_id, m.action]))))
+      .catch(() => {});
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (!user) {
+      setWatchlist([]);
+      return;
+    }
+    api
+      .watchlist()
+      .then((r) => setWatchlist(r.items))
       .catch(() => {});
   }, [user?.id]);
 
@@ -178,6 +193,22 @@ export default function App() {
     setRev((v) => v + 1);
   };
 
+  const saved = useMemo(() => new Set(watchlist.map((m) => m.movie_id)), [watchlist]);
+
+  // Lưu / bỏ lưu phim: cập nhật giao diện ngay, lỗi thì hoàn lại
+  const toggleSave = async (movie) => {
+    const was = saved.has(movie.movie_id);
+    setWatchlist((w) =>
+      was ? w.filter((m) => m.movie_id !== movie.movie_id) : [{ ...movie, added_at: Date.now() / 1000 }, ...w]
+    );
+    try {
+      await (was ? api.removeWatch(movie.movie_id) : api.addWatch(movie.movie_id));
+    } catch {
+      setWatchlist((w) => (was ? [movie, ...w] : w.filter((m) => m.movie_id !== movie.movie_id)));
+      notify({ kind: "error", title: "Chưa lưu được", text: "Hãy thử lại sau ít giây.", duration: 4000 });
+    }
+  };
+
   const toastEl = <Toast toast={toast} onClose={closeToast} />;
 
   if (booting) return <p className="p-10 text-mute">Đang tải...</p>;
@@ -228,6 +259,7 @@ export default function App() {
   const inMain = view === "main" && !movieId;
 
   return (
+    <WatchlistContext.Provider value={{ saved, toggle: toggleSave }}>
     <TrailerContext.Provider value={setTrailerMovie}>
       <header className="sticky top-0 z-10 border-b border-ink/10 bg-paper/90 backdrop-blur">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3">
@@ -235,6 +267,8 @@ export default function App() {
           <nav className="flex flex-wrap gap-1">
             {tabBtn("recommend", "Dành cho bạn", inMain && tab === "recommend", () => goTab("recommend"))}
             {tabBtn("browse", "Khám phá", inMain && tab === "browse", () => goTab("browse"))}
+            {tabBtn("tonight", "Tối nay xem gì?", inMain && tab === "tonight", () => goTab("tonight"))}
+            {tabBtn("watch", `Xem sau${watchlist.length ? ` (${watchlist.length})` : ""}`, inMain && tab === "watch", () => goTab("watch"))}
             {tabBtn("taste", "Gu của bạn", inMain && tab === "taste", () => goTab("taste"))}
             {tabBtn("genres", user.onboarded ? "Đổi thể loại" : "Chọn thể loại", view === "genres", () => {
               setView("genres");
@@ -291,14 +325,30 @@ export default function App() {
           onPickGenres={() => setView("genres")}
           onBrowse={() => goTab("browse")}
         />
+      ) : tab === "tonight" ? (
+        <Tonight rated={rated} onRate={rate} />
+      ) : tab === "watch" ? (
+        <Watchlist items={watchlist} rated={rated} onRate={rate} onBrowse={() => goTab("browse")} />
+      ) : tab === "eval" ? (
+        <Evaluation />
       ) : tab === "taste" ? (
         <Taste rev={rev} onBrowse={() => goTab("browse")} />
       ) : (
         <Browse rated={rated} onRate={rate} />
       )}
 
+      <footer className="mx-auto mt-16 max-w-[1500px] border-t border-ink/10 px-5 py-8 text-xs text-mute">
+        <p>
+          Dữ liệu phim và hình ảnh từ TMDB. Sản phẩm này dùng TMDB API nhưng không được TMDB chứng nhận hay bảo trợ.
+        </p>
+        <button onClick={() => goTab("eval")} className="mt-2 font-semibold underline underline-offset-4">
+          Đánh giá hệ thống
+        </button>
+      </footer>
+
       <TrailerModal movie={trailerMovie} onClose={() => setTrailerMovie(null)} />
       {toastEl}
     </TrailerContext.Provider>
+    </WatchlistContext.Provider>
   );
 }

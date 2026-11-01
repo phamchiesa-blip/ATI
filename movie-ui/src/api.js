@@ -80,6 +80,14 @@ export const api = {
   movie: (id) => req(`/api/movies/${id}`),
   similar: (id, k = 8) => req(`/api/movies/${id}/similar?k=${k}`),
 
+  // Xem sau, Tối nay xem gì, đánh giá hệ thống
+  watchlist: () => req("/api/watchlist"),
+  addWatch: (movie_id) => post("/api/watchlist", { movie_id }),
+  removeWatch: (movie_id) => req(`/api/watchlist/${movie_id}`, { method: "DELETE" }),
+  tonightOptions: () => req("/api/tonight/options"),
+  tonight: (mood, time, exclude = []) => post("/api/tonight", { mood, time, exclude }),
+  evaluation: () => req("/api/evaluation"),
+
   // Hồ sơ sở thích
   getOnboarding: () => req("/api/onboarding"),
   onboarding: (genres, favorite_movie_ids = []) =>
