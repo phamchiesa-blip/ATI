@@ -267,7 +267,7 @@ export default function App() {
           <nav className="flex flex-wrap gap-1">
             {tabBtn("recommend", "Dành cho bạn", inMain && tab === "recommend", () => goTab("recommend"))}
             {tabBtn("browse", "Khám phá", inMain && tab === "browse", () => goTab("browse"))}
-            {tabBtn("tonight", "Tối nay xem gì?", inMain && tab === "tonight", () => goTab("tonight"))}
+            {tabBtn("tonight", "Hôm nay xem gì?", inMain && tab === "tonight", () => goTab("tonight"))}
             {tabBtn("watch", `Xem sau${watchlist.length ? ` (${watchlist.length})` : ""}`, inMain && tab === "watch", () => goTab("watch"))}
             {tabBtn("taste", "Gu của bạn", inMain && tab === "taste", () => goTab("taste"))}
             {tabBtn("genres", user.onboarded ? "Đổi thể loại" : "Chọn thể loại", view === "genres", () => {

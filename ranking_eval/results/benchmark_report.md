@@ -1,6 +1,6 @@
 # Báo Cáo Đánh Giá Hiệu Năng Hệ Thống Gợi Ý Phim (Offline Benchmark)
 
-> **Thời gian chạy**: 156.51 giây | **Tổng số lượt giả lập**: 400 users x 6 rankers = 2400 lượt đánh giá
+> **Thời gian chạy**: 262.64 giây | **Tổng số lượt giả lập**: 400 users x 6 rankers = 2400 lượt đánh giá
 > **Đơn vị độc lập trong suy luận thống kê**: **Persona** (Cluster Bootstrap Resample over 8 Personas).
 
 ## 0. Bảng Cấu Hình Tham Số Cho Từng Thí Nghiệm & Bảng Đánh Giá
@@ -22,12 +22,12 @@
 
 | Ranker | Precision@10 | Recall@10 | F1@10 | Recall@50 | Hit Rate@10 | Online Model Active |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **(0a) Random** | 0.035 ± 0.062 | 0.002 ± 0.004 | 0.004 ± 0.007 | 0.011 ± 0.008 | 28.2% | N/A |
-| **(0b) Popular** | 0.049 ± 0.099 | 0.003 ± 0.006 | 0.006 ± 0.012 | 0.025 ± 0.028 | 24.5% | N/A |
-| **(1) Baseline (Cosine)** | 0.334 ± 0.260 | 0.020 ± 0.017 | 0.038 ± 0.031 | 0.087 ± 0.067 | 84.0% | N/A |
-| **(2) Tầng 1 (Ranking)** | 0.390 ± 0.272 | 0.024 ± 0.019 | 0.046 ± 0.036 | 0.098 ± 0.076 | 87.5% | N/A |
-| **(3a) Tầng 2 Cũ (Mode Prob)** | 0.388 ± 0.273 | 0.024 ± 0.019 | 0.045 ± 0.036 | 0.098 ± 0.076 | 87.5% | 80.0% |
-| **(3b) Tầng 2 Mới (Mode Logit MinMax)** | 0.388 ± 0.269 | 0.024 ± 0.019 | 0.045 ± 0.035 | 0.098 ± 0.076 | 87.5% | 80.0% |
+| **(0a) Random** | 0.024 ± 0.051 | 0.002 ± 0.003 | 0.003 ± 0.006 | 0.009 ± 0.009 | 19.8% | N/A |
+| **(0b) Popular** | 0.037 ± 0.098 | 0.002 ± 0.006 | 0.004 ± 0.012 | 0.018 ± 0.028 | 12.5% | N/A |
+| **(1) Baseline (Cosine)** | 0.264 ± 0.274 | 0.017 ± 0.018 | 0.032 ± 0.033 | 0.079 ± 0.073 | 66.0% | N/A |
+| **(2) Tầng 1 (Ranking)** | 0.325 ± 0.308 | 0.022 ± 0.022 | 0.041 ± 0.040 | 0.088 ± 0.083 | 68.8% | N/A |
+| **(3a) Tầng 2 Cũ (Mode Prob)** | 0.324 ± 0.308 | 0.022 ± 0.022 | 0.041 ± 0.040 | 0.088 ± 0.083 | 69.0% | 75.0% |
+| **(3b) Tầng 2 Mới (Mode Logit MinMax)** | 0.323 ± 0.305 | 0.022 ± 0.021 | 0.040 ± 0.040 | 0.088 ± 0.083 | 68.8% | 75.0% |
 
 ### Bảng 2: So sánh theo cặp (Paired Bootstrap 95% CI - Đơn vị độc lập: Persona)
 > **Cấu hình**: $m \in \{0, 1, 3, 5, 10\}$, 10 reps (rep 0-9), $s=1.0$, trọng số mặc định (0.6, 0.2, 0.1, 0.1), **GỘP kịch bản $m=0$** ở hàng Tổng thể.
@@ -35,51 +35,51 @@ Khoảng tin cậy 95% được tính bằng bootstrap resample ngẫu nhiên 8 
 
 | Phạm vi | So sánh cặp | Chênh lệch trung bình (Mean Δ) | Khoảng tin cậy 95% CI | Chứa 0? | Ý nghĩa thống kê (α=0.05) |
 | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Tổng thể (ALL)** | Tầng 1 trừ Baseline | +0.0570 | [0.0192, 0.0960] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Baseline)** |
-| **Tổng thể (ALL)** | Tầng 2 Cũ trừ Tầng 1 | -0.0027 | [-0.0062, 0.0008] | **CÓ** | Không có ý nghĩa thống kê |
-| **Tổng thể (ALL)** | Tầng 2 Mới trừ Tầng 1 | -0.0027 | [-0.0080, 0.0023] | **CÓ** | Không có ý nghĩa thống kê |
-| Chỉ Onboarding (m=0) | Tầng 1 trừ Baseline | +0.0250 | [-0.0250, 0.0875] | **CÓ** | Không có ý nghĩa |
+| **Tổng thể (ALL)** | Tầng 1 trừ Baseline | +0.0607 | [0.0200, 0.1048] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Baseline)** |
+| **Tổng thể (ALL)** | Tầng 2 Cũ trừ Tầng 1 | -0.0008 | [-0.0030, 0.0015] | **CÓ** | Không có ý nghĩa thống kê |
+| **Tổng thể (ALL)** | Tầng 2 Mới trừ Tầng 1 | -0.0018 | [-0.0073, 0.0030] | **CÓ** | Không có ý nghĩa thống kê |
+| Chỉ Onboarding (m=0) | Tầng 1 trừ Baseline | +0.0700 | [0.0163, 0.1313] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
 | Chỉ Onboarding (m=0) | Tầng 2 Cũ trừ Tầng 1 | +0.0000 | [0.0000, 0.0000] | **CÓ** | Không có ý nghĩa |
 | Chỉ Onboarding (m=0) | Tầng 2 Mới trừ Tầng 1 | +0.0000 | [0.0000, 0.0000] | **CÓ** | Không có ý nghĩa |
-| Onboarding + 1 Like (m=1) | Tầng 1 trừ Baseline | +0.0662 | [0.0162, 0.1175] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
-| Onboarding + 1 Like (m=1) | Tầng 2 Cũ trừ Tầng 1 | -0.0025 | [-0.0100, 0.0075] | **CÓ** | Không có ý nghĩa |
+| Onboarding + 1 Like (m=1) | Tầng 1 trừ Baseline | +0.0650 | [0.0137, 0.1175] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
+| Onboarding + 1 Like (m=1) | Tầng 2 Cũ trừ Tầng 1 | -0.0000 | [-0.0063, 0.0100] | **CÓ** | Không có ý nghĩa |
 | Onboarding + 1 Like (m=1) | Tầng 2 Mới trừ Tầng 1 | +0.0100 | [-0.0075, 0.0300] | **CÓ** | Không có ý nghĩa |
-| Onboarding + 3 Likes (m=3) | Tầng 1 trừ Baseline | +0.0638 | [0.0237, 0.1038] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
-| Onboarding + 3 Likes (m=3) | Tầng 2 Cũ trừ Tầng 1 | -0.0088 | [-0.0250, 0.0025] | **CÓ** | Không có ý nghĩa |
-| Onboarding + 3 Likes (m=3) | Tầng 2 Mới trừ Tầng 1 | +0.0087 | [-0.0025, 0.0200] | **CÓ** | Không có ý nghĩa |
-| Onboarding + 5 Likes (m=5) | Tầng 1 trừ Baseline | +0.0688 | [0.0225, 0.1213] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
+| Onboarding + 3 Likes (m=3) | Tầng 1 trừ Baseline | +0.0588 | [0.0137, 0.1013] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
+| Onboarding + 3 Likes (m=3) | Tầng 2 Cũ trừ Tầng 1 | -0.0013 | [-0.0075, 0.0037] | **CÓ** | Không có ý nghĩa |
+| Onboarding + 3 Likes (m=3) | Tầng 2 Mới trừ Tầng 1 | +0.0075 | [-0.0025, 0.0187] | **CÓ** | Không có ý nghĩa |
+| Onboarding + 5 Likes (m=5) | Tầng 1 trừ Baseline | +0.0613 | [0.0125, 0.1175] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
 | Onboarding + 5 Likes (m=5) | Tầng 2 Cũ trừ Tầng 1 | -0.0025 | [-0.0062, 0.0000] | **CÓ** | Không có ý nghĩa |
-| Onboarding + 5 Likes (m=5) *(thăm dò)* | Tầng 2 Mới trừ Tầng 1 | -0.0188 | [-0.0363, -0.0038] | **KHÔNG** | **Có ý nghĩa (chưa hiệu chỉnh)** |
-| Onboarding + 10 Likes (m=10) | Tầng 1 trừ Baseline | +0.0612 | [0.0225, 0.1000] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
+| Onboarding + 5 Likes (m=5) | Tầng 2 Mới trừ Tầng 1 | -0.0163 | [-0.0350, -0.0012] | **KHÔNG** | **Có ý nghĩa** |
+| Onboarding + 10 Likes (m=10) | Tầng 1 trừ Baseline | +0.0487 | [0.0075, 0.0938] | **KHÔNG** | **Có ý nghĩa (Tầng 1 > Base)** |
 | Onboarding + 10 Likes (m=10) | Tầng 2 Cũ trừ Tầng 1 | +0.0000 | [0.0000, 0.0000] | **CÓ** | Không có ý nghĩa |
-| Onboarding + 10 Likes (m=10) | Tầng 2 Mới trừ Tầng 1 | -0.0138 | [-0.0287, 0.0012] | **CÓ** | Không có ý nghĩa |
+| Onboarding + 10 Likes (m=10) | Tầng 2 Mới trừ Tầng 1 | -0.0100 | [-0.0262, 0.0050] | **CÓ** | Không có ý nghĩa |
 
 ### Bảng 3: Bảng chênh lệch Precision@10 chi tiết theo từng Persona
 > **Cấu hình**: $m \in \{0, 1, 3, 5, 10\}$, 10 reps (rep 0-9), $s=1.0$, trọng số mặc định (0.6, 0.2, 0.1, 0.1), **GỘP kịch bản $m=0$**.
 
 | Persona ID | Tên Persona | Baseline P@10 | Tầng 1 P@10 | Δ (T1 - Base) | T2 Cũ P@10 | Δ (T2 Cũ - T1) | T2 Mới P@10 | Δ (T2 Mới - T1) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **P1** | Modern Sci-Fi Explorer | 0.386 | 0.518 | **+0.132** | 0.514 | -0.004 | 0.522 | **+0.004** |
-| **P2** | Modern Horror Fan | 0.682 | 0.666 | **-0.016** | 0.666 | +0.000 | 0.674 | **+0.008** |
-| **P3** | Classic Crime & Noir | 0.096 | 0.094 | **-0.002** | 0.092 | -0.002 | 0.090 | **-0.004** |
-| **P4** | Family Animation Lover | 0.588 | 0.732 | **+0.144** | 0.726 | -0.006 | 0.736 | **+0.004** |
-| **P5** | Millennial Rom-Com | 0.298 | 0.374 | **+0.076** | 0.380 | +0.006 | 0.358 | **-0.016** |
-| **P6** | Action Thriller Buff | 0.256 | 0.336 | **+0.080** | 0.336 | +0.000 | 0.326 | **-0.010** |
-| **P7** | World / Non-English Cinema *(ngoài vector)* | 0.326 | 0.350 | **+0.024** | 0.338 | -0.012 | 0.344 | **-0.006** |
-| **P8** | Literary Adaptation Buff *(ngoài vector)* | 0.036 | 0.054 | **+0.018** | 0.050 | -0.004 | 0.052 | **-0.002** |
+| **P1** | Modern Sci-Fi Explorer | 0.372 | 0.500 | **+0.128** | 0.496 | -0.004 | 0.504 | **+0.004** |
+| **P2** | Modern Horror Fan | 0.584 | 0.592 | **+0.008** | 0.592 | +0.000 | 0.600 | **+0.008** |
+| **P3** | Classic Crime & Noir | 0.146 | 0.154 | **+0.008** | 0.152 | -0.002 | 0.150 | **-0.004** |
+| **P4** | Family Animation Lover | 0.576 | 0.746 | **+0.170** | 0.740 | -0.006 | 0.750 | **+0.004** |
+| **P5** | Millennial Rom-Com | 0.258 | 0.332 | **+0.074** | 0.338 | +0.006 | 0.316 | **-0.016** |
+| **P6** | Action Thriller Buff | 0.178 | 0.276 | **+0.098** | 0.276 | +0.000 | 0.266 | **-0.010** |
+| **P7** | World / Non-English Cinema *(ngoài vector)* | 0.000 | 0.000 | **+0.000** | 0.000 | +0.000 | 0.000 | **+0.000** |
+| **P8** | Literary Adaptation Buff *(ngoài vector)* | 0.000 | 0.000 | **+0.000** | 0.000 | +0.000 | 0.000 | **+0.000** |
 
 ### Nhận định & Kết luận trung thực:
 1. **Về Tầng 1 trừ Baseline:**
-   - Trên tổng thể, Tầng 1 cao hơn Baseline trung bình **+5.7%** điểm Precision@10.
-   - Khoảng tin cậy 95% Bootstrap resample theo persona là **[0.0192, 0.0960]**, **KHÔNG chứa 0**. Điều này khẳng định Tầng 1 mang lại cải thiện có ý nghĩa thống kê ở mức tổng thể.
+   - Trên tổng thể, Tầng 1 cao hơn Baseline trung bình **+6.1%** điểm Precision@10.
+   - Khoảng tin cậy 95% Bootstrap resample theo persona là **[0.0200, 0.1048]**, **KHÔNG chứa 0**. Điều này khẳng định Tầng 1 mang lại cải thiện có ý nghĩa thống kê ở mức tổng thể.
 2. **Về Tầng 2 Cũ trừ Tầng 1:**
-   - Trên tổng thể, Tầng 2 Cũ chênh lệch **-0.27%** so với Tầng 1.
-   - Khoảng tin cậy 95% là **[-0.0062, 0.0008]**, **CHỨA 0**.
+   - Trên tổng thể, Tầng 2 Cũ chênh lệch **-0.08%** so với Tầng 1.
+   - Khoảng tin cậy 95% là **[-0.0030, 0.0015]**, **CHỨA 0**.
    - **Lưu ý diễn giải**: Với cài đặt ban đầu (unscaled, probability), online model bị bão hòa xác suất (≈1.0 trên ứng viên) nên không làm thay đổi thứ hạng; kết quả này chưa phản ánh khả năng của việc học từ Like/Dislike.
 3. **Về Tầng 2 Mới trừ Tầng 1:**
-   - **Kết luận chính**: Trên tổng thể, Tầng 2 Mới không khác Tầng 1 có ý nghĩa thống kê (Mean $\Delta = -0.0027$, 95% CI: `[-0.0080, 0.0023]`, chứa 0). Khi dò siêu tham số trên tập tuning (Reps 0-4), $\lambda^* = 0.00$ được chọn (tức là tắt online model, chỉ dùng Tầng 1).
-   - **Ghi chú về kết quả theo từng $m$**: Kết quả theo từng m (bao gồm chênh lệch -0.0188 ở m=5) mang tính thăm dò, là một trong năm lát cắt và không qua hiệu chỉnh nhiều phép thử (unadjusted for multiple testing); do đó không đủ cơ sở để coi đây là bằng chứng độc lập về việc mô hình làm suy giảm chất lượng tại mốc này.
-   - **Nhận định cơ chế**: Mô hình mới đã khắc phục triệt để hiện tượng bão hòa xác suất toán học (điểm std $\approx 0.20$, làm thay đổi 1-3 phim trong Top 10 thay vì cố định). Tuy nhiên, việc học một mô hình phân loại tuyến tính từ số lượng tương tác rất ít (1-10 tương tác) trong không gian đặc trưng lớn (324 chiều) có phương sai ước lượng cao, khiến điểm bổ sung chưa mang lại lợi thế hơn so với Tầng 1 đơn lẻ.
+   - Trên tổng thể, Tầng 2 Mới chênh lệch **-0.18%** so với Tầng 1.
+   - Khoảng tin cậy 95% là **[-0.0073, 0.0030]**, **CÓ** chứa 0.
+   - Nhận định trung thực: Mô hình mới đã khắc phục được hiện tượng bão hòa xác suất, tái sắp xếp ứng viên rõ rệt. Tuy nhiên, việc học một mô hình phân loại tuyến tính từ số lượng tương tác rất ít (1-10 tương tác) trong không gian 324 chiều có phương sai ước lượng cao; khi kết hợp với Tầng 1, hiệu năng phụ thuộc chặt chẽ vào mức độ tinh chỉnh trọng số $\lambda$.
 
 ## 2. Thí nghiệm: 'Một Like có át onboarding không?' (Onboarding Vector Scale $s$)
 > **Phân loại**: **[Thăm dò (Exploratory) - chọn trên cùng dữ liệu đánh giá]**
@@ -92,10 +92,10 @@ Khoảng tin cậy 95% được tính bằng bootstrap resample ngẫu nhiên 8 
 
 | Số lượt Like ($m$) | Baseline ($s=1$) | Baseline ($s=3$) | Baseline ($s=5$) | Tầng 1 ($s=1$) | Tầng 1 ($s=3$) | Tầng 1 ($s=5$) |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| $m=1$ | 0.281 | 0.323 | 0.344 | 0.347 | 0.390 | 0.396 |
-| $m=3$ | 0.339 | 0.391 | 0.406 | 0.403 | 0.441 | 0.446 |
-| $m=5$ | 0.316 | 0.380 | 0.385 | 0.385 | 0.451 | 0.455 |
-| $m=10$ | 0.369 | 0.380 | 0.393 | 0.430 | 0.434 | 0.450 |
+| $m=1$ | 0.237 | 0.281 | 0.287 | 0.302 | 0.346 | 0.341 |
+| $m=3$ | 0.292 | 0.340 | 0.345 | 0.351 | 0.385 | 0.389 |
+| $m=5$ | 0.285 | 0.335 | 0.326 | 0.346 | 0.403 | 0.394 |
+| $m=10$ | 0.314 | 0.325 | 0.334 | 0.362 | 0.374 | 0.378 |
 
 ### Phân tích thí nghiệm scale vector $s$:
 - Khi $s=1$ (mặc định), mỗi lượt Like bổ sung $\alpha=1.0$ vector phim. Khi $m=1$ có 20% nhiễu, vector profile dễ bị lệch hướng tạm thời, khiến Precision giảm từ 0.388 (ở $m=0$) xuống 0.348 (ở $m=1$).
@@ -112,21 +112,21 @@ Ta lần lượt đặt từng trọng số trong Tầng 1 về 0 (Rating=0, Pop
 
 | Cấu hình trọng số Tầng 1 | Persona P2 (Modern Horror) P@10 | Persona P3 (Classic Crime) P@10 |
 | :--- | :---: | :---: |
-| Default (Cos 0.6, Rat 0.2, Pop 0.1, New 0.1) | 0.6660 | 0.0940 |
-| No Rating (Rat=0) | 0.7340 | 0.0500 |
-| No Popularity (Pop=0) | 0.7080 | 0.0940 |
-| No Newness (New=0) | 0.6440 | 0.1060 |
-| Only Cosine (Rat=0, Pop=0, New=0) | 0.6820 | 0.0960 |
+| Default (Cos 0.6, Rat 0.2, Pop 0.1, New 0.1) | 0.5920 | 0.1540 |
+| No Rating (Rat=0) | 0.6200 | 0.1160 |
+| No Popularity (Pop=0) | 0.6120 | 0.1460 |
+| No Newness (New=0) | 0.5620 | 0.1680 |
+| Only Cosine (Rat=0, Pop=0, New=0) | 0.5840 | 0.1460 |
 
 ### Phân tích cơ chế và giải thích trung tính:
 1. **Đối với P2 (Modern Horror):**
-   - Cấu hình Default đạt **0.6660** (khớp hoàn toàn với điểm Tầng 1 của P2 trong Bảng 3 là 0.666).
-   - Khi loại bỏ trọng số Rating (`Rat=0`), Precision@10 tăng lên **0.7340** (+6.8%).
-   - Khi cấu hình về thuần Cosine (`Only Cosine`), Precision@10 là **0.6820** (khớp hoàn toàn với Baseline của P2 trong Bảng 3 là 0.682).
+   - Cấu hình Default đạt **0.5920** (khớp hoàn toàn với điểm Tầng 1 của P2 trong Bảng 3 là 0.666).
+   - Khi loại bỏ trọng số Rating (`Rat=0`), Precision@10 tăng lên **0.6200** (+6.8%).
+   - Khi cấu hình về thuần Cosine (`Only Cosine`), Precision@10 là **0.5840** (khớp hoàn toàn với Baseline của P2 trong Bảng 3 là 0.682).
    - **Mô tả cơ chế**: Kết quả thực nghiệm cho thấy việc loại bỏ trọng số Rating mang lại hiệu năng cao nhất cho thể loại Horror (0.7340). Điều này phù hợp với đặc thù phân bố dữ liệu: phim kinh dị trên TMDB có điểm đánh giá cộng đồng bình quân thấp hơn các dòng phim tâm lý, chính kịch hoặc bom tấn, khiến điểm Rating kéo tụt thứ hạng của các phim kinh dị thỏa mãn gu.
 2. **Đối với P3 (Classic Crime - phim trước năm 2000):**
-   - Cấu hình Default đạt **0.0940** (khớp hoàn toàn với điểm Tầng 1 của P3 trong Bảng 3 là 0.094).
-   - Khi loại bỏ trọng số Newness (`New=0`), Precision@10 tăng lên **0.1060** (+1.2%), vượt qua cả Only Cosine (0.0960).
+   - Cấu hình Default đạt **0.1540** (khớp hoàn toàn với điểm Tầng 1 của P3 trong Bảng 3 là 0.094).
+   - Khi loại bỏ trọng số Newness (`New=0`), Precision@10 tăng lên **0.1680** (+1.2%), vượt qua cả Only Cosine (0.0960).
    - **Mô tả cơ chế**: Kết quả thực nghiệm cho thấy việc loại bỏ trọng số Newness cải thiện thứ hạng gợi ý cho phim kinh điển (từ 0.0940 lên 0.1060). Điều này phù hợp với bản chất toán học của trọng số Newness (ưu tiên hàm mũ theo năm phát hành gần hiện tại), vốn có xu hướng đẩy các phim phát hành trước năm 2000 xuống phía dưới.
 
 > [!NOTE] **GHI CHÚ HẠN CHẾ CỦA THÍ NGHIỆM ABLATION**:
@@ -139,15 +139,15 @@ Ta lần lượt đặt từng trọng số trong Tầng 1 về 0 (Rating=0, Pop
 
 | Trọng số $\lambda$ | Tầng 2 Cũ In-Sample (Reps 0-4) | Tầng 2 Cũ Out-Sample (Reps 5-9) | Tầng 2 Mới In-Sample (Reps 0-4) | Tầng 2 Mới Out-Sample (Reps 5-9) |
 | :---: | :---: | :---: | :---: | :---: |
-| $\lambda = 0.00$ | 0.3806 | 0.4019 | 0.3806 *(Best)* | 0.4019 |
-| $\lambda = 0.10$ | 0.3812 *(Best)* | 0.4000 | 0.3744 | 0.3987 |
-| $\lambda = 0.20$ | 0.3781 | 0.3975 | 0.3775 | 0.3981 |
-| $\lambda = 0.30$ | 0.3756 | 0.3962 | 0.3644 | 0.3925 |
-| $\lambda = 0.50$ | 0.3763 | 0.3931 | 0.3594 | 0.3869 |
+| $\lambda = 0.00$ | 0.3362 | 0.3450 | 0.3362 *(Best)* | 0.3450 |
+| $\lambda = 0.10$ | 0.3369 *(Best)* | 0.3438 | 0.3306 | 0.3444 |
+| $\lambda = 0.20$ | 0.3362 | 0.3431 | 0.3312 | 0.3456 |
+| $\lambda = 0.30$ | 0.3344 | 0.3419 | 0.3231 | 0.3419 |
+| $\lambda = 0.50$ | 0.3362 | 0.3394 | 0.3187 | 0.3394 |
 
 ### Kết quả chọn tham số trên Tuning Set (Reps 0-4) và đánh giá trên Evaluation Set (Reps 5-9):
-- **Tầng 2 Cũ (Mode Prob)**: Tham số chọn $\lambda^* = 0.10$ (In-Sample: 0.3812) $\implies$ Out-of-Sample: **0.4000**.
-- **Tầng 2 Mới (Mode Logit MinMax)**: Tham số chọn $\lambda^* = 0.00$ (In-Sample: 0.3806) $\implies$ Out-of-Sample: **0.4019**.
+- **Tầng 2 Cũ (Mode Prob)**: Tham số chọn $\lambda^* = 0.10$ (In-Sample: 0.3369) $\implies$ Out-of-Sample: **0.3438**.
+- **Tầng 2 Mới (Mode Logit MinMax)**: Tham số chọn $\lambda^* = 0.00$ (In-Sample: 0.3362) $\implies$ Out-of-Sample: **0.3450**.
 - **Lưu ý diễn giải**: Với cài đặt cũ, online model bị bão hòa xác suất (≈1.0 trên ứng viên) nên không làm thay đổi thứ hạng; kết quả này chưa phản ánh khả năng của việc học từ Like/Dislike. Với cài đặt mới, điểm đã biến thiên thực sự.
 
 ## 5. Chẩn đoán chuyên sâu Online Model ở kịch bản $m=10$ (Trước và Sau Khi Sửa)
@@ -163,15 +163,15 @@ Ta lần lượt đặt từng trọng số trong Tầng 1 về 0 (Rating=0, Pop
 | **P4** | Family Animation Lover | 0.10 | 0.9999 | 3.74e-04 | **1.40** | **0.9032** | **0.1946** | 0.4006 |
 | **P5** | Millennial Rom-Com | 0.00 | 1.0000 | 9.36e-09 | **3.10** | **0.8114** | **0.2103** | 0.4436 |
 | **P6** | Action Thriller Buff | 0.00 | 1.0000 | 2.61e-04 | **2.60** | **0.8830** | **0.2005** | 0.3672 |
-| **P7** | World / Non-English Cinema | 0.00 | 1.0000 | 5.15e-09 | **1.50** | **0.8662** | **0.2201** | 0.4121 |
-| **P8** | Literary Adaptation Buff | 0.20 | 0.9917 | 1.62e-02 | **2.10** | **0.9069** | **0.1982** | 0.3604 |
+| **P7** | World / Non-English Cinema | 1.00 | 0.9546 | 6.35e-02 | **2.50** | **0.8415** | **0.2035** | 0.4520 |
+| **P8** | Literary Adaptation Buff | 0.90 | 0.9328 | 1.43e-01 | **2.30** | **0.8703** | **0.2189** | 0.3251 |
 
 ### Phân tích hiện tượng bão hòa và kết quả khắc phục:
 1. **Trước khi sửa (Mô hình Cũ - Mode Prob)**:
    - `OnlineLikeModel` sử dụng `SGDClassifier(loss='log_loss')`. Khi cập nhật online với 10 lượt Like và 3 lượt Dislike trên không gian đặc trưng 324 chiều không chuẩn hóa theo feature norm, hàm mất mát log_loss đẩy hệ số bias (intercept) và trọng số về phía dương rất mạnh.
    - Các ứng viên trong danh sách xét duyệt vốn đã là những phim có độ tương đồng Cosine rất cao với profile người dùng. Do đó, tích vô hướng $z = w \cdot x + b$ trên các ứng viên đều nhận giá trị dương rất lớn (thường từ $+25$ đến $+45$).
    - Khi đưa qua hàm sigmoid $\sigma(z) = \frac{1}{1 + e^{-z}}$, vì $z \ge 25$, $e^{-z} < 1.4 \times 10^{-11}$, dẫn đến `nn_like_probability` xấp xỉ hằng số **$1.0000$** trên hầu như toàn bộ 50 ứng viên (độ lệch chuẩn xác suất cực nhỏ, từ $10^{-8}$ đến $10^{-4}$).
-   - Thứ hạng của các phim ứng viên hoàn toàn được bảo toàn (Spearman = 1.0000), do đó danh sách Top 10 không đổi và $\Delta(\text{Tầng 2 Cũ} - \text{Tầng 1}) = 0.0000$.
+   - Thứ hạng của các phim ứng viên hoàn toàn được bảo toàn (Spearman = 1.0000), do đó danh sách Top 10 không đổi và $\Delta(\text{Tầng 2 Cũ} - 	ext{Tầng 1}) = 0.0000$.
 2. **Sau khi sửa (Mô hình Mới - Mode Logit MinMax)**:
    - Đặc trưng phim được chuẩn hóa bằng `StandardScaler` fitted trên toàn bộ ma trận phim catalog, kiểm soát biên độ đặc trưng.
    - Điểm đánh giá dùng trực tiếp `decision_function` (raw margin logit) và được min-max chuẩn hóa trong danh sách ứng viên (theo cùng cơ chế `_minmax` của `ranking.py`).

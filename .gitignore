@@ -24,6 +24,7 @@ tmdb_5000_*.csv
 *apikey*
 *secret*
 
+
 # Node / giao diện
 node_modules/
 dist/
