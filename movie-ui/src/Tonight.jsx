@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Bookmark, MessageSquare, Play, Plus, RotateCcw, Send, Shuffle, Sparkles, SlidersHorizontal, X } from "lucide-react";
+import { AlertCircle, Bookmark, MessageSquare, Play, Plus, RotateCcw, Send, Shuffle, Sparkles, SlidersHorizontal, X } from "lucide-react";
 import { api, OFFLINE_MSG } from "./api";
 import { MovieCard, Notice, PosterLink, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
 
@@ -146,6 +146,14 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
     });
   };
 
+  const clearKeyword = () => {
+    onUpdateIntent({
+      ...intent,
+      matched_keywords: [],
+      matched_keyword_display: "",
+    });
+  };
+
   return (
     <div className="mt-6 rounded-2xl bg-cobalt/5 p-4 ring-1 ring-cobalt/20 md:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -203,6 +211,19 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
           <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 font-semibold text-ink ring-1 ring-ink/15">
             &le; {intent.max_runtime} phút
             <button type="button" onClick={clearRuntime} className="rounded-full p-0.5 hover:bg-ink/10">
+              <X size={12} />
+            </button>
+          </span>
+        )}
+        {intent.matched_keyword_display && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-lemon px-3 py-1 font-semibold text-ink ring-1 ring-ink/15">
+            Từ khóa: {intent.matched_keyword_display}
+            <button
+              type="button"
+              onClick={clearKeyword}
+              title={`Bỏ từ khóa ${intent.matched_keyword_display}`}
+              className="rounded-full p-0.5 hover:bg-ink/10"
+            >
               <X size={12} />
             </button>
           </span>
@@ -371,6 +392,8 @@ export default function Tonight({ rated, onRate }) {
       }
     } catch (e) {
       setError(e.status === 0 ? OFFLINE_MSG : e.message || "Chưa chọn được phim. Hãy thử lại.");
+      setQueue(null);
+      setCurrentIntent(null);
     }
     setBusy(false);
   };
@@ -383,6 +406,8 @@ export default function Tonight({ rated, onRate }) {
       similar_movie_ids:
         patchedIntent.similar_movie_ids ??
         (patchedIntent.similar_movies || []).map((m) => m.movie_id),
+      matched_keywords: patchedIntent.matched_keywords,
+      matched_keyword_display: patchedIntent.matched_keyword_display,
       year_from: patchedIntent.year_from,
       year_to: patchedIntent.year_to,
       max_runtime: patchedIntent.max_runtime,
@@ -449,10 +474,10 @@ export default function Tonight({ rated, onRate }) {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl font-extrabold">Hôm nay bạn muốn xem gì?</h1>
-          <p className="mt-2 max-w-2xl text-mute">
+          {/* <p className="mt-2 max-w-2xl text-mute">
             Gõ tự nhiên tâm trạng, thể loại muốn/tránh, thời kỳ hoặc “giống phim X”. Hệ thống chuyển yêu cầu
             thành vector 324 chiều, trộn với hồ sơ cá nhân của bạn và xếp hạng đa mục tiêu.
-          </p>
+          </p> */}
         </div>
 
         <div role="group" aria-label="Chế độ chọn phim" className="inline-flex rounded-full bg-white p-1 ring-1 ring-ink/15">
@@ -526,7 +551,10 @@ export default function Tonight({ rated, onRate }) {
               <input
                 type="text"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  if (error) setError("");
+                }}
                 disabled={busy}
                 placeholder={
                   turns.length > 0
@@ -545,6 +573,28 @@ export default function Tonight({ rated, onRate }) {
               {busy ? "Đang phân tích..." : turns.length > 0 ? "Tinh chỉnh" : "Tìm phim ngay"}
             </button>
           </form>
+
+          {/* Thông báo lỗi khi không nhận diện được yêu cầu */}
+          {error && tabMode === "chat" && (
+            <div
+              role="alert"
+              className="mt-4 flex items-start gap-3 rounded-2xl bg-coral/10 p-4 text-sm font-medium text-coral ring-1 ring-coral/25"
+            >
+              <AlertCircle size={20} className="mt-0.5 shrink-0 text-coral" />
+              <div className="min-w-0 flex-1">
+                <p className="font-bold text-coral">Không nhận diện được yêu cầu</p>
+                <p className="mt-1 text-xs leading-relaxed text-ink/80">{error}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setError("")}
+                className="rounded-lg px-2 py-1 text-xs font-semibold text-coral/70 hover:bg-coral/10 hover:text-coral transition-colors"
+                aria-label="Đóng thông báo lỗi"
+              >
+                ✕
+              </button>
+            </div>
+          )}
 
           {/* Gợi ý bấm nhanh (khi mới vào) hoặc gợi ý tinh chỉnh nhiều lượt (khi đã có kết quả) */}
           {turns.length === 0 ? (
@@ -659,7 +709,7 @@ export default function Tonight({ rated, onRate }) {
         )
       )}
 
-      {error && (
+      {error && tabMode === "buttons" && (
         <p role="alert" className="mt-6 text-coral">
           {error}
         </p>

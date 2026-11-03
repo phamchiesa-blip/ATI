@@ -303,6 +303,44 @@ def test_multi_turn_and_profile_blending():
     print(f"  Query Vector shape OK: {q_vec.shape}, L2 norm={float((q_vec**2).sum()**0.5):.3f}\n")
 
 
+def test_keyword_queries():
+    print("=== Test TMDB Keyword Search (marvel, breaking the fourth wall) ===")
+    uid = "test_kw_user"
+    # 1. Marvel query must recommend Deadpool in top 3
+    res_m = chat_recommend(uid, "marvel", db_path=DB_PATH, use_llm=False)
+    titles_m = [m["title"] for m in res_m["items"]]
+    assert "Deadpool" in titles_m[:3], f"Expected Deadpool in top 3 for 'marvel', got: {titles_m[:3]}"
+    assert res_m["intent"]["matched_keywords"], "Expected matched_keywords for 'marvel'"
+    print(f"  OK marvel: Top-1={titles_m[0]}, matched_keywords={res_m['intent']['matched_keywords']}")
+
+    # 2. Breaking the fourth wall must recommend Deadpool
+    res_w = chat_recommend(uid, "breaking the fourth wall", db_path=DB_PATH, use_llm=False)
+    titles_w = [m["title"] for m in res_w["items"]]
+    assert "Deadpool" in titles_w, f"Expected Deadpool in recommendations for 'breaking the fourth wall'"
+    print(f"  OK breaking the fourth wall: Top-1={titles_w[0]}")
+    print("  Keyword search test passed successfully!\n")
+
+
+def test_unrecognized_and_gibberish_queries():
+    print("=== Test Unrecognized and Gibberish Queries ===")
+    uid = "test_gibberish_user"
+    gibberish_queries = [
+        "dddd",
+        "aaaaa",
+        "???",
+        "123456",
+        "thời tiết hôm nay thế nào",
+        "bàn ghế tủ lạnh",
+    ]
+    for q in gibberish_queries:
+        try:
+            chat_recommend(uid, q, db_path=DB_PATH, use_llm=False)
+            raise AssertionError(f"Query {q!r} should have raised ValueError!")
+        except ValueError as e:
+            print(f"  OK rejected: {q!r:30} -> {e}")
+    print("  All gibberish and unrecognized queries properly raised ValueError!\n")
+
+
 def main():
     print("=====================================================================")
     print("DANH GIA DINH TINH TREN TAP MAU NHO (n = 20 CAU TRUY VAN TIENG VIET/ANH)")
@@ -310,6 +348,8 @@ def main():
     print("de kiem tra kha nang hieu y dinh, loc the loai tranh va sinh ly do.")
     print("=====================================================================\n")
 
+    test_unrecognized_and_gibberish_queries()
+    test_keyword_queries()
     test_multi_turn_and_profile_blending()
 
     res_local = evaluate_20_queries(use_llm=False)

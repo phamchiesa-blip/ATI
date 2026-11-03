@@ -39,6 +39,7 @@ import unicodedata
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Optional
 
 import numpy as np
@@ -384,6 +385,20 @@ VI_TO_EN_TOPIC_KEYWORDS: dict[str, str] = {
 }
 
 
+# Cac tu/am tiet de trung lap giua tieng Viet khong dau va tieng Anh
+_VI_FALSE_EN: set[str] = {
+    "movie", "movies", "film", "films", "like", "with", "want", "watch", "some", "good", "best",
+    "cho", "minh", "phim", "xem", "nhung", "hay", "cua", "cac", "mot", "nhu", "nam", "tuoi",
+    "tre", "hop", "man", "tim", "tai", "luc", "anh", "hung", "dao", "dien", "vien", "tay",
+    "cao", "boi", "kinh", "dien", "truoc", "sau", "den", "nay", "nhe", "hon", "nua", "tranh",
+    "khong", "thich", "cam", "dong", "buon", "vui", "cuoi", "tuan", "gio", "nghi", "trua",
+    "nhanh", "duoi", "phut", "thap", "nien", "khoa", "hoc", "vien", "tuong",
+    "hoat", "hinh", "gia", "dinh", "tinh", "lang", "tam", "chinh", "kich", "toi", "pham",
+    "lich", "chien", "tranh", "lieu", "truyen", "that", "bao", "duong", "soi",
+    "ban", "ghe", "lanh", "tu", "nha", "thoi", "tiet",
+}
+
+
 def _fold(s: str) -> str:
     """Bo dau tieng Viet + chuyen chu thuong (chuan hoa van ban de so khop)."""
     s = s.replace("đ", "d").replace("Đ", "d")
@@ -405,6 +420,8 @@ class ChatIntent:
     mood_labels: list[str] = field(default_factory=list)
     similar_movie_ids: list[int] = field(default_factory=list)
     similar_movie_titles: list[str] = field(default_factory=list)
+    matched_keywords: list[str] = field(default_factory=list)
+    matched_keyword_display: str = ""
     year_from: Optional[int] = None
     year_to: Optional[int] = None
     max_runtime: Optional[int] = None
@@ -415,6 +432,25 @@ class ChatIntent:
     keywords_en: str = ""
     is_followup: bool = False
     parser_source: str = "local"  # "local" | "llm"
+
+    def is_empty(self) -> bool:
+        """Kiem tra xem co bat ky tieu chi tim phim nao duoc nhan dien hay khong."""
+        return not (
+            self.wanted_genres
+            or self.avoid_genres
+            or self.mood_labels
+            or self.similar_movie_ids
+            or self.matched_keywords
+            or self.director
+            or self.actor
+            or self.year_from is not None
+            or self.year_to is not None
+            or self.max_runtime is not None
+            or self.min_rating is not None
+            or self.keywords_raw
+            or self.keywords_en
+            or self.is_followup
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -427,6 +463,8 @@ class ChatIntent:
                 {"movie_id": mid, "title": title}
                 for mid, title in zip(self.similar_movie_ids, self.similar_movie_titles)
             ],
+            "matched_keywords": self.matched_keywords,
+            "matched_keyword_display": self.matched_keyword_display,
             "year_from": self.year_from,
             "year_to": self.year_to,
             "max_runtime": self.max_runtime,
@@ -463,11 +501,17 @@ class ChatIntent:
             want_parts.append(f"trước năm {self.year_to}")
         if self.max_runtime:
             want_parts.append(f"dưới {self.max_runtime} phút")
-        if self.keywords_raw and not want_parts:
+        if self.matched_keyword_display:
+            want_parts.append(f"từ khóa “{self.matched_keyword_display}”")
+        elif self.matched_keywords:
+            want_parts.append(f"từ khóa “{self.matched_keywords[0]}”")
+        elif self.keywords_raw and not want_parts:
             want_parts.append(f"chủ đề “{self.keywords_raw}”")
         elif self.keywords_raw and len(self.keywords_raw) <= 40:
             want_parts.append(f"từ khóa “{self.keywords_raw}”")
 
+        if not want_parts and not self.avoid_genres:
+            return "Chưa xác định được yêu cầu tìm phim"
         want_str = ", ".join(want_parts) if want_parts else "Phim hay được đánh giá cao"
         out = f"Mình hiểu bạn muốn: {want_str}"
         if self.avoid_genres:
@@ -479,6 +523,25 @@ class ChatIntent:
 # ═══════════════════════════════════════════════════════════════════════════
 # 3. CHI MUC KHONG GIAN 324 CHIEU (CATALOG & FEATURE SPACE INDEX)
 # ═══════════════════════════════════════════════════════════════════════════
+
+def _find_movies_csv() -> Optional[str]:
+    """Tim duong dan toi tmdb_5000_movies.csv neu co."""
+    env = os.environ.get("TMDB_MOVIES_CSV")
+    if env and os.path.exists(env):
+        return env
+    cur = Path(__file__).resolve().parent
+    candidates = [
+        cur / "tmdb_5000_movies.csv",
+        cur / "data" / "tmdb_5000_movies.csv",
+        cur.parent / "tmdb_5000_movies.csv",
+        cur.parent / "data" / "tmdb_5000_movies.csv",
+        cur.parent / "data_module" / "data" / "tmdb_5000_movies.csv",
+        cur.parent / "data_module" / "src" / "tmdb_5000_movies.csv",
+    ]
+    for p in candidates:
+        if p.exists():
+            return str(p)
+    return None
 
 class FeatureSpaceIndex:
     """Quan ly va khoi phuc chinh xac khong gian 324 chieu tu movies.db ma khong can
@@ -578,6 +641,34 @@ class FeatureSpaceIndex:
         # 5. Numeric bounds [321:324] (vote_average, popularity, release_year)
         self.min_year = min(years) if years else 1916
         self.max_year = max(years) if years else 2017
+
+        # 6. Chi muc TMDB Keywords tu CSV (neu co) phuc vu tim kiem theo tu khoa
+        self.mid_to_keywords: dict[int, list[str]] = {}
+        self.keyword_to_mids: dict[str, set[int]] = {}
+        self.keywords_folded: list[tuple[str, str, set[int]]] = []
+        csv_path = _find_movies_csv()
+        if csv_path:
+            try:
+                import pandas as pd
+                df = pd.read_csv(csv_path)
+                for mid_val, kw_val in zip(df["id"], df.get("keywords", [])):
+                    if not isinstance(kw_val, str):
+                        continue
+                    try:
+                        items = json.loads(kw_val)
+                        names = [it["name"].strip() for it in items if it.get("name")]
+                        if names:
+                            mid_int = int(mid_val)
+                            self.mid_to_keywords[mid_int] = names
+                            for name in names:
+                                self.keyword_to_mids.setdefault(name.lower(), set()).add(mid_int)
+                    except Exception:
+                        pass
+                for k_orig, mids_set in self.keyword_to_mids.items():
+                    self.keywords_folded.append((_fold(k_orig), k_orig, mids_set))
+                self.keywords_folded.sort(key=lambda x: -len(x[0]))
+            except Exception:
+                pass
 
     def project_text_to_svd(self, text: str) -> np.ndarray:
         """Chieu van ban tieng Anh qua TF-IDF -> 50 chieu SVD cung khong gian movies.db."""
@@ -742,6 +833,20 @@ def _extract_genres_from_segment(segment_folded: str) -> list[str]:
     return found
 
 
+def is_gibberish(text: str) -> bool:
+    """Kiem tra chuoi ky tu vo nghia / go linh tinh (VD: 'dddd', 'aaaaa', '???', '123456')."""
+    s = (text or "").strip()
+    if not s:
+        return True
+    if not re.search(r"[a-zA-ZÀ-ỹà-ỹ]", s):
+        return True
+    if re.search(r"^(.)\1{2,}$", s, flags=re.IGNORECASE):
+        return True
+    if len(s.split()) == 1 and re.search(r"(.)\1{3,}", s, flags=re.IGNORECASE):
+        return True
+    return False
+
+
 def parse_intent_local(
     message: str,
     space: FeatureSpaceIndex,
@@ -750,6 +855,8 @@ def parse_intent_local(
     """Cach 1 (Cuc bo): Phan tich cau nhap cua nguoi dung bang tu dien + quy tac + khop catalog.
     Ho tro day du ca cau don va hoi thoai nhieu luot (multi-turn refinement)."""
     raw = (message or "").strip()
+    if is_gibberish(raw):
+        return ChatIntent(parser_source="local")
     folded = _fold(raw)
     intent = ChatIntent(parser_source="local")
 
@@ -872,6 +979,60 @@ def parse_intent_local(
         intent.max_runtime = 100
     elif re.search(r"\b(?:khoang\s+2\s+tieng|khoang\s+2\s+gio|duoi\s+2\s+tieng)\b", folded):
         intent.max_runtime = 125
+    # 7.5. Nhan dien TMDB Keywords (VD: "marvel", "superhero", "breaking the fourth wall", "zombie", "time travel"...)
+    matched_kws: list[str] = []
+    kw_display = ""
+    # Khop nguyen cum tu keyword (>= 4 ky tu, khong phai so) xuat hien trong van ban
+    for f_kw, orig_kw, _mids in getattr(space, "keywords_folded", []):
+        if len(f_kw) >= 4 and not f_kw.isdigit() and re.search(r"\b" + re.escape(f_kw) + r"\b", positive_folded):
+            matched_kws.append(orig_kw)
+            if not kw_display:
+                kw_display = orig_kw
+            positive_folded = positive_folded.replace(f_kw, " ")
+            folded_no_title = folded_no_title.replace(f_kw, " ")
+            break
+
+    # Khop tu don dac trung trong keywords (VD: "marvel" -> "marvel comic", "marvel cinematic universe")
+    if not matched_kws and getattr(space, "keywords_folded", None):
+        _KW_STOP_WORDS = {
+            "phim", "xem", "muon", "thich", "nhung", "cho", "minh", "mot", "cac", "nhu",
+            "the", "loai", "gi", "ve", "movie", "movies", "film", "films", "like", "with",
+            "want", "watch", "some", "good", "best", "about", "from", "into", "hay"
+        }
+        _SHORT_KW_ALIASES = {
+            "dc": ["dc comics", "dc extended universe"],
+        }
+        for short_alias, alias_kws in _SHORT_KW_ALIASES.items():
+            if re.search(r"\b" + re.escape(short_alias) + r"\b", positive_folded):
+                matched_kws.extend(alias_kws)
+                kw_display = short_alias.upper()
+                break
+
+        if not matched_kws:
+            tokens = [
+                t for t in re.findall(r"[a-zA-ZÀ-ỹà-ỹ]+", positive_folded)
+                if len(t) >= 4 and t not in _KW_STOP_WORDS and t not in _VI_FALSE_EN
+            ]
+            for tok in tokens:
+                hits = []
+                for f_kw, orig_kw, mids in space.keywords_folded:
+                    if re.search(r"\b" + re.escape(tok) + r"\b", f_kw):
+                        hits.append((orig_kw, len(mids)))
+                if hits:
+                    hits.sort(key=lambda h: -h[1])
+                    matched_kws.extend([h[0] for h in hits[:5]])
+                    kw_display = tok
+                    positive_folded = positive_folded.replace(tok, " ")
+                    folded_no_title = folded_no_title.replace(tok, " ")
+                    break
+
+    if matched_kws:
+        intent.matched_keywords = matched_kws
+        intent.matched_keyword_display = kw_display
+        intent.keywords_en = (intent.keywords_en + " " + " ".join(matched_kws)).strip()
+        if not intent.keywords_raw:
+            intent.keywords_raw = kw_display
+
 
     # 8. Chuyen tu khoa chu de Tieng Viet -> Tieng Anh + giu tu tieng Anh trong cau de dua qua TF-IDF/SVD
     matched_topics_vi: list[str] = []
@@ -882,16 +1043,6 @@ def parse_intent_local(
             matched_topics_vi.append(vi_phrase.strip())
 
     # Lay them cac tu tieng Anh co trong vocab cua TF-IDF (loai bo cac am tiet tieng Viet de trung tu tieng Anh ngan)
-    _VI_FALSE_EN = {
-        "movie", "movies", "film", "films", "like", "with", "want", "watch", "some", "good", "best",
-        "cho", "minh", "phim", "xem", "nhung", "hay", "cua", "cac", "mot", "nhu", "nam", "tuoi",
-        "tre", "hop", "man", "tim", "tai", "luc", "anh", "hung", "dao", "dien", "vien", "tay",
-        "cao", "boi", "kinh", "dien", "truoc", "sau", "den", "nay", "nhe", "hon", "nua", "tranh",
-        "khong", "thich", "cam", "dong", "buon", "vui", "cuoi", "tuan", "gio", "nghi", "trua",
-        " nhanh", "nhanh", "duoi", "phut", "thap", "nien", "khoa", "hoc", "vien", "tuong",
-        "hoat", "hinh", "gia", "dinh", "tinh", "lang", "tam", "chinh", "kich", "toi", "pham",
-        "lich", "chien", "tranh", "lieu", "truyen", "that", "bao", "hoc", "duong", "soi", "tuoi",
-    }
     vocab = space.tfidf.vocabulary_
     raw_tokens = re.findall(r"[a-zA-Z]{4,}", folded_no_title)
     en_direct = [tok for tok in raw_tokens if tok in vocab and tok not in _VI_FALSE_EN]
@@ -1100,6 +1251,8 @@ def parse_user_query(
     use_llm: bool = True,
 ) -> ChatIntent:
     """Ham dieu phoi Hieu yeu cau: thu LLM neu co key & duoc bat, loi hoac khong co key thi dung Local."""
+    if is_gibberish(message):
+        return ChatIntent(parser_source="local")
     space = get_feature_space(db_path)
     if use_llm:
         llm_intent = parse_intent_llm(message, space, previous_intent=previous_intent)
@@ -1213,10 +1366,15 @@ def _build_reason(
     profile_cos: Optional[float],
     runtime: Optional[int],
     liked_genres: set[str],
+    matched_kw_label: Optional[str] = None,
 ) -> str:
     """Sinh ly do goi y cu the, trung thuc cho tung phim."""
     reasons: list[str] = []
     m_genres = meta.get("genres", [])
+
+    # 0. Neu khop tu khoa TMDB
+    if matched_kw_label:
+        reasons.append(f"Từ khóa: {matched_kw_label}")
 
     # 1. Neu khop "giong phim X"
     if intent.similar_movie_titles and query_cos > 0.35:
@@ -1315,6 +1473,9 @@ def chat_recommend(
             base.similar_movie_titles = [
                 space.movies[mid]["title"] for mid in base.similar_movie_ids if mid in space.movies
             ]
+        if "matched_keywords" in intent_override:
+            base.matched_keywords = list(intent_override["matched_keywords"] or [])
+            base.matched_keyword_display = str(intent_override.get("matched_keyword_display") or "")
         if "year_from" in intent_override:
             base.year_from = intent_override["year_from"]
         if "year_to" in intent_override:
@@ -1325,8 +1486,25 @@ def chat_recommend(
     else:
         intent = parse_user_query(message, db_path=db_path, previous_intent=prev_obj, use_llm=use_llm)
 
+    if not intent_override and intent.is_empty():
+        raise ValueError(
+            "Hệ thống chưa hiểu yêu cầu tìm phim của bạn. "
+            "Vui lòng mô tả tâm trạng, thể loại (hài, hành động...), "
+            "thời kỳ hoặc tên phim cụ thể (VD: “giống Inception”)."
+        )
+
     query_vec = build_query_vector(intent, space)
     query_scores = cosine_similarity_bulk(query_vec, space.matrix)
+
+    # Tang diem vuot troi cho cac phim chua tu khoa TMDB duoc tim kiem
+    kw_movie_ids: set[int] = set()
+    if intent.matched_keywords and hasattr(space, "keyword_to_mids"):
+        for kw in intent.matched_keywords:
+            kw_movie_ids.update(space.keyword_to_mids.get(kw.lower(), set()))
+    if kw_movie_ids:
+        for idx, mid_np in enumerate(space.movie_ids):
+            if int(mid_np) in kw_movie_ids:
+                query_scores[idx] += 0.55
 
     # Kiem tra User Profile hien co cua nguoi dung
     prof = _rec._registry.get(user_id)
@@ -1435,6 +1613,13 @@ def chat_recommend(
         mid = int(r["movie_id"])
         meta = space.movies[mid]
         rt = runtimes.get(mid) if runtimes else None
+        matched_kw_label = None
+        if intent.matched_keywords and hasattr(space, "mid_to_keywords"):
+            m_kws = {k.lower() for k in space.mid_to_keywords.get(mid, [])}
+            for kw in intent.matched_keywords:
+                if kw.lower() in m_kws:
+                    matched_kw_label = kw
+                    break
         why = _build_reason(
             meta=meta,
             intent=intent,
@@ -1442,6 +1627,7 @@ def chat_recommend(
             profile_cos=r["profile_cosine"],
             runtime=rt,
             liked_genres=liked_genres,
+            matched_kw_label=matched_kw_label,
         )
         items.append({
             "movie_id": mid,

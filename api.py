@@ -1040,17 +1040,20 @@ def tonight_chat(body: TonightChatBody, user: dict = Depends(current_user)):
     seeds = _seeds.get(uid, set())
     exclude_set = set(body.exclude) | seeds
 
-    res = chat_recommend(
-        uid,
-        body.message,
-        db_path=DB,
-        previous_intent=body.previous_intent,
-        intent_override=body.intent_override,
-        exclude_ids=exclude_set,
-        runtimes=runtimes,
-        top_n=min(max(body.top_n, 1), 24),
-        use_llm=body.use_llm,
-    )
+    try:
+        res = chat_recommend(
+            uid,
+            body.message,
+            db_path=DB,
+            previous_intent=body.previous_intent,
+            intent_override=body.intent_override,
+            exclude_ids=exclude_set,
+            runtimes=runtimes,
+            top_n=min(max(body.top_n, 1), 24),
+            use_llm=body.use_llm,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     for item in res["items"]:
         item["poster_url"] = _poster_url(item["movie_id"])
     res["runtime_filter_applied"] = bool(extras) and bool(res["intent"].get("max_runtime"))
