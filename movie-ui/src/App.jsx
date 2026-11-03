@@ -160,15 +160,48 @@ export default function App() {
     startSession();
   };
 
-  const restart = async () => {
-    if (!window.confirm("Xóa các phim đã đánh giá và thể loại đã chọn để bắt đầu lại?")) return;
-    await api.resetProfile().catch(() => {});
-    setRated({});
-    setUser((u) => ({ ...u, onboarded: false }));
-    setView("main");
-    setRev((v) => v + 1);
-    window.location.hash = "";
-    notify({ kind: "info", title: "Đã xóa hồ sơ sở thích", text: "Bạn có thể chọn thể loại để bắt đầu lại.", duration: 4000 });
+  const executeRestart = async () => {
+    try {
+      await api.resetProfile();
+      setRated({});
+      setUser((u) => ({ ...u, onboarded: false }));
+      setView("main");
+      setRev((v) => v + 1);
+      window.location.hash = "";
+      notify({
+        kind: "info",
+        title: "Đã làm lại từ đầu",
+        text: "Hồ sơ sở thích đã được xóa. Bạn có thể chọn lại thể loại yêu thích.",
+        duration: 4000,
+      });
+    } catch {
+      notify({
+        kind: "error",
+        title: "Chưa xóa được hồ sơ",
+        text: "Đã có lỗi xảy ra, vui lòng thử lại sau.",
+        duration: 4000,
+      });
+    }
+  };
+
+  const restart = () => {
+    notify({
+      kind: "warning",
+      title: "Làm lại từ đầu?",
+      text: "Xóa các phim đã đánh giá và thể loại đã chọn để bắt đầu lại?",
+      duration: 10000,
+      actions: [
+        {
+          label: "Xác nhận làm lại",
+          primary: true,
+          onClick: executeRestart,
+        },
+        {
+          label: "Hủy",
+          onClick: () => {},
+        },
+      ],
+    });
   };
 
   const rate = async (movie, action) => {
@@ -291,7 +324,7 @@ export default function App() {
               </>
             ) : (
               <>
-                <span className="text-mute">Xin chào, {user.name}</span>
+                <span className="text-mute">Xin chào, {user.name.split(" ")[0]}</span>
                 <button onClick={restart} className={ghost}>
                   Làm lại từ đầu
                 </button>

@@ -238,7 +238,7 @@ export function PosterTile({ movie, status, onRate, className = "" }) {
 }
 
 // Popup xem nhanh khi rê chuột: hiện sau 0,35 giây, tự chọn bên trái/phải cho vừa màn hình
-function useHoverPreview() {
+export function useHoverPreview() {
   const ref = useRef(null);
   const timer = useRef(0);
   const [pos, setPos] = useState(null);
@@ -274,7 +274,7 @@ function useHoverPreview() {
   return { ref, pos, show, hide };
 }
 
-function HoverPreview({ movie, pos }) {
+export function HoverPreview({ movie, pos }) {
   if (!pos) return null;
   return createPortal(
     <motion.div

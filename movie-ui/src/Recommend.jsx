@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { api } from "./api";
-import { CardButtons, GRID, Notice, PosterLink, PosterTile, Rating, RateButtons, TrailerContext } from "./ui";
+import { CardButtons, GRID, HoverPreview, Notice, PosterLink, PosterTile, Rating, RateButtons, TrailerContext, useHoverPreview } from "./ui";
 
 const reasonText = (m, coldStart, isHero = false) =>
   (coldStart || m.cold_start)
@@ -106,8 +106,18 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
   const [why, setWhy] = useState(false);
   const personal = !isCold && movie.match_percent != null;
   const width = max === min ? 100 : 35 + ((movie.match_percent - min) / (max - min)) * 65;
+  const { ref, pos, show, hide } = useHoverPreview();
+
   return (
-    <article>
+    <article
+      ref={ref}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) hide();
+      }}
+    >
       <PosterTile movie={movie} status={status} onRate={onRate} className="rounded-b-none" />
       <div className="relative rounded-b-xl bg-white p-3 ring-1 ring-ink/10">
         <span className="absolute inset-x-3 top-0 border-t border-dashed border-ink/30" />
@@ -145,6 +155,7 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
       <div className="mt-3">
         <CardButtons movie={movie} />
       </div>
+      <HoverPreview movie={movie} pos={pos} />
     </article>
   );
 }

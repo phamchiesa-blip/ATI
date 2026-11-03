@@ -1,15 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Info, PartyPopper, TriangleAlert, X } from "lucide-react";
 
-const ICONS = { welcome: PartyPopper, info: Info, error: TriangleAlert };
+const ICONS = { welcome: PartyPopper, info: Info, error: TriangleAlert, warning: TriangleAlert };
 
 // Thông báo nhỏ góc dưới bên phải. Thanh phía dưới chạy ngược trong `duration` ms
 // rồi tự đóng; người dùng cũng có thể bấm X để đóng sớm.
 export default function Toast({ toast, onClose }) {
   const kind = toast?.kind ?? "info";
   const Icon = ICONS[kind] ?? Info;
-  const tint = kind === "error" ? "text-coral" : "text-cobalt";
-  const bar = kind === "error" ? "bg-coral" : "bg-cobalt";
+  const tint = kind === "error" || kind === "warning" ? "text-coral" : "text-cobalt";
+  const bar = kind === "error" || kind === "warning" ? "bg-coral" : "bg-cobalt";
 
   return (
     <div className="pointer-events-none fixed right-5 bottom-5 left-5 z-50 sm:left-auto sm:w-96">
@@ -30,22 +30,42 @@ export default function Toast({ toast, onClose }) {
               <div className="min-w-0 flex-1">
                 <p className="font-semibold">{toast.title}</p>
                 {toast.text && <p className="mt-0.5 text-sm text-mute">{toast.text}</p>}
-                {toast.action && (
+                {toast.actions ? (
+                  <div className="mt-3 flex items-center gap-2">
+                    {toast.actions.map((act, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => {
+                          if (act.onClick) act.onClick();
+                          onClose(toast.id);
+                        }}
+                        className={
+                          act.primary
+                            ? "cursor-pointer rounded-full bg-coral px-3.5 py-1 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-coral/90"
+                            : "cursor-pointer rounded-full bg-ink/5 px-3.5 py-1 text-xs font-semibold text-ink transition-colors hover:bg-ink/10"
+                        }
+                      >
+                        {act.label}
+                      </button>
+                    ))}
+                  </div>
+                ) : toast.action ? (
                   <button
                     onClick={() => {
                       toast.action.onClick();
                       onClose(toast.id);
                     }}
-                    className="mt-2 text-sm font-semibold text-cobalt underline underline-offset-4"
+                    className="mt-2 cursor-pointer text-sm font-semibold text-cobalt underline underline-offset-4"
                   >
                     {toast.action.label}
                   </button>
-                )}
+                ) : null}
               </div>
               <button
                 aria-label="Đóng thông báo"
                 onClick={() => onClose(toast.id)}
-                className="rounded-full p-1 text-mute hover:bg-ink/5"
+                className="cursor-pointer rounded-full p-1 text-mute hover:bg-ink/5"
               >
                 <X size={16} />
               </button>
