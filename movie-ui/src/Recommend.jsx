@@ -2,37 +2,42 @@ import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { api } from "./api";
-import { CardButtons, GRID, Notice, PosterLink, PosterTile, Rating, RateButtons, TrailerContext } from "./ui";
+import { CardButtons, GRID, HoverPreview, Notice, PosterLink, PosterTile, Rating, RateButtons, TrailerContext, useHoverPreview } from "./ui";
+import { useLang } from "./i18n";
 
-const reasonText = (m, coldStart, isHero = false) =>
+const reasonText = (m, coldStart, tr, isHero = false) =>
   (coldStart || m.cold_start)
     ? (isHero
-        ? "Phim đang được yêu thích, hãy bấm Thích/Không thích để hệ thống hiểu gu của bạn"
-        : "Phim đang được yêu thích")
+        ? tr(
+            "Phim đang được yêu thích, hãy bấm Thích/Không thích để hệ thống hiểu gu của bạn",
+            "Popular movie — click Like/Dislike so the system learns your taste"
+          )
+        : tr("Phim đang được yêu thích", "Popular right now"))
     : m.match_percent == null
-      ? "Được nhiều người yêu thích"
+      ? tr("Được nhiều người yêu thích", "Audience favorite")
       : m.reasons?.length
-        ? `Vì bạn thích ${m.reasons.join(", ")}`
-        : "Có nội dung gần với những phim bạn đã chọn";
+        ? tr(`Vì bạn thích ${m.reasons.join(", ")}`, `Because you like ${m.reasons.join(", ")}`)
+        : tr("Có nội dung gần với những phim bạn đã chọn", "Similar content to movies you selected");
 
 const PARTS = [
-  ["cosine", "Giống gu của bạn"],
-  ["rating", "Điểm đánh giá"],
-  ["popularity", "Độ phổ biến"],
-  ["newness", "Độ mới"],
-  ["neural", "AI học từ Thích / Không thích"],
+  ["cosine", "Giống gu của bạn", "Matches your taste"],
+  ["rating", "Điểm đánh giá", "Rating score"],
+  ["popularity", "Độ phổ biến", "Popularity"],
+  ["newness", "Độ mới", "Recency"],
+  ["neural", "AI học từ Thích / Không thích", "Online AI learned from Like / Dislike"],
 ];
 
 // Các thành phần cấu thành điểm gợi ý (module Ranking), thang 0-100 so với các phim ứng viên
 function Breakdown({ data, coldStart }) {
+  const { tr } = useLang();
   return (
     <ul className="mt-2 grid gap-2">
-      {PARTS.filter(([k]) => data[k] != null && (!coldStart || k !== "cosine")).map(([k, label]) => {
+      {PARTS.filter(([k]) => data[k] != null && (!coldStart || k !== "cosine")).map(([k, labelVi, labelEn]) => {
         const v = Math.round(data[k] * 100);
         return (
           <li key={k}>
             <div className="flex justify-between text-xs">
-              <span>{label}</span>
+              <span>{tr(labelVi, labelEn)}</span>
               <span className="text-mute">{v}</span>
             </div>
             <div className="mt-0.5 h-1 rounded-full bg-ink/10">
@@ -48,6 +53,7 @@ function Breakdown({ data, coldStart }) {
 function Hero({ movie, status, onRate, coldStart }) {
   const isCold = coldStart || Boolean(movie.cold_start);
   const openTrailer = useContext(TrailerContext);
+  const { tr } = useLang();
   return (
     <section className="grid items-center gap-8 rounded-3xl bg-white p-6 md:grid-cols-[280px_1fr] md:p-10">
       <PosterLink movie={movie} size="lg" showTitle={false} />
@@ -65,20 +71,20 @@ function Hero({ movie, status, onRate, coldStart }) {
           ))}
         </div>
         <p className="mt-4 line-clamp-4 leading-relaxed text-mute">{movie.overview}</p>
-        <p className="mt-4 text-sm font-medium">{reasonText(movie, isCold, true)}</p>
+        <p className="mt-4 text-sm font-medium">{reasonText(movie, isCold, tr, true)}</p>
 
         <div className="mt-5 flex flex-wrap items-start gap-x-10 gap-y-4">
           {!isCold && movie.match_percent != null ? (
             <p className="flex items-baseline gap-2">
               <span className="font-display text-5xl font-extrabold text-cobalt">{movie.match_percent}%</span>
-              <span className="text-sm text-mute">độ hợp</span>
+              <span className="text-sm text-mute">{tr("độ hợp", "match")}</span>
             </p>
           ) : (
             <Rating value={movie.vote_average} />
           )}
           {movie.breakdown && (
             <div className="min-w-56 flex-1">
-              <p className="text-sm font-semibold">Vì sao gợi ý phim này?</p>
+              <p className="text-sm font-semibold">{tr("Vì sao gợi ý phim này?", "Why this recommendation?")}</p>
               <Breakdown data={movie.breakdown} coldStart={isCold} />
             </div>
           )}
@@ -89,7 +95,7 @@ function Hero({ movie, status, onRate, coldStart }) {
             onClick={() => openTrailer(movie)}
             className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-2.5 font-semibold text-white hover:bg-ink/85"
           >
-            <Play size={16} className="fill-white" /> Xem trailer
+            <Play size={16} className="fill-white" /> {tr("Xem trailer", "Watch trailer")}
           </button>
           <div className="min-w-60 flex-1 sm:max-w-sm">
             <RateButtons status={status} onRate={(a) => onRate(movie, a)} />
@@ -104,10 +110,21 @@ function Hero({ movie, status, onRate, coldStart }) {
 function Ticket({ movie, min, max, status, onRate, coldStart }) {
   const isCold = coldStart || Boolean(movie.cold_start);
   const [why, setWhy] = useState(false);
+  const { tr } = useLang();
   const personal = !isCold && movie.match_percent != null;
   const width = max === min ? 100 : 35 + ((movie.match_percent - min) / (max - min)) * 65;
+  const { ref, pos, show, hide } = useHoverPreview();
+
   return (
-    <article>
+    <article
+      ref={ref}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) hide();
+      }}
+    >
       <PosterTile movie={movie} status={status} onRate={onRate} className="rounded-b-none" />
       <div className="relative rounded-b-xl bg-white p-3 ring-1 ring-ink/10">
         <span className="absolute inset-x-3 top-0 border-t border-dashed border-ink/30" />
@@ -117,7 +134,7 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
           <>
             <p className="mt-1 flex items-baseline justify-between">
               <span className="font-display text-xl font-extrabold text-cobalt">{movie.match_percent}%</span>
-              <span className="text-xs text-mute">độ hợp</span>
+              <span className="text-xs text-mute">{tr("độ hợp", "match")}</span>
             </p>
             <div className="mt-1 h-1.5 rounded-full bg-ink/10">
               <div className="h-full rounded-full bg-cobalt" style={{ width: `${width}%` }} />
@@ -128,7 +145,7 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
             <Rating value={movie.vote_average} />
           </p>
         )}
-        <p className="mt-2 text-xs leading-snug text-mute">{reasonText(movie, isCold, false)}</p>
+        <p className="mt-2 text-xs leading-snug text-mute">{reasonText(movie, isCold, tr, false)}</p>
         {movie.breakdown && (
           <>
             <button
@@ -136,7 +153,7 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
               aria-expanded={why}
               className="mt-2 text-xs font-semibold text-cobalt underline underline-offset-4"
             >
-              {why ? "Ẩn chi tiết" : "Vì sao gợi ý?"}
+              {why ? tr("Ẩn chi tiết", "Hide details") : tr("Vì sao gợi ý?", "Why recommended?")}
             </button>
             {why && <Breakdown data={movie.breakdown} coldStart={isCold} />}
           </>
@@ -145,13 +162,14 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
       <div className="mt-3">
         <CardButtons movie={movie} />
       </div>
+      <HoverPreview movie={movie} pos={pos} />
     </article>
   );
 }
 
 const MODES = [
-  ["proposed", "Đề xuất (Ranking + AI)"],
-  ["baseline", "Baseline (chỉ cosine)"],
+  ["proposed", "Đề xuất (Ranking + AI)", "Proposed (Ranking + AI)"],
+  ["baseline", "Baseline (chỉ cosine)", "Baseline (cosine only)"],
 ];
 
 export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }) {
@@ -160,6 +178,7 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
   const [coldStart, setColdStart] = useState(false);
   const [mode, setMode] = useState("proposed");
   const [state, setState] = useState("loading");
+  const { tr } = useLang();
 
   useEffect(() => {
     let off = false;
@@ -189,18 +208,24 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl font-extrabold">
-            {!isCold ? "Dành cho bạn" : "Đang được yêu thích"}
+            {!isCold ? tr("Dành cho bạn", "For You") : tr("Đang được yêu thích", "Popular Right Now")}
           </h1>
           <p className="mt-2 text-mute">
             {!isCold
-              ? "Danh sách tự cập nhật mỗi khi bạn bấm Thích hoặc Không thích."
-              : "Những phim nổi tiếng và được đánh giá cao."}
+              ? tr(
+                  "Danh sách tự cập nhật mỗi khi bạn bấm Thích hoặc Không thích.",
+                  "Your list updates automatically whenever you click Like or Dislike."
+                )
+              : tr(
+                  "Những phim nổi tiếng và được đánh giá cao.",
+                  "Well-known and highly rated movies."
+                )}
           </p>
         </div>
         {!isCold && (
           <div>
-            <div role="group" aria-label="Cách gợi ý" className="inline-flex rounded-full bg-white p-1 ring-1 ring-ink/15">
-              {MODES.map(([id, label]) => (
+            <div role="group" aria-label={tr("Cách gợi ý", "Recommendation mode")} className="inline-flex rounded-full bg-white p-1 ring-1 ring-ink/15">
+              {MODES.map(([id, labelVi, labelEn]) => (
                 <button
                   key={id}
                   onClick={() => setMode(id)}
@@ -209,14 +234,20 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
                     mode === id ? "bg-ink text-white" : "hover:bg-ink/5"
                   }`}
                 >
-                  {label}
+                  {tr(labelVi, labelEn)}
                 </button>
               ))}
             </div>
             <p className="mt-2 max-w-sm text-xs text-mute">
               {mode === "baseline"
-                ? "Chỉ xếp theo độ giống nội dung, không tính điểm đánh giá, độ phổ biến, độ mới hay AI."
-                : "Kết hợp độ giống nội dung với điểm đánh giá, độ phổ biến, độ mới và AI học từ Thích / Không thích."}
+                ? tr(
+                    "Chỉ xếp theo độ giống nội dung, không tính điểm đánh giá, độ phổ biến, độ mới hay AI.",
+                    "Ranked by content similarity only, without rating, popularity, recency, or online AI."
+                  )
+                : tr(
+                    "Kết hợp độ giống nội dung với điểm đánh giá, độ phổ biến, độ mới và AI học từ Thích / Không thích.",
+                    "Combines content similarity with rating, popularity, recency, and AI learned from Like / Dislike."
+                  )}
             </p>
           </div>
         )}
@@ -225,11 +256,14 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
       {state === "ok" && isCold && (
         <div className="mt-6 flex flex-wrap items-center gap-4 rounded-2xl bg-white p-5 ring-1 ring-ink/10">
           <p className="min-w-60 flex-1">
-            <strong>Muốn gợi ý riêng cho bạn?</strong> Chọn thể loại bạn thích, hoặc bấm Thích / Không
-            thích vài phim bên dưới.
+            <strong>{tr("Muốn gợi ý riêng cho bạn?", "Want personalized recommendations?")}</strong>{" "}
+            {tr(
+              "Chọn thể loại bạn thích, hoặc bấm Thích / Không thích vài phim bên dưới.",
+              "Pick your favorite genres, or click Like / Dislike on a few movies below."
+            )}
           </p>
           <button onClick={onPickGenres} className="rounded-full bg-cobalt px-6 py-2.5 font-semibold text-white hover:bg-cobalt/90">
-            Chọn thể loại
+            {tr("Chọn thể loại", "Pick Genres")}
           </button>
         </div>
       )}
@@ -237,18 +271,26 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
       <div className="mt-8">
         {state === "loading" && <div className="h-96 animate-pulse rounded-3xl bg-ink/10" />}
         {state === "error" && (
-          <Notice title="Không tải được gợi ý">Hãy kiểm tra máy chủ API đang chạy rồi tải lại trang.</Notice>
+          <Notice title={tr("Không tải được gợi ý", "Could not load recommendations")}>
+            {tr(
+              "Hãy kiểm tra máy chủ API đang chạy rồi tải lại trang.",
+              "Please check that the API server is running and reload the page."
+            )}
+          </Notice>
         )}
         {state === "ok" && !hero && (
           <Notice
-            title="Bạn đã xem hết gợi ý hiện có"
+            title={tr("Bạn đã xem hết gợi ý hiện có", "You have seen all current recommendations")}
             action={
               <button onClick={onBrowse} className="mt-6 rounded-full bg-cobalt px-6 py-2.5 font-semibold text-white">
-                Khám phá thêm phim
+                {tr("Khám phá thêm phim", "Explore more movies")}
               </button>
             }
           >
-            Hãy Thích vài phim mới để hệ thống hiểu bạn rõ hơn.
+            {tr(
+              "Hãy Thích vài phim mới để hệ thống hiểu bạn rõ hơn.",
+              "Like a few more movies so the system understands your taste better."
+            )}
           </Notice>
         )}
         {state === "ok" && hero && (

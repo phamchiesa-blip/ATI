@@ -61,6 +61,9 @@ from feature_store import (                                         # noqa: E402
 )
 import tmdb_client                                                   # noqa: E402
 from similarity import cosine_similarity_bulk                       # noqa: E402
+from chatbot import (                                               # noqa: E402
+    GENRE_VI_LABELS, QUICK_SUGGESTIONS, chat_recommend, get_feature_space,
+)
 from ranking_eval.frontend_service import (                        # noqa: E402
     get_popular_movies, onboard_user, recommendations as ranked_recommendations,
 )
@@ -999,6 +1002,65 @@ TIMES = [
 
 @app.get("/api/tonight/options")
 def tonight_options():
+    return {
+        "moods": [{k: m[k] for k in ("id", "label", "genres")} for m in MOODS],
+        "times": [{"id": t["id"], "label": t["label"]} for t in TIMES],
+        "quick_suggestions": QUICK_SUGGESTIONS,
+        "genre_labels": [
+            {"id": g, "label": GENRE_VI_LABELS.get(g, g)}
+            for g in get_feature_space(DB).genre_labels
+        ],
+        "llm_available": bool(
+            os.environ.get("GEMINI_API_KEY", "").strip()
+            or os.environ.get("OPENAI_API_KEY", "").strip()
+        ),
+    }
+
+
+class TonightChatBody(BaseModel):
+    message: str = ""
+    previous_intent: Optional[dict] = None
+    intent_override: Optional[dict] = None
+    exclude: List[int] = []
+    top_n: int = 10
+    use_llm: bool = True
+
+
+@app.post("/api/tonight/chat")
+def tonight_chat(body: TonightChatBody, user: dict = Depends(current_user)):
+    """Endpoint Chat Bot cho muc 'Hom nay xem gi?':
+    Hieu yeu cau tu nhien (hoac dieu chinh tag) -> Dung Query Vector 324 chieu ->
+    Loc phim tranh -> Tinh Cosine & tron voi User Profile + Ranking -> Tra ve danh sach phim + ly do."""
+    if not body.message.strip() and not body.intent_override and not body.previous_intent:
+        raise HTTPException(400, "Hãy nhập yêu cầu hoặc chọn một gợi ý nhanh")
+    uid = user["id"]
+    _ensure_profile(uid)
+    extras = _load_extra()
+    runtimes = {mid: info.get("runtime") for mid, info in extras.items()} if extras else None
+    seeds = _seeds.get(uid, set())
+    exclude_set = set(body.exclude) | seeds
+
+    try:
+        res = chat_recommend(
+            uid,
+            body.message,
+            db_path=DB,
+            previous_intent=body.previous_intent,
+            intent_override=body.intent_override,
+            exclude_ids=exclude_set,
+            runtimes=runtimes,
+            top_n=min(max(body.top_n, 1), 24),
+            use_llm=body.use_llm,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    for item in res["items"]:
+        item["poster_url"] = _poster_url(item["movie_id"])
+    res["runtime_filter_applied"] = bool(extras) and bool(res["intent"].get("max_runtime"))
+    return res
+
+
+def _legacy_tonight_options():
     return {"moods": [{k: m[k] for k in ("id", "label", "genres")} for m in MOODS],
             "times": [{"id": t["id"], "label": t["label"]} for t in TIMES]}
 

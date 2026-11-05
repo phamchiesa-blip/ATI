@@ -86,6 +86,7 @@ export const api = {
   removeWatch: (movie_id) => req(`/api/watchlist/${movie_id}`, { method: "DELETE" }),
   tonightOptions: () => req("/api/tonight/options"),
   tonight: (mood, time, exclude = []) => post("/api/tonight", { mood, time, exclude }),
+  tonightChat: (payload) => post("/api/tonight/chat", payload),
   evaluation: () => req("/api/evaluation"),
 
   // Hồ sơ sở thích

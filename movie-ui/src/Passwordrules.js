@@ -7,21 +7,31 @@ const COMMON = new Set([
 ]);
 
 export const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-const LABELS = ["Rất yếu", "Yếu", "Trung bình", "Khá", "Mạnh"];
+const LABELS_VI = ["Rất yếu", "Yếu", "Trung bình", "Khá", "Mạnh"];
+const LABELS_EN = ["Very weak", "Weak", "Fair", "Good", "Strong"];
 
-export function checkPassword(pw, email = "") {
+export function checkPassword(pw, email = "", lang = "vi") {
   const local = email.split("@")[0].toLowerCase();
+  const isEn = lang === "en";
   const rules = [
-    { id: "len", label: "Ít nhất 8 ký tự", ok: pw.length >= 8 && pw.length <= 128 },
-    { id: "mix", label: "Có cả chữ cái và chữ số", ok: /\p{L}/u.test(pw) && /\p{Nd}/u.test(pw) },
+    {
+      id: "len",
+      label: isEn ? "At least 8 characters" : "Ít nhất 8 ký tự",
+      ok: pw.length >= 8 && pw.length <= 128,
+    },
+    {
+      id: "mix",
+      label: isEn ? "Contains both letters and numbers" : "Có cả chữ cái và chữ số",
+      ok: /\p{L}/u.test(pw) && /\p{Nd}/u.test(pw),
+    },
     {
       id: "common",
-      label: "Không quá phổ biến hoặc quá đơn giản",
+      label: isEn ? "Not too common or repetitive" : "Không quá phổ biến hoặc quá đơn giản",
       ok: pw.length > 0 && !COMMON.has(pw.toLowerCase()) && new Set(pw).size >= 4,
     },
     {
       id: "email",
-      label: "Không chứa phần đầu của email",
+      label: isEn ? "Does not contain your email username" : "Không chứa phần đầu của email",
       ok: pw.length > 0 && !(local.length >= 3 && pw.toLowerCase().includes(local)),
     },
   ];
@@ -32,5 +42,6 @@ export function checkPassword(pw, email = "") {
   if (/\p{Ll}/u.test(pw) && /\p{Lu}/u.test(pw)) score++;
   if (/[^\p{L}\p{Nd}]/u.test(pw)) score++;
   if (!valid) score = Math.min(score, 1);
-  return { rules, valid, score, label: pw ? LABELS[score] : "" };
+  const labels = isEn ? LABELS_EN : LABELS_VI;
+  return { rules, valid, score, label: pw ? labels[score] : "" };
 }
