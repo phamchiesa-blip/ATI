@@ -33,14 +33,18 @@ from __future__ import annotations
 import json
 import os
 import re
-import sqlite3
 import threading
 import unicodedata
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Sequence
+
+from repositories.protocols import MovieRepositoryProtocol, InteractionRepositoryProtocol
+from repositories.sqlite_movie_repo import SqliteMovieRepository
+from repositories.sqlite_interaction_repo import SqliteInteractionRepository
+from domain.dtos import ChatbotResponseDTO
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -524,44 +528,23 @@ class ChatIntent:
 # 3. CHI MUC KHONG GIAN 324 CHIEU (CATALOG & FEATURE SPACE INDEX)
 # ═══════════════════════════════════════════════════════════════════════════
 
-def _find_movies_csv() -> Optional[str]:
-    """Tim duong dan toi tmdb_5000_movies.csv neu co."""
-    env = os.environ.get("TMDB_MOVIES_CSV")
-    if env and os.path.exists(env):
-        return env
-    cur = Path(__file__).resolve().parent
-    candidates = [
-        cur / "tmdb_5000_movies.csv",
-        cur / "data" / "tmdb_5000_movies.csv",
-        cur.parent / "tmdb_5000_movies.csv",
-        cur.parent / "data" / "tmdb_5000_movies.csv",
-        cur.parent / "data_module" / "data" / "tmdb_5000_movies.csv",
-        cur.parent / "data_module" / "src" / "tmdb_5000_movies.csv",
-    ]
-    for p in candidates:
-        if p.exists():
-            return str(p)
-    return None
-
 class FeatureSpaceIndex:
     """Quan ly va khoi phuc chinh xac khong gian 324 chieu tu movies.db ma khong can
     chay lai build_dataset.py hay luu file pickle ngoai."""
 
-    def __init__(self, db_path: str = DEFAULT_DB_PATH) -> None:
+    def __init__(
+        self,
+        db_path: str = DEFAULT_DB_PATH,
+        *,
+        movie_repo: Optional[MovieRepositoryProtocol] = None,
+    ) -> None:
         self.db_path = db_path
-        check_db_exists(db_path)
+        self.movie_repo = movie_repo or SqliteMovieRepository(db_path=db_path)
 
-        self.movie_ids, self.matrix = get_all_vectors(db_path)
+        self.movie_ids, self.matrix = self.movie_repo.get_all_vectors()
         self.id_to_row: dict[int, int] = {int(mid): i for i, mid in enumerate(self.movie_ids)}
 
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        rows = conn.execute(
-            'SELECT movie_id, title, overview, genres, director, "cast", '
-            'vote_average, vote_count, popularity, release_date '
-            'FROM movies ORDER BY movie_id'
-        ).fetchall()
-        conn.close()
+        rows = self.movie_repo.get_all_movie_rows()
 
         self.movies: dict[int, dict[str, Any]] = {}
         self.titles_ordered: list[tuple[int, str, str, float]] = []  # (mid, title, folded, pop)
@@ -570,8 +553,13 @@ class FeatureSpaceIndex:
 
         for r in rows:
             mid = int(r["movie_id"])
-            genres = json.loads(r["genres"] or "[]")
-            cast = json.loads(r["cast"] or "[]")
+            raw_genres = r["genres"]
+
+            genres = raw_genres if isinstance(raw_genres, list) else json.loads(raw_genres or "[]")
+
+            raw_cast = r["cast"]
+
+            cast = raw_cast if isinstance(raw_cast, list) else json.loads(raw_cast or "[]")
             rel_date = r["release_date"] or ""
             year = int(rel_date[:4]) if rel_date[:4].isdigit() else None
             if year is not None:
@@ -620,7 +608,7 @@ class FeatureSpaceIndex:
             active = np.where(self.matrix[:, col] == 1.0)[0]
             common = None
             for i in active:
-                actors = set(json.loads(rows[i]["cast"] or "[]"))
+                raw_cast_i = rows[i]["cast"]; actors = set(raw_cast_i if isinstance(raw_cast_i, list) else json.loads(raw_cast_i or "[]"))
                 common = actors if common is None else (common & actors)
             if common and len(common) == 1:
                 a_name = next(iter(common))
@@ -642,33 +630,16 @@ class FeatureSpaceIndex:
         self.min_year = min(years) if years else 1916
         self.max_year = max(years) if years else 2017
 
-        # 6. Chi muc TMDB Keywords tu CSV (neu co) phuc vu tim kiem theo tu khoa
-        self.mid_to_keywords: dict[int, list[str]] = {}
+        # 6. Chi muc TMDB Keywords tu Repository phuc vu tim kiem theo tu khoa
+        self.mid_to_keywords: dict[int, list[str]] = self.movie_repo.get_keywords_mapping()
         self.keyword_to_mids: dict[str, set[int]] = {}
         self.keywords_folded: list[tuple[str, str, set[int]]] = []
-        csv_path = _find_movies_csv()
-        if csv_path:
-            try:
-                import pandas as pd
-                df = pd.read_csv(csv_path)
-                for mid_val, kw_val in zip(df["id"], df.get("keywords", [])):
-                    if not isinstance(kw_val, str):
-                        continue
-                    try:
-                        items = json.loads(kw_val)
-                        names = [it["name"].strip() for it in items if it.get("name")]
-                        if names:
-                            mid_int = int(mid_val)
-                            self.mid_to_keywords[mid_int] = names
-                            for name in names:
-                                self.keyword_to_mids.setdefault(name.lower(), set()).add(mid_int)
-                    except Exception:
-                        pass
-                for k_orig, mids_set in self.keyword_to_mids.items():
-                    self.keywords_folded.append((_fold(k_orig), k_orig, mids_set))
-                self.keywords_folded.sort(key=lambda x: -len(x[0]))
-            except Exception:
-                pass
+        for mid_int, names in self.mid_to_keywords.items():
+            for name in names:
+                self.keyword_to_mids.setdefault(name.lower(), set()).add(mid_int)
+        for k_orig, mids_set in self.keyword_to_mids.items():
+            self.keywords_folded.append((_fold(k_orig), k_orig, mids_set))
+        self.keywords_folded.sort(key=lambda x: -len(x[0]))
 
     def project_text_to_svd(self, text: str) -> np.ndarray:
         """Chieu van ban tieng Anh qua TF-IDF -> 50 chieu SVD cung khong gian movies.db."""
@@ -683,8 +654,14 @@ _SPACE_CACHE: dict[str, FeatureSpaceIndex] = {}
 _SPACE_LOCK = threading.RLock()
 
 
-def get_feature_space(db_path: str = DEFAULT_DB_PATH) -> FeatureSpaceIndex:
-    """Singleton lazy loader cho FeatureSpaceIndex theo db_path."""
+def get_feature_space(
+    db_path: str = DEFAULT_DB_PATH,
+    *,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
+) -> FeatureSpaceIndex:
+    """Singleton lazy loader cho FeatureSpaceIndex theo db_path hoac movie_repo."""
+    if movie_repo is not None:
+        return FeatureSpaceIndex(movie_repo=movie_repo)
     abs_path = os.path.abspath(db_path)
     with _SPACE_LOCK:
         if abs_path not in _SPACE_CACHE:
@@ -1249,11 +1226,13 @@ def parse_user_query(
     db_path: str = DEFAULT_DB_PATH,
     previous_intent: Optional[ChatIntent] = None,
     use_llm: bool = True,
+    *,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
 ) -> ChatIntent:
     """Ham dieu phoi Hieu yeu cau: thu LLM neu co key & duoc bat, loi hoac khong co key thi dung Local."""
     if is_gibberish(message):
         return ChatIntent(parser_source="local")
-    space = get_feature_space(db_path)
+    space = get_feature_space(db_path, movie_repo=movie_repo)
     if use_llm:
         llm_intent = parse_intent_llm(message, space, previous_intent=previous_intent)
         if llm_intent is not None:
@@ -1426,6 +1405,8 @@ def chat_recommend(
     candidate_k: int = 120,
     query_weight: float = 0.75,
     use_llm: bool = True,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
+    interaction_repo: Optional[InteractionRepositoryProtocol] = None,
 ) -> dict[str, Any]:
     """Luong chinh cua Chat Bot goi y phim:
       1. Hieu yeu cau -> ChatIntent (hoac nhan intent_override khi nguoi dung bam sua tag tren UI)
@@ -1434,7 +1415,9 @@ def chat_recommend(
       4. Tinh Cosine Similarity voi Query Vector va TRON voi User Profile (neu co)
       5. Dua qua Multi-Objective Ranking (Cosine 0.6 + Rating 0.2 + Popularity 0.1 + Newness 0.1) + Online Reranker
       6. Tra ve danh sach phim THAT trong catalog + ly do + dong 'Minh hieu ban muon: ...'"""
-    space = get_feature_space(db_path)
+    m_repo = movie_repo or SqliteMovieRepository(db_path=db_path)
+    i_repo = interaction_repo or SqliteInteractionRepository(db_path=db_path)
+    space = get_feature_space(db_path, movie_repo=m_repo)
 
     prev_obj: Optional[ChatIntent] = None
     if isinstance(previous_intent, ChatIntent):
@@ -1484,7 +1467,7 @@ def chat_recommend(
             base.max_runtime = intent_override["max_runtime"]
         intent = base
     else:
-        intent = parse_user_query(message, db_path=db_path, previous_intent=prev_obj, use_llm=use_llm)
+        intent = parse_user_query(message, db_path=db_path, previous_intent=prev_obj, use_llm=use_llm, movie_repo=m_repo)
 
     if not intent_override and intent.is_empty():
         raise ValueError(
@@ -1508,7 +1491,7 @@ def chat_recommend(
 
     # Kiem tra User Profile hien co cua nguoi dung
     prof = _rec._registry.get(user_id)
-    history = get_user_interactions(user_id, db_path=db_path)
+    history = i_repo.get_interactions(user_id)
     interacted_ids = {int(h["movie_id"]) for h in history}
     liked_ids = [int(h["movie_id"]) for h in history if h["action"] == "like"]
 
@@ -1656,8 +1639,16 @@ def chat_recommend(
             },
         })
 
-    return {
-        "intent": intent.to_dict(),
-        "personalized": has_profile,
-        "items": items,
-    }
+    return ChatbotResponseDTO(
+
+
+        intent=intent.to_dict(),
+
+
+        personalized=has_profile,
+
+
+        items=items,
+
+
+    )

@@ -21,34 +21,41 @@ Dieu phoi toan bo luong Recommendation Core:
     Don -> Ranking
 
 Public API:
-    like(user_id, movie_id, db_path)
-    dislike(user_id, movie_id, db_path)
-    recommend(user_id, k, db_path)  -> [(movie_id, score), ...]
+    like(user_id, movie_id, db_path, ...)
+    dislike(user_id, movie_id, db_path, ...)
+    recommend(user_id, k, db_path, ...)  -> [(movie_id, score), ...]
 """
 
 from __future__ import annotations
 
-import sys
 import os
+import sys
+from typing import Optional
 
-# Cho phep import feature_store tu thu muc data_module/src
-_DATA_MODULE_SRC = os.path.join(
-    os.path.dirname(__file__), "..", "data_module", "src"
-)
-sys.path.insert(0, os.path.abspath(_DATA_MODULE_SRC))
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_DATA_MODULE_SRC = os.path.join(_ROOT, "data_module", "src")
+for _p in (_ROOT, _DATA_MODULE_SRC):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 import numpy as np
-from feature_store import DEFAULT_DB_PATH, get_movie_vector, get_all_vectors
-
-from user_profile import UserProfile, UserProfileRegistry, ALPHA, BETA
-from interaction import save_interaction, get_interactions
+from feature_store import DEFAULT_DB_PATH
+from repositories.protocols import InteractionRepositoryProtocol, MovieRepositoryProtocol
+from repositories.sqlite_interaction_repo import SqliteInteractionRepository
+from repositories.sqlite_movie_repo import SqliteMovieRepository
 from similarity import get_top_k_movies
+from user_profile import ALPHA, BETA, UserProfile, UserProfileRegistry
 
 # ─── Singleton registry (in-memory) ─────────────────────────────────────────
 _registry = UserProfileRegistry()
 
 
-def _get_profile(user_id: str, db_path: str) -> UserProfile:
+def _get_profile(
+    user_id: str,
+    db_path: str = DEFAULT_DB_PATH,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
+    interaction_repo: Optional[InteractionRepositoryProtocol] = None,
+) -> UserProfile:
     """Lay hoac phuc dung profile cua user.
 
     Neu profile chua trong memory, thu build lai tu interaction history.
@@ -57,11 +64,12 @@ def _get_profile(user_id: str, db_path: str) -> UserProfile:
     if profile is not None:
         return profile
 
-    # Tao moi va replay lich su (cold start sau khi restart)
     profile = _registry.get_or_create(user_id)
-    history = get_interactions(user_id, db_path=db_path)
+    i_repo = interaction_repo or SqliteInteractionRepository(db_path=db_path)
+    m_repo = movie_repo or SqliteMovieRepository(db_path=db_path)
+    history = i_repo.get_interactions(user_id)
     for record in history:
-        vec = get_movie_vector(record["movie_id"], db_path=db_path)
+        vec = m_repo.get_vector(record["movie_id"])
         if vec is None:
             continue
         if record["action"] == "like":
@@ -73,40 +81,25 @@ def _get_profile(user_id: str, db_path: str) -> UserProfile:
 
 # ─── Public API ──────────────────────────────────────────────────────────────
 
-def like(user_id: str, movie_id: int, db_path: str = DEFAULT_DB_PATH) -> None:
-    """Xu ly su kien user bam Like tren mot phim.
+def like(
+    user_id: str,
+    movie_id: int,
+    db_path: str = DEFAULT_DB_PATH,
+    *,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
+    interaction_repo: Optional[InteractionRepositoryProtocol] = None,
+) -> None:
+    """Xu ly su kien user bam Like tren mot phim."""
+    m_repo = movie_repo or SqliteMovieRepository(db_path=db_path)
+    i_repo = interaction_repo or SqliteInteractionRepository(db_path=db_path)
 
-    Luong:
-        movie_id
-           |
-           v
-        get_movie_vector(movie_id)
-           |
-           v
-        Update User Profile  (Profile += alpha * MovieVector)
-           |
-           v
-        Luu Interaction History
-
-    Parameters
-    ----------
-    user_id : str
-    movie_id : int
-    db_path : str
-        Duong dan den movies.db (mac dinh 'movies.db').
-
-    Raises
-    ------
-    ValueError
-        Neu movie_id khong ton tai trong DB.
-    """
-    vec = get_movie_vector(movie_id, db_path=db_path)
+    vec = m_repo.get_vector(movie_id)
     if vec is None:
         raise ValueError(f"movie_id={movie_id} khong ton tai trong DB.")
 
-    profile = _get_profile(user_id, db_path)
+    profile = _get_profile(user_id, db_path=db_path, movie_repo=m_repo, interaction_repo=i_repo)
     profile.apply_like(vec)
-    save_interaction(user_id, movie_id, "like", db_path=db_path)
+    i_repo.log_interaction(user_id, movie_id, "like")
 
 
 def dislike(
@@ -115,61 +108,34 @@ def dislike(
     db_path: str = DEFAULT_DB_PATH,
     *,
     preserve_numeric: bool = False,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
+    interaction_repo: Optional[InteractionRepositoryProtocol] = None,
 ) -> None:
-    """Xu ly su kien user bam Dislike tren mot phim.
+    """Xu ly su kien user bam Dislike tren mot phim."""
+    m_repo = movie_repo or SqliteMovieRepository(db_path=db_path)
+    i_repo = interaction_repo or SqliteInteractionRepository(db_path=db_path)
 
-    Luong:
-        movie_id
-           |
-           v
-        get_movie_vector(movie_id)
-           |
-           v
-        Update User Profile  (Profile -= beta * MovieVector)
-           |
-           v
-        Luu Interaction History
-
-    Parameters
-    ----------
-    user_id : str
-    movie_id : int
-    db_path : str
-
-    Raises
-    ------
-    ValueError
-        Neu movie_id khong ton tai trong DB.
-    """
-    vec = get_movie_vector(movie_id, db_path=db_path)
+    vec = m_repo.get_vector(movie_id)
     if vec is None:
         raise ValueError(f"movie_id={movie_id} khong ton tai trong DB.")
 
-    profile = _get_profile(user_id, db_path)
+    profile = _get_profile(user_id, db_path=db_path, movie_repo=m_repo, interaction_repo=i_repo)
     profile.apply_dislike(vec, preserve_numeric=preserve_numeric)
-    save_interaction(user_id, movie_id, "dislike", db_path=db_path)
+    i_repo.log_interaction(user_id, movie_id, "dislike")
 
 
 def seed_profile_from_onboarding(
     user_id: str,
     seed_movie_ids: "list[int]",
     db_path: str = DEFAULT_DB_PATH,
+    *,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
 ) -> None:
-    """Khoi tao User Profile tu danh sach phim yeu thich trong onboarding.
-
-    Goi ham nay khi user moi dang ky va chon genre / phim yeu thich.
-    Profile = trung binh cac vector phim duoc chon.
-
-    Parameters
-    ----------
-    user_id : str
-    seed_movie_ids : list[int]
-        Danh sach movie_id user chon trong buoc onboarding.
-    db_path : str
-    """
+    """Khoi tao User Profile tu danh sach phim yeu thich trong onboarding."""
+    m_repo = movie_repo or SqliteMovieRepository(db_path=db_path)
     vectors = []
     for mid in seed_movie_ids:
-        vec = get_movie_vector(mid, db_path=db_path)
+        vec = m_repo.get_vector(mid)
         if vec is not None:
             vectors.append(vec)
     if not vectors:
@@ -182,55 +148,26 @@ def recommend(
     user_id: str,
     k: int = 20,
     db_path: str = DEFAULT_DB_PATH,
+    *,
+    movie_repo: Optional[MovieRepositoryProtocol] = None,
+    interaction_repo: Optional[InteractionRepositoryProtocol] = None,
 ) -> "list[tuple[int, float]]":
-    """Tra ve Top-K phim phu hop nhat cho user.
+    """Tra ve Top-K phim phu hop nhat cho user."""
+    m_repo = movie_repo or SqliteMovieRepository(db_path=db_path)
+    i_repo = interaction_repo or SqliteInteractionRepository(db_path=db_path)
 
-    Luong:
-        User Profile
-             |
-             v
-        So sanh voi toan bo Movie Feature Vectors (Cosine Similarity)
-             |
-             v
-        Sort giam dan
-             |
-             v
-        Loai phim da Like / Dislike
-             |
-             v
-        Lay Top-K
-
-    Parameters
-    ----------
-    user_id : str
-    k : int
-        So phim muon lay (mac dinh 20).
-    db_path : str
-
-    Returns
-    -------
-    list[tuple[int, float]]
-        [(movie_id, cosine_score), ...] sap xep giam dan.
-        Day la dau vao cho module Ranking cua Don.
-
-    Raises
-    ------
-    RuntimeError
-        Neu user chua co profile (chua onboarding va chua co bat ky
-        Like/Dislike nao).
-    """
-    profile = _get_profile(user_id, db_path)
+    profile = _get_profile(user_id, db_path=db_path, movie_repo=m_repo, interaction_repo=i_repo)
     if not profile.is_initialized():
         raise RuntimeError(
             f"User '{user_id}' chua co profile. "
             "Hay goi seed_profile_from_onboarding() hoac like()/dislike() truoc."
         )
 
-    # Lay toan bo phim
-    movie_ids, movie_matrix = get_all_vectors(db_path=db_path)
+    # Lay toan bo phim tu Repository
+    movie_ids, movie_matrix = m_repo.get_all_vectors()
 
     # Tap phim can loai (da tuong tac)
-    history = get_interactions(user_id, db_path=db_path)
+    history = i_repo.get_interactions(user_id)
     interacted_ids = {record["movie_id"] for record in history}
 
     # Tinh Top-K
