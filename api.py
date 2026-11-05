@@ -916,6 +916,20 @@ def feedback(body: FeedbackBody, user: dict = Depends(current_user)):
     return {"ok": True}
 
 
+@app.delete("/api/feedback/{movie_id}")
+def remove_feedback(movie_id: int, user: dict = Depends(current_user)):
+    """Bo Thich / Khong thich mot phim: xoa khoi lich su roi dung lai profile tu dau."""
+    uid = user["id"]
+    with _db() as c:
+        n = c.execute("DELETE FROM user_interaction_history WHERE user_id = ? AND movie_id = ?",
+                      (uid, movie_id)).rowcount
+    if not n:
+        raise HTTPException(404, "not_rated")
+    _rec._registry._profiles.pop(uid, None)
+    _ensure_profile(uid)
+    return {"ok": True}
+
+
 def _breakdown(r: dict):
     if "rating_score" not in r:
         return None

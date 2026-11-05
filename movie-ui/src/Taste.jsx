@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { api } from "./api";
 import { Notice, toneOf } from "./ui";
 import { useLang } from "./i18n";
@@ -12,11 +12,11 @@ const top = (list, pick, n) => {
     .slice(0, n);
 };
 
-function Row({ m }) {
+function Row({ m, onRemove, removeLabel }) {
   const [bg] = toneOf(m.genres?.[0]);
   return (
-    <li>
-      <a href={`#/movie/${m.movie_id}`} className="flex items-center gap-3 rounded-xl bg-white p-3 hover:bg-ink/5">
+    <li className="group flex items-center gap-2 rounded-xl bg-white pr-2 hover:bg-ink/5">
+      <a href={`#/movie/${m.movie_id}`} className="flex min-w-0 flex-1 items-center gap-3 p-3">
         <span aria-hidden className="size-8 shrink-0 rounded-lg" style={{ background: bg }} />
         <span className="min-w-0 flex-1">
           <span className="block truncate font-semibold">{m.title}</span>
@@ -25,15 +25,29 @@ function Row({ m }) {
           </span>
         </span>
       </a>
+      <button
+        type="button"
+        onClick={() => onRemove(m)}
+        title={removeLabel}
+        aria-label={`${removeLabel}: ${m.title}`}
+        className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold text-mute ring-1 ring-ink/15 transition-colors hover:bg-coral hover:text-white hover:ring-coral"
+      >
+        <X size={14} /> <span className="hidden sm:inline">{removeLabel}</span>
+      </button>
     </li>
   );
 }
 
 // Trang "Gu của bạn": tổng hợp từ lịch sử Thích / Không thích
-export default function Taste({ rev, onBrowse }) {
+export default function Taste({ rev, onBrowse, onUnrate }) {
   const [items, setItems] = useState(null);
   const [error, setError] = useState(false);
   const { tr } = useLang();
+
+  const remove = (m) => {
+    setItems((list) => list.filter((x) => x.movie_id !== m.movie_id));
+    onUnrate?.(m);
+  };
 
   useEffect(() => {
     api
@@ -155,13 +169,13 @@ export default function Taste({ rev, onBrowse }) {
                 <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold">
                   <ThumbsUp size={20} className="text-cobalt" /> {tr("Đã Thích", "Liked")}
                 </h2>
-                <ul className="mt-3 grid gap-2">{stats.likes.map((m) => <Row key={m.movie_id} m={m} />)}</ul>
+                <ul className="mt-3 grid gap-2">{stats.likes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ thích", "Unlike")} />)}</ul>
               </section>
               <section>
                 <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold">
                   <ThumbsDown size={20} /> {tr("Không thích", "Disliked")}
                 </h2>
-                <ul className="mt-3 grid gap-2">{stats.dislikes.map((m) => <Row key={m.movie_id} m={m} />)}</ul>
+                <ul className="mt-3 grid gap-2">{stats.dislikes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ không thích", "Remove dislike")} />)}</ul>
               </section>
             </div>
           </>

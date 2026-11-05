@@ -95,6 +95,7 @@ export const api = {
   onboarding: (genres, favorite_movie_ids = []) =>
     post("/api/onboarding", { genres, favorite_movie_ids }),
   feedback: (movie_id, action) => post("/api/feedback", { movie_id, action }),
+  unrate: (movie_id) => req(`/api/feedback/${movie_id}`, { method: "DELETE" }),
   recommendations: (k = 13, mode = "proposed") => req(`/api/recommendations?k=${k}&mode=${mode}`),
   history: () => req("/api/history"),
   resetProfile: () => req("/api/me/profile", { method: "DELETE" }),

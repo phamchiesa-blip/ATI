@@ -204,8 +204,8 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
         </p>
         <span className="rounded-full bg-white px-3 py-0.5 text-xs font-semibold text-mute ring-1 ring-ink/10">
           {intent.parser_source === "llm"
-            ? tr("Hiểu bằng LLM + Catalog", "Parsed via LLM + Catalog")
-            : tr("Hiểu cục bộ (Từ điển + TF-IDF/SVD 324 chiều)", "Local parser (Lexicon + 324-D TF-IDF/SVD)")}
+            ? tr("Phân tích bằng AI", "Understood by AI")
+            : tr("Phân tích nhanh", "Quick match")}
         </span>
       </div>
 
@@ -561,7 +561,7 @@ export default function Tonight({ rated, onRate }) {
               tabMode === "buttons" ? "bg-ink text-white" : "hover:bg-ink/5"
             }`}
           >
-            <SlidersHorizontal size={15} /> {tr("Chọn theo nút tâm trạng", "Pick by Mood")}
+            <SlidersHorizontal size={15} /> {tr("Chọn theo tâm trạng", "Pick by Mood")}
           </button>
         </div>
       </div>
@@ -729,8 +729,8 @@ export default function Tonight({ rated, onRate }) {
               />
               <label htmlFor="toggle-llm">
                 {tr(
-                  "Dùng LLM API để hiểu câu tự do (tự động rơi về từ điển cục bộ nếu mất mạng)",
-                  "Use LLM API for free-text queries (automatically falls back to local dictionary offline)"
+                  "Dùng AI để hiểu câu bạn gõ chính xác hơn",
+                  "Use AI to better understand what you type"
                 )}
               </label>
             </div>

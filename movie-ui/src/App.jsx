@@ -265,6 +265,35 @@ export default function App() {
     setRev((v) => v + 1);
   };
 
+  const unrate = async (movie) => {
+    const prev = rated[movie.movie_id];
+    setRated((r) => {
+      const next = { ...r };
+      delete next[movie.movie_id];
+      return next;
+    });
+    try {
+      await api.unrate(movie.movie_id);
+      notify({
+        kind: "info",
+        title: prev === "dislike" ? tr("Đã bỏ Không thích", "Removed dislike") : tr("Đã bỏ Thích", "Removed like"),
+        text: movie.title,
+        duration: 3000,
+      });
+    } catch (e) {
+      if (e.status !== 404) {
+        setRated((r) => ({ ...r, [movie.movie_id]: prev }));
+        notify({
+          kind: "error",
+          title: tr("Chưa bỏ được đánh giá", "Could not remove rating"),
+          text: tr("Hãy thử lại sau ít giây.", "Please try again in a few seconds."),
+          duration: 4000,
+        });
+      }
+    }
+    setRev((v) => v + 1);
+  };
+
   const saved = useMemo(() => new Set(watchlist.map((m) => m.movie_id)), [watchlist]);
 
   // Lưu / bỏ lưu phim: cập nhật giao diện ngay, lỗi thì hoàn lại
@@ -371,6 +400,7 @@ export default function App() {
     <LangContext.Provider value={{ lang, setLang, tr }}>
       <WatchlistContext.Provider value={{ saved, toggle: toggleSave }}>
         <TrailerContext.Provider value={setTrailerMovie}>
+          <div className="flex min-h-screen flex-col">
           <header className="sticky top-0 z-10 border-b border-ink/10 bg-paper/90 backdrop-blur">
             <div className="mx-auto flex max-w-[1500px] items-center gap-x-4 px-5 py-3 xl:gap-x-6">
               <span className="shrink-0 whitespace-nowrap font-display text-2xl font-extrabold">Gu Phim</span>
@@ -440,6 +470,7 @@ export default function App() {
             </div>
           </header>
 
+          <div className="flex-1">
           {view === "genres" ? (
             <Onboarding
               onCancel={() => setView("main")}
@@ -468,12 +499,13 @@ export default function App() {
           ) : tab === "eval" ? (
             <Evaluation />
           ) : tab === "taste" ? (
-            <Taste rev={rev} onBrowse={() => goTab("browse")} />
+            <Taste rev={rev} onBrowse={() => goTab("browse")} onUnrate={unrate} />
           ) : (
             <Browse rated={rated} onRate={rate} />
           )}
+          </div>
 
-          <footer className="mx-auto mt-16 max-w-[1500px] border-t border-ink/10 px-5 py-8 text-xs text-mute">
+          <footer className="mx-auto mt-16 w-full max-w-[1500px] border-t border-ink/10 px-5 py-8 text-xs text-mute">
             <p>
               {tr(
                 "Dữ liệu phim và hình ảnh từ TMDB. Sản phẩm này dùng TMDB API nhưng không được TMDB chứng nhận hay bảo trợ.",
@@ -484,6 +516,7 @@ export default function App() {
               {tr("Đánh giá hệ thống", "System Evaluation")}
             </button>
           </footer>
+          </div>
 
           <TrailerModal movie={trailerMovie} onClose={() => setTrailerMovie(null)} />
           {toastEl}
