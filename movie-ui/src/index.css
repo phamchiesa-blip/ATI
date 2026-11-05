@@ -29,3 +29,32 @@ body {
     transition: none !important;
   }
 }
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ===== Dark mode: đổi bảng màu qua biến CSS ===== */
+.dark {
+  color-scheme: dark;
+  --color-paper: #0d1321;
+  --color-ink: #e6ebf5;
+  --color-mute: #9aa4bd;
+  --color-cobalt: #5b74ff;
+  --color-surface: #172036;
+}
+
+body {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Thẻ/ô nền trắng -> nền tối */
+.dark .bg-white,
+.dark .hover\:bg-white:hover {
+  background-color: var(--color-surface);
+}
+
+/* Nút/nhãn nền "ink" (giờ là màu sáng) cần chữ tối */
+.dark .bg-ink.text-white,
+.dark .bg-ink .text-white {
+  color: var(--color-paper);
+}

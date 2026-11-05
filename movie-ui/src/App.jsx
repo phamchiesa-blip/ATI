@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Globe } from "lucide-react";
+import { Globe, Moon, Sun } from "lucide-react";
 import { api, getToken, setToken } from "./api";
 import Auth from "./Auth";
 import Onboarding from "./Onboarding";
@@ -44,6 +44,17 @@ export default function App() {
   };
   const toggleLang = () => setLang(lang === "vi" ? "en" : "vi");
   const tr = (vi, en) => (lang === "en" ? en : vi);
+
+  const [theme, setTheme] = useState(() =>
+    document.documentElement.classList.contains("dark") ? "dark" : "light"
+  );
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {}
+  }, [theme]);
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   const notify = (t) => setToast({ id: Date.now() + Math.random(), duration: 5000, ...t });
   const closeToast = (id) => setToast((t) => (t && t.id === id ? null : t));
@@ -288,6 +299,18 @@ export default function App() {
     </button>
   );
 
+  const themeBtn = (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      title={theme === "dark" ? tr("Chế độ sáng", "Light mode") : tr("Chế độ tối", "Dark mode")}
+      aria-label={theme === "dark" ? tr("Chuyển sang chế độ sáng", "Switch to light mode") : tr("Chuyển sang chế độ tối", "Switch to dark mode")}
+      className="inline-flex items-center justify-center rounded-full bg-white p-2 ring-1 ring-ink/20 transition-colors hover:bg-cobalt hover:text-white hover:ring-cobalt"
+    >
+      {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+    </button>
+  );
+
   const toastEl = <Toast toast={toast} onClose={closeToast} />;
 
   if (booting) return <p className="p-10 text-mute">{tr("Đang tải...", "Loading...")}</p>;
@@ -295,7 +318,7 @@ export default function App() {
     return (
       <LangContext.Provider value={{ lang, setLang, tr }}>
         <main className="mx-auto max-w-md px-5 py-16">
-          <div className="mb-4 flex justify-end">{langBtn}</div>
+          <div className="mb-4 flex justify-end gap-2">{themeBtn}{langBtn}</div>
           <Notice
             title={tr("Chưa kết nối được máy chủ", "Cannot connect to server")}
             action={
@@ -323,7 +346,7 @@ export default function App() {
   if (view === "auth") {
     return (
       <LangContext.Provider value={{ lang, setLang, tr }}>
-        <div className="mx-auto flex max-w-6xl justify-end px-5 pt-4">{langBtn}</div>
+        <div className="mx-auto flex max-w-6xl justify-end gap-2 px-5 pt-4">{themeBtn}{langBtn}</div>
         <Auth initialMode={authMode} onBack={() => setView("main")} onDone={authDone} />
         {toastEl}
       </LangContext.Provider>
@@ -334,7 +357,7 @@ export default function App() {
     <button
       onClick={onClick}
       aria-current={active ? "page" : undefined}
-      className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+      className={`shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold transition-colors xl:px-4 ${
         active ? "bg-ink text-white" : "hover:bg-ink/5"
       }`}
     >
@@ -349,9 +372,9 @@ export default function App() {
       <WatchlistContext.Provider value={{ saved, toggle: toggleSave }}>
         <TrailerContext.Provider value={setTrailerMovie}>
           <header className="sticky top-0 z-10 border-b border-ink/10 bg-paper/90 backdrop-blur">
-            <div className="mx-auto flex max-w-[1500px] flex-wrap items-center gap-x-6 gap-y-2 px-5 py-3">
-              <span className="font-display text-2xl font-extrabold">Gu Phim</span>
-              <nav className="flex flex-wrap gap-1">
+            <div className="mx-auto flex max-w-[1500px] items-center gap-x-4 px-5 py-3 xl:gap-x-6">
+              <span className="shrink-0 whitespace-nowrap font-display text-2xl font-extrabold">Gu Phim</span>
+              <nav className="flex min-w-0 flex-nowrap gap-1 overflow-x-auto [scrollbar-width:none]">
                 {tabBtn(
                   "recommend",
                   tr("Dành cho bạn", "For You"),
@@ -382,7 +405,8 @@ export default function App() {
                   }
                 )}
               </nav>
-              <div className="ml-auto flex flex-wrap items-center gap-3 text-sm">
+              <div className="ml-auto flex shrink-0 flex-nowrap items-center gap-2 whitespace-nowrap text-sm">
+                {themeBtn}
                 {langBtn}
                 {user.guest ? (
                   <>
@@ -401,7 +425,7 @@ export default function App() {
                   </>
                 ) : (
                   <>
-                    <span className="text-mute">
+                    <span className="hidden text-mute 2xl:inline">
                       {tr(`Xin chào, ${user.name.split(" ")[0]}`, `Hi, ${user.name.split(" ")[0]}`)}
                     </span>
                     <button onClick={restart} className={ghost}>

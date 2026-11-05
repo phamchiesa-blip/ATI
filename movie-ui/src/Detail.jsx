@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { ArrowLeft, Bookmark, ExternalLink, Play } from "lucide-react";
 import { api } from "./api";
-import { GRID, MovieCard, Notice, Poster, Rating, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
+import { GRID, MovieCard, Notice, Overview, Poster, Rating, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
 import { useLang } from "./i18n";
 
 const money = (n) =>
@@ -155,7 +155,7 @@ export default function Detail({ id, rated, onRate, onFilter }) {
                 ))}
               </div>
 
-              <p className="mt-5 max-w-2xl leading-relaxed text-mute">{movie.overview}</p>
+              <Overview movie={movie} className="mt-5 max-w-2xl leading-relaxed text-mute" />
 
               <dl className="mt-6 grid max-w-2xl gap-x-8 gap-y-4 sm:grid-cols-2">
                 <Fact label={tr("Đạo diễn", "Director")}>

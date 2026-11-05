@@ -3,6 +3,52 @@ import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { Bookmark, Play, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import { translateBackendText, useLang } from "./i18n";
+import { api } from "./api";
+
+// Tóm tắt phim theo ngôn ngữ đang chọn (tiếng Việt được dịch ở backend, cache lại ở client)
+const overviewCache = new Map();
+export function useOverview(movie) {
+  const { lang } = useLang();
+  const id = movie?.movie_id ?? movie?.id;
+  const original = movie?.overview || "";
+  const preset = movie?.overview_vi || null; // bản dịch sẵn backend gửi kèm
+  const key = `${id}:${lang}`;
+  const pick = () => (lang !== "vi" || !original ? original : preset ?? overviewCache.get(key) ?? null);
+  const [text, setText] = useState(pick);
+  useEffect(() => {
+    const now = pick();
+    setText(now);
+    if (now !== null) return;
+    let off = false;
+    api
+      .overview(id, "vi")
+      .then((r) => {
+        overviewCache.set(key, r.overview);
+        if (!off) setText(r.overview);
+      })
+      .catch(() => !off && setText(original));
+    return () => {
+      off = true;
+    };
+  }, [key, original, preset]);
+  return text; // null = đang dịch
+}
+
+export function Overview({ movie, className }) {
+  const text = useOverview(movie);
+  if (text === null) {
+    return (
+      <div className={className} aria-busy="true">
+        <div className="animate-pulse space-y-2 py-1">
+          <div className="h-3 w-full rounded bg-ink/10" />
+          <div className="h-3 w-11/12 rounded bg-ink/10" />
+          <div className="h-3 w-4/5 rounded bg-ink/10" />
+        </div>
+      </div>
+    );
+  }
+  return <p className={className}>{text}</p>;
+}
 
 // Màu poster theo thể loại: [nền, chữ]
 export const TONES = {
@@ -303,7 +349,7 @@ export function HoverPreview({ movie, pos }) {
           <Rating value={movie.vote_average} />
         </p>
         <p className="mt-1.5 text-xs font-medium">{movie.genres?.join(", ")}</p>
-        <p className="mt-2 line-clamp-5 text-xs leading-relaxed text-mute">{movie.overview}</p>
+        <Overview movie={movie} className="mt-2 line-clamp-5 text-xs leading-relaxed text-mute" />
         {movie.director && (
           <p className="mt-2 text-xs">
             <span className="text-mute">{tr("Đạo diễn ", "Director ")}</span>

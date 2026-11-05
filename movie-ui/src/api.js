@@ -77,6 +77,7 @@ export const api = {
   },
   suggest: (q) => req(`/api/suggest?q=${encodeURIComponent(q)}`),
   trailer: (id) => req(`/api/movies/${id}/trailer`),
+  overview: (id, lang = "vi") => req(`/api/movies/${id}/overview?lang=${lang}`),
   movie: (id) => req(`/api/movies/${id}`),
   similar: (id, k = 8) => req(`/api/movies/${id}/similar?k=${k}`),
 

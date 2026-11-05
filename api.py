@@ -127,6 +127,9 @@ def _init_accounts():
                 movie_id INTEGER PRIMARY KEY, poster_path TEXT, trailer_key TEXT,
                 trailer_name TEXT, fetched_at REAL NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS overview_vi (
+                movie_id INTEGER PRIMARY KEY, text TEXT, source TEXT, fetched_at REAL NOT NULL
+            );
             CREATE TABLE IF NOT EXISTS watchlist (
                 user_id TEXT NOT NULL, movie_id INTEGER NOT NULL, added_at REAL NOT NULL,
                 PRIMARY KEY (user_id, movie_id)
@@ -165,6 +168,21 @@ def _import_media_csv() -> int:
 
 
 _import_media_csv()
+
+
+def _import_overview_vi_csv() -> None:
+    """Nap ban dich tom tat tu data_module/overview_vi.csv (do translate_overviews.py --export tao)."""
+    path = os.path.join(ROOT, "data_module", "overview_vi.csv")
+    if not os.path.exists(path):
+        return
+    with open(path, newline="", encoding="utf-8") as f:
+        rows = [(int(r["movie_id"]), r["text"], r.get("source") or "csv", 0.0)
+                for r in csv.DictReader(f) if r.get("text")]
+    with _acc() as c:
+        c.executemany("INSERT OR IGNORE INTO overview_vi VALUES (?, ?, ?, ?)", rows)
+
+
+_import_overview_vi_csv()
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -376,6 +394,21 @@ def _fold(s: str) -> str:
     return "".join(ch for ch in unicodedata.normalize("NFKD", s.lower()) if not unicodedata.combining(ch))
 
 
+_OVERVIEW_VI: "dict" = {}
+_OVERVIEW_VI_AT = 0.0
+
+
+def _overview_vi(movie_id: int) -> "Optional[str]":
+    """Tom tat tieng Viet da dich san (bang overview_vi). Lam moi moi 60 giay."""
+    global _OVERVIEW_VI, _OVERVIEW_VI_AT
+    if time.time() - _OVERVIEW_VI_AT > 60:
+        with _acc() as c:
+            _OVERVIEW_VI = {r["movie_id"]: r["text"] for r in c.execute(
+                "SELECT movie_id, text FROM overview_vi WHERE text IS NOT NULL")}
+        _OVERVIEW_VI_AT = time.time()
+    return _OVERVIEW_VI.get(movie_id)
+
+
 def _card(meta: dict) -> dict:
     """Rut gon metadata thanh du lieu hien thi tren card phim."""
     date = meta.get("release_date") or ""
@@ -383,6 +416,7 @@ def _card(meta: dict) -> dict:
         "movie_id": meta["movie_id"],
         "title": meta["title"],
         "overview": meta.get("overview") or "",
+        "overview_vi": _overview_vi(meta["movie_id"]),
         "genres": meta.get("genres", []),
         "director": meta.get("director"),
         "cast": meta.get("cast", []),
@@ -719,6 +753,41 @@ def trailer(movie_id: int):
 
 
 _ALL: "Optional[tuple]" = None
+
+
+@app.get("/api/movies/{movie_id}/overview")
+def overview_translated(movie_id: int, lang: str = "vi"):
+    """Tom tat phim theo ngon ngu. Tieng Viet: uu tien ban dich TMDB, khong co thi dich may.
+    Ket qua duoc luu vao bang overview_vi de lan sau tra ve ngay."""
+    meta = get_movie_metadata(movie_id, db_path=DB)
+    if meta is None:
+        raise HTTPException(404, "Không tìm thấy phim")
+    original = meta.get("overview") or ""
+    if lang != "vi" or not original:
+        return {"overview": original, "source": "original"}
+    with _acc() as c:
+        row = c.execute("SELECT text, source FROM overview_vi WHERE movie_id = ?", (movie_id,)).fetchone()
+    if row and row["text"]:
+        return {"overview": row["text"], "source": row["source"]}
+    text, source = None, None
+    try:
+        text = tmdb_client.fetch_overview_vi(movie_id)
+        source = "tmdb" if text else None
+    except Exception:
+        pass
+    if not text:
+        try:
+            text = tmdb_client.machine_translate_vi(original)
+            source = "machine" if text else None
+        except Exception:
+            pass
+    if not text:  # khong dich duoc (mat mang...): tra ban goc, khong luu cache
+        return {"overview": original, "source": "original"}
+    with _acc() as c:
+        c.execute("INSERT OR REPLACE INTO overview_vi VALUES (?, ?, ?, ?)",
+                  (movie_id, text, source, time.time()))
+    _OVERVIEW_VI[movie_id] = text
+    return {"overview": text, "source": source}
 
 
 @app.get("/api/movies/{movie_id}/similar")

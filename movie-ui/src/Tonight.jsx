@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AlertCircle, Bookmark, MessageSquare, Play, Plus, RotateCcw, Send, Shuffle, Sparkles, SlidersHorizontal, X } from "lucide-react";
 import { api, OFFLINE_MSG } from "./api";
-import { MovieCard, Notice, PosterLink, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
+import { MovieCard, Notice, Overview, PosterLink, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
 import { translateBackendText, useLang } from "./i18n";
 
 const FOLLOWUP_CHIPS = [
@@ -79,7 +79,7 @@ function Pick({ movie, status, onRate, onNext, hasNext }) {
             </span>
           )}
         </div>
-        <p className="mt-4 line-clamp-4 leading-relaxed text-mute">{movie.overview}</p>
+        <Overview movie={movie} className="mt-4 line-clamp-4 leading-relaxed text-mute" />
         {movie.director && (
           <p className="mt-3 text-sm">
             {tr("Đạo diễn", "Director")} {movie.director}

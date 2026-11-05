@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { api } from "./api";
-import { CardButtons, GRID, HoverPreview, Notice, PosterLink, PosterTile, Rating, RateButtons, TrailerContext, useHoverPreview } from "./ui";
+import { CardButtons, GRID, HoverPreview, Notice, Overview, PosterLink, PosterTile, Rating, RateButtons, TrailerContext, useHoverPreview } from "./ui";
 import { useLang } from "./i18n";
 
 const reasonText = (m, coldStart, tr, isHero = false) =>
@@ -70,7 +70,7 @@ function Hero({ movie, status, onRate, coldStart }) {
             </span>
           ))}
         </div>
-        <p className="mt-4 line-clamp-4 leading-relaxed text-mute">{movie.overview}</p>
+        <Overview movie={movie} className="mt-4 line-clamp-4 leading-relaxed text-mute" />
         <p className="mt-4 text-sm font-medium">{reasonText(movie, isCold, tr, true)}</p>
 
         <div className="mt-5 flex flex-wrap items-start gap-x-10 gap-y-4">
@@ -168,8 +168,8 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
 }
 
 const MODES = [
-  ["proposed", "Đề xuất (Ranking + AI)", "Proposed (Ranking + AI)"],
-  ["baseline", "Baseline (chỉ cosine)", "Baseline (cosine only)"],
+  ["proposed", "Gợi ý thông minh", "Smart picks"],
+  ["baseline", "Phim tương tự", "Similar movies"],
 ];
 
 export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }) {
@@ -210,17 +210,11 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
           <h1 className="font-display text-4xl font-extrabold">
             {!isCold ? tr("Dành cho bạn", "For You") : tr("Đang được yêu thích", "Popular Right Now")}
           </h1>
-          <p className="mt-2 text-mute">
-            {!isCold
-              ? tr(
-                  "Danh sách tự cập nhật mỗi khi bạn bấm Thích hoặc Không thích.",
-                  "Your list updates automatically whenever you click Like or Dislike."
-                )
-              : tr(
-                  "Những phim nổi tiếng và được đánh giá cao.",
-                  "Well-known and highly rated movies."
-                )}
-          </p>
+          {isCold && (
+            <p className="mt-2 text-mute">
+              {tr("Những phim nổi tiếng và được đánh giá cao.", "Well-known and highly rated movies.")}
+            </p>
+          )}
         </div>
         {!isCold && (
           <div>
@@ -238,17 +232,6 @@ export default function Recommend({ rev, rated, onRate, onPickGenres, onBrowse }
                 </button>
               ))}
             </div>
-            <p className="mt-2 max-w-sm text-xs text-mute">
-              {mode === "baseline"
-                ? tr(
-                    "Chỉ xếp theo độ giống nội dung, không tính điểm đánh giá, độ phổ biến, độ mới hay AI.",
-                    "Ranked by content similarity only, without rating, popularity, recency, or online AI."
-                  )
-                : tr(
-                    "Kết hợp độ giống nội dung với điểm đánh giá, độ phổ biến, độ mới và AI học từ Thích / Không thích.",
-                    "Combines content similarity with rating, popularity, recency, and AI learned from Like / Dislike."
-                  )}
-            </p>
           </div>
         )}
       </div>
