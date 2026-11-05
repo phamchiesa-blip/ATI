@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
 import { api } from "./api";
 import { GRID, MovieCard, Notice, useDebounced } from "./ui";
+import { useLang } from "./i18n";
 
 const KEY = "gu-phim-browse";
 const DEFAULTS = {
@@ -17,38 +18,38 @@ const DEFAULTS = {
 };
 
 const YEARS = [
-  { id: "", label: "Mọi năm" },
-  { id: "2020", label: "Từ 2020", from: 2020 },
-  { id: "2010", label: "2010 - 2019", from: 2010, to: 2019 },
-  { id: "2000", label: "2000 - 2009", from: 2000, to: 2009 },
-  { id: "1990", label: "1990 - 1999", from: 1990, to: 1999 },
-  { id: "old", label: "Trước 1990", to: 1989 },
+  { id: "", labelVi: "Mọi năm", labelEn: "All years" },
+  { id: "2020", labelVi: "Từ 2020", labelEn: "2020 & newer", from: 2020 },
+  { id: "2010", labelVi: "2010 - 2019", labelEn: "2010 - 2019", from: 2010, to: 2019 },
+  { id: "2000", labelVi: "2000 - 2009", labelEn: "2000 - 2009", from: 2000, to: 2009 },
+  { id: "1990", labelVi: "1990 - 1999", labelEn: "1990 - 1999", from: 1990, to: 1999 },
+  { id: "old", labelVi: "Trước 1990", labelEn: "Before 1990", to: 1989 },
 ];
 const RATINGS = [
-  { id: "", label: "Mọi điểm" },
-  { id: "6", label: "Từ 6 điểm" },
-  { id: "7", label: "Từ 7 điểm" },
-  { id: "8", label: "Từ 8 điểm" },
+  { id: "", labelVi: "Mọi điểm", labelEn: "All ratings" },
+  { id: "6", labelVi: "Từ 6 điểm", labelEn: "6+ rating" },
+  { id: "7", labelVi: "Từ 7 điểm", labelEn: "7+ rating" },
+  { id: "8", labelVi: "Từ 8 điểm", labelEn: "8+ rating" },
 ];
 const SORTS = [
-  { id: "popularity", label: "Phổ biến nhất" },
-  { id: "rating", label: "Điểm cao nhất" },
-  { id: "newest", label: "Mới nhất" },
-  { id: "oldest", label: "Cũ nhất" },
-  { id: "title", label: "Tên A - Z" },
+  { id: "popularity", labelVi: "Phổ biến nhất", labelEn: "Most popular" },
+  { id: "rating", labelVi: "Điểm cao nhất", labelEn: "Highest rated" },
+  { id: "newest", labelVi: "Mới nhất", labelEn: "Newest" },
+  { id: "oldest", labelVi: "Cũ nhất", labelEn: "Oldest" },
+  { id: "title", labelVi: "Tên A - Z", labelEn: "Title A - Z" },
 ];
 const PEOPLE_LABEL = {
-  director: "Đạo diễn",
-  actor: "Diễn viên",
-  voice: "Lồng tiếng",
-  keyword: "Từ khóa",
+  director: ["Đạo diễn", "Director"],
+  actor: ["Diễn viên", "Actor"],
+  voice: ["Lồng tiếng", "Voice cast"],
+  keyword: ["Từ khóa", "Keyword"],
 };
 const GROUPS = [
-  ["movies", "Phim"],
-  ["director", "Đạo diễn"],
-  ["actor", "Diễn viên"],
-  ["voice", "Lồng tiếng"],
-  ["keyword", "Từ khóa"],
+  ["movies", "Phim", "Movies"],
+  ["director", "Đạo diễn", "Directors"],
+  ["actor", "Diễn viên", "Actors"],
+  ["voice", "Lồng tiếng", "Voice Cast"],
+  ["keyword", "Từ khóa", "Keywords"],
 ];
 
 const loadFilters = () => {
@@ -70,6 +71,7 @@ function SearchBox({ value, onChange, onPick }) {
   const [active, setActive] = useState(-1);
   const box = useRef(null);
   const dv = useDebounced(value, 200);
+  const { tr } = useLang();
 
   useEffect(() => {
     if (dv.trim().length < 2) {
@@ -98,16 +100,16 @@ function SearchBox({ value, onChange, onPick }) {
 
   const options = useMemo(() => {
     if (!sug) return [];
-    return GROUPS.flatMap(([kind, label]) =>
+    return GROUPS.flatMap(([kind, labelVi, labelEn]) =>
       (sug[kind] ?? []).map((it) => ({
         kind,
-        label,
+        label: tr(labelVi, labelEn),
         text: it.title ?? it.name,
-        hint: kind === "movies" ? (it.release_year ?? "") : `${it.count} phim`,
+        hint: kind === "movies" ? (it.release_year ?? "") : `${it.count} ${tr("phim", "movies")}`,
         id: it.movie_id,
       }))
     );
-  }, [sug]);
+  }, [sug, tr]);
   const showList = open && options.length > 0;
 
   const pick = (o) => {
@@ -135,7 +137,9 @@ function SearchBox({ value, onChange, onPick }) {
   return (
     <div ref={box} className="relative w-full md:w-[28rem]">
       <label className="relative block">
-        <span className="sr-only">Tìm phim, đạo diễn, diễn viên hoặc từ khóa</span>
+        <span className="sr-only">
+          {tr("Tìm phim, đạo diễn, diễn viên hoặc từ khóa", "Search movies, directors, actors, or keywords")}
+        </span>
         <Search size={18} className="absolute top-1/2 left-4 -translate-y-1/2 text-mute" />
         <input
           role="combobox"
@@ -150,13 +154,13 @@ function SearchBox({ value, onChange, onPick }) {
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={onKeyDown}
-          placeholder="Tìm phim, đạo diễn, diễn viên, từ khóa..."
+          placeholder={tr("Tìm phim, đạo diễn, diễn viên, từ khóa...", "Search movies, directors, actors, keywords...")}
           className="w-full rounded-full bg-white py-2.5 pr-10 pl-11 ring-1 ring-ink/15 focus:ring-2 focus:ring-cobalt focus:outline-none"
         />
         {value && (
           <button
             type="button"
-            aria-label="Xóa nội dung tìm kiếm"
+            aria-label={tr("Xóa nội dung tìm kiếm", "Clear search input")}
             onClick={() => {
               onChange("");
               setSug(null);
@@ -215,6 +219,7 @@ export default function Browse({ rated, onRate }) {
   const [page, setPage] = useState(1);
   const [state, setState] = useState("loading");
   const dq = useDebounced(f.query);
+  const { lang, tr } = useLang();
   const set = (patch) => setF((prev) => ({ ...prev, ...patch }));
 
   useEffect(() => {
@@ -274,13 +279,22 @@ export default function Browse({ rated, onRate }) {
   const toggleGenre = (g) =>
     set({ genres: f.genres.includes(g) ? f.genres.filter((x) => x !== g) : [...f.genres, g] });
 
+  const yearEntry = YEARS.find((x) => x.id === f.years);
   const active = [
     ...f.genres.map((g) => ({ key: `g-${g}`, label: g, clear: () => toggleGenre(g) })),
     ...["director", "actor", "voice", "keyword"]
       .filter((k) => f[k])
-      .map((k) => ({ key: k, label: `${PEOPLE_LABEL[k]}: ${f[k]}`, clear: () => set({ [k]: "" }) })),
-    ...(f.years ? [{ key: "years", label: YEARS.find((x) => x.id === f.years).label, clear: () => set({ years: "" }) }] : []),
-    ...(f.rating ? [{ key: "rating", label: `Từ ${f.rating} điểm`, clear: () => set({ rating: "" }) }] : []),
+      .map((k) => ({
+        key: k,
+        label: `${tr(PEOPLE_LABEL[k][0], PEOPLE_LABEL[k][1])}: ${f[k]}`,
+        clear: () => set({ [k]: "" }),
+      })),
+    ...(f.years && yearEntry
+      ? [{ key: "years", label: tr(yearEntry.labelVi, yearEntry.labelEn), clear: () => set({ years: "" }) }]
+      : []),
+    ...(f.rating
+      ? [{ key: "rating", label: tr(`Từ ${f.rating} điểm`, `${f.rating}+ rating`), clear: () => set({ rating: "" }) }]
+      : []),
     ...(dq.trim() ? [{ key: "q", label: `"${dq.trim()}"`, clear: () => set({ query: "" }) }] : []),
   ];
 
@@ -289,9 +303,11 @@ export default function Browse({ rated, onRate }) {
       on ? "bg-ink text-white" : "bg-white ring-1 ring-ink/15 hover:bg-ink/5"
     }`;
 
+  const localeStr = lang === "en" ? "en-US" : "vi-VN";
+
   return (
     <main className="mx-auto max-w-[1500px] px-5 py-8">
-      <h1 className="font-display text-4xl font-extrabold">Khám phá phim</h1>
+      <h1 className="font-display text-4xl font-extrabold">{tr("Khám phá phim", "Explore Movies")}</h1>
 
       <div className="mt-6 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
         <SearchBox
@@ -299,24 +315,39 @@ export default function Browse({ rated, onRate }) {
           onChange={(v) => set({ query: v })}
           onPick={(kind, name) => set({ [kind]: name, query: "" })}
         />
-        <select aria-label="Năm phát hành" value={f.years} onChange={(e) => set({ years: e.target.value })} className={selectCls}>
+        <select
+          aria-label={tr("Năm phát hành", "Release year")}
+          value={f.years}
+          onChange={(e) => set({ years: e.target.value })}
+          className={selectCls}
+        >
           {YEARS.map((y) => (
             <option key={y.id} value={y.id}>
-              {y.label}
+              {tr(y.labelVi, y.labelEn)}
             </option>
           ))}
         </select>
-        <select aria-label="Điểm đánh giá" value={f.rating} onChange={(e) => set({ rating: e.target.value })} className={selectCls}>
+        <select
+          aria-label={tr("Điểm đánh giá", "Rating")}
+          value={f.rating}
+          onChange={(e) => set({ rating: e.target.value })}
+          className={selectCls}
+        >
           {RATINGS.map((r) => (
             <option key={r.id} value={r.id}>
-              {r.label}
+              {tr(r.labelVi, r.labelEn)}
             </option>
           ))}
         </select>
-        <select aria-label="Sắp xếp" value={f.sort} onChange={(e) => set({ sort: e.target.value })} className={`${selectCls} md:ml-auto`}>
+        <select
+          aria-label={tr("Sắp xếp", "Sort by")}
+          value={f.sort}
+          onChange={(e) => set({ sort: e.target.value })}
+          className={`${selectCls} md:ml-auto`}
+        >
           {SORTS.map((s) => (
             <option key={s.id} value={s.id}>
-              {s.label}
+              {tr(s.labelVi, s.labelEn)}
             </option>
           ))}
         </select>
@@ -324,46 +355,73 @@ export default function Browse({ rated, onRate }) {
 
       <div className="mt-4 flex flex-wrap gap-2">
         <button className={chip(f.genres.length === 0)} onClick={() => set({ genres: [] })}>
-          Tất cả
+          {tr("Tất cả", "All")}
         </button>
         {genreList.map((g) => (
-          <button key={g.name} aria-pressed={f.genres.includes(g.name)} className={chip(f.genres.includes(g.name))} onClick={() => toggleGenre(g.name)}>
+          <button
+            key={g.name}
+            aria-pressed={f.genres.includes(g.name)}
+            className={chip(f.genres.includes(g.name))}
+            onClick={() => toggleGenre(g.name)}
+          >
             {g.name}
           </button>
         ))}
       </div>
 
       <div className="mt-5 flex min-h-8 flex-wrap items-center gap-2 text-sm">
-        {state === "ok" && <span className="font-semibold">{total.toLocaleString("vi-VN")} phim</span>}
+        {state === "ok" && (
+          <span className="font-semibold">
+            {total.toLocaleString(localeStr)} {tr("phim", "movies")}
+          </span>
+        )}
         {active.map((a) => (
-          <span key={a.key} className="inline-flex items-center gap-1 rounded-full bg-cobalt/10 py-1 pr-1 pl-3 font-medium text-cobalt">
+          <span
+            key={a.key}
+            className="inline-flex items-center gap-1 rounded-full bg-cobalt/10 py-1 pr-1 pl-3 font-medium text-cobalt"
+          >
             {a.label}
-            <button aria-label={`Bỏ lọc ${a.label}`} onClick={a.clear} className="rounded-full p-1 hover:bg-cobalt/15">
+            <button
+              aria-label={tr(`Bỏ lọc ${a.label}`, `Remove filter ${a.label}`)}
+              onClick={a.clear}
+              className="rounded-full p-1 hover:bg-cobalt/15"
+            >
               <X size={14} />
             </button>
           </span>
         ))}
         {active.length > 0 && (
           <button onClick={() => setF({ ...DEFAULTS })} className="font-semibold underline underline-offset-4">
-            Xóa tất cả
+            {tr("Xóa tất cả", "Clear all")}
           </button>
         )}
       </div>
 
       <div className="mt-6">
         {state === "error" && (
-          <Notice title="Không tải được danh sách phim">Hãy kiểm tra máy chủ API đang chạy rồi tải lại trang.</Notice>
+          <Notice title={tr("Không tải được danh sách phim", "Could not load movies")}>
+            {tr(
+              "Hãy kiểm tra máy chủ API đang chạy rồi tải lại trang.",
+              "Please check that the API server is running and reload the page."
+            )}
+          </Notice>
         )}
         {state === "ok" && items.length === 0 && (
           <Notice
-            title="Không có phim nào khớp"
+            title={tr("Không có phim nào khớp", "No matching movies")}
             action={
-              <button onClick={() => setF({ ...DEFAULTS })} className="mt-6 rounded-full bg-cobalt px-6 py-2.5 font-semibold text-white">
-                Xóa bộ lọc
+              <button
+                onClick={() => setF({ ...DEFAULTS })}
+                className="mt-6 rounded-full bg-cobalt px-6 py-2.5 font-semibold text-white"
+              >
+                {tr("Xóa bộ lọc", "Clear filters")}
               </button>
             }
           >
-            Thử bỏ bớt bộ lọc, hoặc gõ tên phim, đạo diễn, diễn viên để xem gợi ý.
+            {tr(
+              "Thử bỏ bớt bộ lọc, hoặc gõ tên phim, đạo diễn, diễn viên để xem gợi ý.",
+              "Try removing some filters, or type a movie title, director, or actor to see suggestions."
+            )}
           </Notice>
         )}
         {state === "loading" && (
@@ -383,10 +441,16 @@ export default function Browse({ rated, onRate }) {
             {items.length < total && (
               <div className="mt-10 text-center">
                 <p className="mb-3 text-sm text-mute">
-                  Đang hiện {items.length} / {total.toLocaleString("vi-VN")} phim
+                  {tr(
+                    `Đang hiện ${items.length} / ${total.toLocaleString(localeStr)} phim`,
+                    `Showing ${items.length} of ${total.toLocaleString(localeStr)} movies`
+                  )}
                 </p>
-                <button onClick={more} className="rounded-full bg-white px-8 py-3 font-semibold ring-1 ring-ink/20 hover:bg-ink/5">
-                  Xem thêm phim
+                <button
+                  onClick={more}
+                  className="rounded-full bg-white px-8 py-3 font-semibold ring-1 ring-ink/20 hover:bg-ink/5"
+                >
+                  {tr("Xem thêm phim", "Load more movies")}
                 </button>
               </div>
             )}

@@ -2,12 +2,21 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ExternalLink, X } from "lucide-react";
 import { api } from "./api";
+import { useLang } from "./i18n";
 
 const MESSAGES = {
-  no_key:
+  no_key: [
     "Chưa cấu hình TMDB API key nên chưa nhúng được trailer ngay trong trang. Bạn vẫn có thể xem trên YouTube.",
-  not_found: "Chưa tìm thấy trailer cho phim này trong TMDB. Bạn có thể thử tìm trên YouTube.",
-  unavailable: "Không lấy được trailer lúc này. Bạn có thể thử tìm trên YouTube.",
+    "TMDB API key is not configured, so trailers cannot be embedded inline. You can still watch it on YouTube.",
+  ],
+  not_found: [
+    "Chưa tìm thấy trailer cho phim này trong TMDB. Bạn có thể thử tìm trên YouTube.",
+    "No trailer found for this movie in TMDB. You can search for it on YouTube.",
+  ],
+  unavailable: [
+    "Không lấy được trailer lúc này. Bạn có thể thử tìm trên YouTube.",
+    "Could not load trailer right now. You can search for it on YouTube.",
+  ],
 };
 
 // Popup trailer: bấm ra ngoài, bấm X hoặc nhấn Esc để đóng
@@ -15,6 +24,7 @@ export default function TrailerModal({ movie, onClose }) {
   const [data, setData] = useState(null);
   const [failed, setFailed] = useState(false);
   const closeRef = useRef(null);
+  const { tr } = useLang();
 
   useEffect(() => {
     if (!movie) return;
@@ -50,6 +60,8 @@ export default function TrailerModal({ movie, onClose }) {
       ? `https://www.youtube.com/results?search_query=${encodeURIComponent(`${movie.title} official trailer`)}`
       : "#";
 
+  const msgPair = failed ? MESSAGES.unavailable : (MESSAGES[data?.reason] ?? MESSAGES.not_found);
+
   return (
     <AnimatePresence>
       {movie && (
@@ -77,7 +89,7 @@ export default function TrailerModal({ movie, onClose }) {
               <button
                 ref={closeRef}
                 onClick={onClose}
-                aria-label="Đóng trailer"
+                aria-label={tr("Đóng trailer", "Close trailer")}
                 className="rounded-full p-2 hover:bg-ink/5"
               >
                 <X size={20} />
@@ -97,19 +109,17 @@ export default function TrailerModal({ movie, onClose }) {
             ) : (
               <div className="flex aspect-video flex-col items-center justify-center gap-4 bg-paper p-8 text-center">
                 {!data && !failed ? (
-                  <p className="text-mute">Đang tìm trailer...</p>
+                  <p className="text-mute">{tr("Đang tìm trailer...", "Searching for trailer...")}</p>
                 ) : (
                   <>
-                    <p className="max-w-md text-mute">
-                      {failed ? MESSAGES.unavailable : (MESSAGES[data.reason] ?? MESSAGES.not_found)}
-                    </p>
+                    <p className="max-w-md text-mute">{tr(msgPair[0], msgPair[1])}</p>
                     <a
                       href={searchUrl}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 font-semibold text-white hover:bg-ink/85"
                     >
-                      Tìm trên YouTube <ExternalLink size={16} />
+                      {tr("Tìm trên YouTube", "Search on YouTube")} <ExternalLink size={16} />
                     </a>
                   </>
                 )}

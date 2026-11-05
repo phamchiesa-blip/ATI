@@ -1,29 +1,61 @@
 import { useContext, useEffect, useState } from "react";
 import { AlertCircle, Bookmark, MessageSquare, Play, Plus, RotateCcw, Send, Shuffle, Sparkles, SlidersHorizontal, X } from "lucide-react";
 import { api, OFFLINE_MSG } from "./api";
-import { MovieCard, Notice, PosterLink, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
+import { MovieCard, Notice, Overview, PosterLink, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
+import { translateBackendText, useLang } from "./i18n";
 
 const FOLLOWUP_CHIPS = [
-  { label: "Nhẹ nhàng hơn nữa", text: "Cho mình cái nhẹ nhàng hơn nữa" },
-  { label: "Kịch tính hơn", text: "Cho mình phim kịch tính, hồi hộp hơn" },
-  { label: "Phim mới hơn (từ 2012)", text: "Chọn phim mới hơn gần đây" },
-  { label: "Phim ngắn (< 100 phút)", text: "Chọn phim ngắn dưới 100 phút" },
-  { label: "Bỏ Kinh dị & Tâm lý nặng", text: "Tránh kinh dị và tâm lý bi kịch" },
+  { labelVi: "Nhẹ nhàng hơn nữa", labelEn: "Lighter mood", text: "Cho mình cái nhẹ nhàng hơn nữa" },
+  { labelVi: "Kịch tính hơn", labelEn: "More thrilling", text: "Cho mình phim kịch tính, hồi hộp hơn" },
+  { labelVi: "Phim mới hơn (từ 2012)", labelEn: "Newer movies (from 2012)", text: "Chọn phim mới hơn gần đây" },
+  { labelVi: "Phim ngắn (< 100 phút)", labelEn: "Short movies (< 100m)", text: "Chọn phim ngắn dưới 100 phút" },
+  { labelVi: "Bỏ Kinh dị & Tâm lý nặng", labelEn: "No Horror & heavy Drama", text: "Tránh kinh dị và tâm lý bi kịch" },
 ];
+
+const QUICK_SUG_EN = {
+  chill: "Lighthearted & relaxing for the weekend",
+  light: "Lighthearted & relaxing, no horror",
+  mindblow: "Mind-bending sci-fi like Inception",
+  family: "Fun family animation",
+  thriller: "Gripping crime & mystery thriller",
+  thrill: "Suspenseful crime thriller under 2 hours",
+  romance: "Emotional & romantic",
+  action_new: "2010s epic action & adventure",
+  action90s: "90s action blockbusters",
+};
+
+const MOOD_EN = {
+  happy: "Fun & lighthearted",
+  thrill: "Thrilling & suspenseful",
+  touching: "Touching & emotional",
+  excited: "Exciting & epic",
+  scary: "Scary & spooky",
+  dreamy: "Dreamy & magical",
+  romantic: "Romantic",
+  think: "Thought-provoking",
+};
+
+const TIME_EN = {
+  short: "Under 100 min",
+  medium: "Around 2 hours",
+  any: "Any length",
+};
 
 function Pick({ movie, status, onRate, onNext, hasNext }) {
   const openTrailer = useContext(TrailerContext);
   const { saved, toggle } = useContext(WatchlistContext);
+  const { lang, tr } = useLang();
   const on = saved.has(movie.movie_id);
+  const displayWhy = translateBackendText(movie.why, lang);
   return (
     <section className="grid gap-8 rounded-3xl bg-white p-6 ring-1 ring-ink/10 md:grid-cols-[260px_1fr] md:p-10">
       <PosterLink movie={movie} size="lg" showTitle={false} />
       <div className="max-w-xl">
         <div className="flex flex-wrap items-center gap-2">
-          <p className="text-sm font-semibold text-cobalt">{movie.why}</p>
+          <p className="text-sm font-semibold text-cobalt">{displayWhy}</p>
           {movie.match_percent != null && (
             <span className="rounded-full bg-cobalt/10 px-2.5 py-0.5 text-xs font-bold text-cobalt">
-              {movie.match_percent}% độ hợp
+              {movie.match_percent}% {tr("độ hợp", "match")}
             </span>
           )}
         </div>
@@ -42,31 +74,38 @@ function Pick({ movie, status, onRate, onNext, hasNext }) {
             <span className="rounded-full bg-ink/5 px-3 py-1 text-sm text-mute">{movie.release_year}</span>
           )}
           {movie.runtime && (
-            <span className="rounded-full bg-ink/5 px-3 py-1 text-sm text-mute">{movie.runtime} phút</span>
+            <span className="rounded-full bg-ink/5 px-3 py-1 text-sm text-mute">
+              {movie.runtime} {tr("phút", "min")}
+            </span>
           )}
         </div>
-        <p className="mt-4 line-clamp-4 leading-relaxed text-mute">{movie.overview}</p>
-        {movie.director && <p className="mt-3 text-sm">Đạo diễn {movie.director}</p>}
+        <Overview movie={movie} className="mt-4 line-clamp-4 leading-relaxed text-mute" />
+        {movie.director && (
+          <p className="mt-3 text-sm">
+            {tr("Đạo diễn", "Director")} {movie.director}
+          </p>
+        )}
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <button
             onClick={() => openTrailer(movie)}
             className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-2.5 font-semibold text-white hover:bg-ink/85"
           >
-            <Play size={16} className="fill-white" /> Xem trailer
+            <Play size={16} className="fill-white" /> {tr("Xem trailer", "Watch trailer")}
           </button>
           <button
             onClick={() => toggle(movie)}
             aria-pressed={on}
             className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 font-semibold ring-1 ring-ink/20 hover:bg-ink/5"
           >
-            <Bookmark size={16} className={on ? "fill-current" : ""} /> {on ? "Đã lưu" : "Xem sau"}
+            <Bookmark size={16} className={on ? "fill-current" : ""} />{" "}
+            {on ? tr("Đã lưu", "Saved") : tr("Xem sau", "Watchlist")}
           </button>
           {hasNext && (
             <button
               onClick={onNext}
               className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-semibold text-cobalt ring-1 ring-cobalt/40 hover:bg-cobalt/5"
             >
-              <Shuffle size={16} /> Đổi phim khác
+              <Shuffle size={16} /> {tr("Đổi phim khác", "Next movie")}
             </button>
           )}
         </div>
@@ -82,10 +121,13 @@ function Pick({ movie, status, onRate, onNext, hasNext }) {
 function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
   const [addingWant, setAddingWant] = useState(false);
   const [addingAvoid, setAddingAvoid] = useState(false);
+  const { lang, tr } = useLang();
 
   if (!intent) return null;
 
-  const genreMap = Object.fromEntries((genreLabels || []).map((g) => [g.id, g.label]));
+  const genreMap = Object.fromEntries(
+    (genreLabels || []).map((g) => [g.id, lang === "en" ? g.id : g.label])
+  );
   const wanted = intent.wanted_genres || [];
   const avoid = intent.avoid_genres || [];
   const simMovies = intent.similar_movies || [];
@@ -158,15 +200,17 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
     <div className="mt-6 rounded-2xl bg-cobalt/5 p-4 ring-1 ring-cobalt/20 md:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="font-display text-base font-extrabold text-ink md:text-lg">
-          {intent.summary_line}
+          {translateBackendText(intent.summary_line, lang)}
         </p>
         <span className="rounded-full bg-white px-3 py-0.5 text-xs font-semibold text-mute ring-1 ring-ink/10">
-          {intent.parser_source === "llm" ? "Hiểu bằng LLM + Catalog" : "Hiểu cục bộ (Từ điển + TF-IDF/SVD 324 chiều)"}
+          {intent.parser_source === "llm"
+            ? tr("Phân tích bằng AI", "Understood by AI")
+            : tr("Phân tích nhanh", "Quick match")}
         </span>
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-        <span className="font-semibold text-mute">Muốn xem:</span>
+        <span className="font-semibold text-mute">{tr("Muốn xem:", "Want:")}</span>
         {wanted.map((g) => (
           <span
             key={g}
@@ -176,7 +220,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
             <button
               type="button"
               onClick={() => removeWanted(g)}
-              title={`Bỏ thể loại ${genreMap[g] || g}`}
+              title={tr(`Bỏ thể loại ${genreMap[g] || g}`, `Remove ${genreMap[g] || g}`)}
               className="rounded-full p-0.5 hover:bg-white/20"
             >
               <X size={12} />
@@ -188,11 +232,11 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
             key={m.movie_id}
             className="inline-flex items-center gap-1 rounded-full bg-ink px-3 py-1 font-semibold text-white"
           >
-            Giống: {m.title}
+            {tr("Giống:", "Similar to:")} {m.title}
             <button
               type="button"
               onClick={() => removeSimilar(m.movie_id)}
-              title={`Bỏ giống ${m.title}`}
+              title={tr(`Bỏ giống ${m.title}`, `Remove ${m.title}`)}
               className="rounded-full p-0.5 hover:bg-white/20"
             >
               <X size={12} />
@@ -201,7 +245,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
         ))}
         {(intent.year_from || intent.year_to) && (
           <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 font-semibold text-ink ring-1 ring-ink/15">
-            Năm: {intent.year_from || "..."}–{intent.year_to || "nay"}
+            {tr("Năm:", "Year:")} {intent.year_from || "..."}–{intent.year_to || tr("nay", "now")}
             <button type="button" onClick={clearYear} className="rounded-full p-0.5 hover:bg-ink/10">
               <X size={12} />
             </button>
@@ -209,7 +253,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
         )}
         {intent.max_runtime && (
           <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 font-semibold text-ink ring-1 ring-ink/15">
-            &le; {intent.max_runtime} phút
+            &le; {intent.max_runtime} {tr("phút", "min")}
             <button type="button" onClick={clearRuntime} className="rounded-full p-0.5 hover:bg-ink/10">
               <X size={12} />
             </button>
@@ -217,11 +261,11 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
         )}
         {intent.matched_keyword_display && (
           <span className="inline-flex items-center gap-1 rounded-full bg-lemon px-3 py-1 font-semibold text-ink ring-1 ring-ink/15">
-            Từ khóa: {intent.matched_keyword_display}
+            {tr("Từ khóa:", "Keyword:")} {intent.matched_keyword_display}
             <button
               type="button"
               onClick={clearKeyword}
-              title={`Bỏ từ khóa ${intent.matched_keyword_display}`}
+              title={tr(`Bỏ từ khóa ${intent.matched_keyword_display}`, `Remove keyword ${intent.matched_keyword_display}`)}
               className="rounded-full p-0.5 hover:bg-ink/10"
             >
               <X size={12} />
@@ -231,7 +275,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
 
         {addingWant ? (
           <select
-            aria-label="Thêm thể loại muốn xem"
+            aria-label={tr("Thêm thể loại muốn xem", "Add wanted genre")}
             autoFocus
             defaultValue=""
             onChange={(e) => addWanted(e.target.value)}
@@ -239,13 +283,13 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
             className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold ring-1 ring-cobalt"
           >
             <option value="" disabled>
-              + Chọn thể loại...
+              {tr("+ Chọn thể loại...", "+ Select genre...")}
             </option>
             {(genreLabels || [])
               .filter((g) => !wanted.includes(g.id))
               .map((g) => (
                 <option key={g.id} value={g.id}>
-                  {g.label} ({g.id})
+                  {lang === "en" ? g.id : `${g.label} (${g.id})`}
                 </option>
               ))}
           </select>
@@ -255,11 +299,11 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
             onClick={() => setAddingWant(true)}
             className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 font-semibold text-cobalt ring-1 ring-cobalt/30 hover:bg-cobalt/10"
           >
-            <Plus size={12} /> Thêm thể loại
+            <Plus size={12} /> {tr("Thêm thể loại", "Add genre")}
           </button>
         )}
 
-        <span className="ml-2 font-semibold text-mute">· Tránh:</span>
+        <span className="ml-2 font-semibold text-mute">{tr("· Tránh:", "· Avoid:")}</span>
         {avoid.map((g) => (
           <span
             key={g}
@@ -269,7 +313,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
             <button
               type="button"
               onClick={() => removeAvoid(g)}
-              title={`Bỏ tránh ${genreMap[g] || g}`}
+              title={tr(`Bỏ tránh ${genreMap[g] || g}`, `Remove ${genreMap[g] || g}`)}
               className="rounded-full p-0.5 hover:bg-coral/20"
             >
               <X size={12} />
@@ -279,7 +323,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
 
         {addingAvoid ? (
           <select
-            aria-label="Thêm thể loại muốn tránh"
+            aria-label={tr("Thêm thể loại muốn tránh", "Add avoided genre")}
             autoFocus
             defaultValue=""
             onChange={(e) => addAvoid(e.target.value)}
@@ -287,13 +331,13 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
             className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold ring-1 ring-coral"
           >
             <option value="" disabled>
-              + Tránh thể loại...
+              {tr("+ Tránh thể loại...", "+ Avoid genre...")}
             </option>
             {(genreLabels || [])
               .filter((g) => !avoid.includes(g.id))
               .map((g) => (
                 <option key={g.id} value={g.id}>
-                  {g.label} ({g.id})
+                  {lang === "en" ? g.id : `${g.label} (${g.id})`}
                 </option>
               ))}
           </select>
@@ -303,12 +347,15 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
             onClick={() => setAddingAvoid(true)}
             className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 font-semibold text-mute ring-1 ring-ink/15 hover:bg-ink/5"
           >
-            <Plus size={12} /> Thêm loại trừ
+            <Plus size={12} /> {tr("Thêm loại trừ", "Add exclusion")}
           </button>
         )}
       </div>
       <p className="mt-2 text-xs text-mute">
-        Hiểu sai ý bạn? Hãy bấm <strong>×</strong> hoặc <strong>+ Thêm</strong> ở trên để chỉnh lại ngay, hoặc gõ câu tiếp theo bên dưới.
+        {tr(
+          "Hiểu sai ý bạn? Hãy bấm × hoặc + Thêm ở trên để chỉnh lại ngay, hoặc gõ câu tiếp theo bên dưới.",
+          "Misunderstood? Click × or + Add above to adjust directly, or type a follow-up message below."
+        )}
       </p>
     </div>
   );
@@ -318,10 +365,11 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
 export default function Tonight({ rated, onRate }) {
   const [options, setOptions] = useState(null);
   const [tabMode, setTabMode] = useState("chat"); // "chat" | "buttons"
+  const { lang, tr } = useLang();
 
   // State cho chế độ Chat Bot
   const [input, setInput] = useState("");
-  const [turns, setTurns] = useState([]); // [{ role: "user"|"assistant", text, summary }]
+  const [turns, setTurns] = useState([]); // [{ userText, summary, count, isFollowup }]
   const [currentIntent, setCurrentIntent] = useState(null);
   const [useLlm, setUseLlm] = useState(true);
 
@@ -365,7 +413,10 @@ export default function Tonight({ rated, onRate }) {
       setDone(r.items.length === 0);
       setNote(
         r.intent?.max_runtime && !r.runtime_filter_applied
-          ? "Chưa lọc được theo thời lượng vì thiếu dữ liệu thời lượng phim (cần file CSV gốc)."
+          ? tr(
+              "Chưa lọc được theo thời lượng vì thiếu dữ liệu thời lượng phim (cần file CSV gốc).",
+              "Runtime filter not applied because movie runtime data is missing (requires original CSV)."
+            )
           : ""
       );
       if (msg) {
@@ -383,7 +434,7 @@ export default function Tonight({ rated, onRate }) {
         setTurns((prev) => [
           ...prev,
           {
-            userText: "(Đã chỉnh trực tiếp bộ lọc thể loại)",
+            userText: tr("(Đã chỉnh trực tiếp bộ lọc thể loại)", "(Adjusted genre filters directly)"),
             summary: r.intent.summary_line,
             count: r.items.length,
             isFollowup: true,
@@ -391,7 +442,11 @@ export default function Tonight({ rated, onRate }) {
         ]);
       }
     } catch (e) {
-      setError(e.status === 0 ? OFFLINE_MSG : e.message || "Chưa chọn được phim. Hãy thử lại.");
+      setError(
+        e.status === 0
+          ? OFFLINE_MSG
+          : e.message || tr("Chưa chọn được phim. Hãy thử lại.", "Could not pick a movie. Please try again.")
+      );
       setQueue(null);
       setCurrentIntent(null);
     }
@@ -429,7 +484,10 @@ export default function Tonight({ rated, onRate }) {
     const r = await api.tonight(mood, time, exclude);
     setNote(
       time !== "any" && !r.runtime_filter_applied
-        ? "Chưa lọc được theo thời lượng vì thiếu dữ liệu thời lượng phim (cần file CSV gốc)."
+        ? tr(
+            "Chưa lọc được theo thời lượng vì thiếu dữ liệu thời lượng phim (cần file CSV gốc).",
+            "Runtime filter not applied because movie runtime data is missing (requires original CSV)."
+          )
         : ""
     );
     return r.items;
@@ -445,7 +503,11 @@ export default function Tonight({ rated, onRate }) {
       setCursor(0);
       setDone(items.length === 0);
     } catch (e) {
-      setError(e.status === 0 ? OFFLINE_MSG : "Chưa chọn được phim. Hãy thử lại.");
+      setError(
+        e.status === 0
+          ? OFFLINE_MSG
+          : tr("Chưa chọn được phim. Hãy thử lại.", "Could not pick a movie. Please try again.")
+      );
     }
     setBusy(false);
   };
@@ -473,14 +535,16 @@ export default function Tonight({ rated, onRate }) {
     <main className="mx-auto max-w-[1500px] px-5 py-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-4xl font-extrabold">Hôm nay bạn muốn xem gì?</h1>
-          {/* <p className="mt-2 max-w-2xl text-mute">
-            Gõ tự nhiên tâm trạng, thể loại muốn/tránh, thời kỳ hoặc “giống phim X”. Hệ thống chuyển yêu cầu
-            thành vector 324 chiều, trộn với hồ sơ cá nhân của bạn và xếp hạng đa mục tiêu.
-          </p> */}
+          <h1 className="font-display text-4xl font-extrabold">
+            {tr("Hôm nay bạn muốn xem gì?", "What do you want to watch today?")}
+          </h1>
         </div>
 
-        <div role="group" aria-label="Chế độ chọn phim" className="inline-flex rounded-full bg-white p-1 ring-1 ring-ink/15">
+        <div
+          role="group"
+          aria-label={tr("Chế độ chọn phim", "Movie selection mode")}
+          className="inline-flex rounded-full bg-white p-1 ring-1 ring-ink/15"
+        >
           <button
             onClick={() => setTabMode("chat")}
             aria-pressed={tabMode === "chat"}
@@ -488,7 +552,7 @@ export default function Tonight({ rated, onRate }) {
               tabMode === "chat" ? "bg-ink text-white" : "hover:bg-ink/5"
             }`}
           >
-            <MessageSquare size={15} /> Trò chuyện tìm phim
+            <MessageSquare size={15} /> {tr("Trò chuyện tìm phim", "Chat Recommender")}
           </button>
           <button
             onClick={() => setTabMode("buttons")}
@@ -497,7 +561,7 @@ export default function Tonight({ rated, onRate }) {
               tabMode === "buttons" ? "bg-ink text-white" : "hover:bg-ink/5"
             }`}
           >
-            <SlidersHorizontal size={15} /> Chọn theo nút tâm trạng
+            <SlidersHorizontal size={15} /> {tr("Chọn theo tâm trạng", "Pick by Mood")}
           </button>
         </div>
       </div>
@@ -509,14 +573,17 @@ export default function Tonight({ rated, onRate }) {
             <div className="mb-5 space-y-2.5 border-b border-ink/10 pb-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold tracking-wider text-mute uppercase">
-                  Hội thoại đang diễn ra ({turns.length} lượt)
+                  {tr(
+                    `Hội thoại đang diễn ra (${turns.length} lượt)`,
+                    `Active conversation (${turns.length} ${turns.length === 1 ? "turn" : "turns"})`
+                  )}
                 </span>
                 <button
                   type="button"
                   onClick={resetChat}
                   className="inline-flex items-center gap-1 text-xs font-semibold text-cobalt hover:underline"
                 >
-                  <RotateCcw size={13} /> Bắt đầu cuộc trò chuyện mới
+                  <RotateCcw size={13} /> {tr("Bắt đầu cuộc trò chuyện mới", "Start new conversation")}
                 </button>
               </div>
               <ul className="max-h-44 space-y-2 overflow-y-auto pr-1 text-sm">
@@ -524,12 +591,13 @@ export default function Tonight({ rated, onRate }) {
                   <li key={idx} className="flex flex-col gap-1 rounded-2xl bg-paper px-4 py-2.5">
                     <div className="flex items-center gap-2">
                       <span className="rounded-full bg-ink px-2 py-0.5 text-[11px] font-bold text-white">
-                        Bạn
+                        {tr("Bạn", "You")}
                       </span>
                       <span className="font-medium text-ink">{t.userText}</span>
                     </div>
                     <p className="text-xs text-cobalt">
-                      → {t.summary} ({t.count} phim phù hợp)
+                      → {translateBackendText(t.summary, lang)} (
+                      {tr(`${t.count} phim phù hợp`, `${t.count} matching movies`)})
                     </p>
                   </li>
                 ))}
@@ -546,7 +614,9 @@ export default function Tonight({ rated, onRate }) {
             className="flex flex-col gap-3 sm:flex-row"
           >
             <label className="relative flex-1">
-              <span className="sr-only">Hôm nay bạn muốn xem gì?</span>
+              <span className="sr-only">
+                {tr("Hôm nay bạn muốn xem gì?", "What do you want to watch today?")}
+              </span>
               <Sparkles size={18} className="absolute top-1/2 left-4 -translate-y-1/2 text-cobalt" />
               <input
                 type="text"
@@ -558,8 +628,14 @@ export default function Tonight({ rated, onRate }) {
                 disabled={busy}
                 placeholder={
                   turns.length > 0
-                    ? "Gõ tiếp để tinh chỉnh (VD: “cho mình cái nhẹ hơn nữa”, “tránh kinh dị”, “từ năm 2010”)..."
-                    : "Hôm nay bạn muốn xem gì? (VD: “phim hài nhẹ nhàng thư giãn, tránh kinh dị” hoặc “giống Inception”)..."
+                    ? tr(
+                        "Gõ tiếp để tinh chỉnh (VD: “cho mình cái nhẹ hơn nữa”, “tránh kinh dị”, “từ năm 2010”)...",
+                        "Type a follow-up to refine (e.g., “something lighter”, “no horror”, “from 2010”)..."
+                      )
+                    : tr(
+                        "Hôm nay bạn muốn xem gì? (VD: “phim hài nhẹ nhàng thư giãn, tránh kinh dị” hoặc “giống Inception”)...",
+                        "What do you want to watch? (e.g., “lighthearted comedy, no horror” or “like Inception”)..."
+                      )
                 }
                 className="w-full rounded-full bg-paper py-3.5 pr-4 pl-11 text-sm font-medium ring-1 ring-ink/15 focus:bg-white focus:ring-2 focus:ring-cobalt focus:outline-none"
               />
@@ -570,7 +646,11 @@ export default function Tonight({ rated, onRate }) {
               className="inline-flex items-center justify-center gap-2 rounded-full bg-cobalt px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-cobalt/90 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Send size={16} />
-              {busy ? "Đang phân tích..." : turns.length > 0 ? "Tinh chỉnh" : "Tìm phim ngay"}
+              {busy
+                ? tr("Đang phân tích...", "Analyzing...")
+                : turns.length > 0
+                  ? tr("Tinh chỉnh", "Refine")
+                  : tr("Tìm phim ngay", "Find Movies")}
             </button>
           </form>
 
@@ -582,14 +662,16 @@ export default function Tonight({ rated, onRate }) {
             >
               <AlertCircle size={20} className="mt-0.5 shrink-0 text-coral" />
               <div className="min-w-0 flex-1">
-                <p className="font-bold text-coral">Không nhận diện được yêu cầu</p>
+                <p className="font-bold text-coral">
+                  {tr("Không nhận diện được yêu cầu", "Could not recognize request")}
+                </p>
                 <p className="mt-1 text-xs leading-relaxed text-ink/80">{error}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setError("")}
-                className="rounded-lg px-2 py-1 text-xs font-semibold text-coral/70 hover:bg-coral/10 hover:text-coral transition-colors"
-                aria-label="Đóng thông báo lỗi"
+                className="rounded-lg px-2 py-1 text-xs font-semibold text-coral/70 transition-colors hover:bg-coral/10 hover:text-coral"
+                aria-label={tr("Đóng thông báo lỗi", "Close error message")}
               >
                 ✕
               </button>
@@ -599,7 +681,7 @@ export default function Tonight({ rated, onRate }) {
           {/* Gợi ý bấm nhanh (khi mới vào) hoặc gợi ý tinh chỉnh nhiều lượt (khi đã có kết quả) */}
           {turns.length === 0 ? (
             <div className="mt-4">
-              <p className="text-xs font-semibold text-mute">Gợi ý bấm nhanh:</p>
+              <p className="text-xs font-semibold text-mute">{tr("Gợi ý bấm nhanh:", "Quick suggestions:")}</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {suggestions.map((s) => (
                   <button
@@ -609,24 +691,26 @@ export default function Tonight({ rated, onRate }) {
                     onClick={() => sendChat(s.prompt)}
                     className="rounded-full bg-paper px-3.5 py-1.5 text-xs font-semibold text-ink ring-1 ring-ink/10 transition-colors hover:bg-cobalt/10 hover:text-cobalt hover:ring-cobalt/30"
                   >
-                    {s.label}
+                    {lang === "en" ? QUICK_SUG_EN[s.id] || s.label : s.label}
                   </button>
                 ))}
               </div>
             </div>
           ) : (
             <div className="mt-4">
-              <p className="text-xs font-semibold text-mute">Tinh chỉnh tiếp câu vừa rồi (nhiều lượt hội thoại):</p>
+              <p className="text-xs font-semibold text-mute">
+                {tr("Tinh chỉnh tiếp câu vừa rồi (nhiều lượt hội thoại):", "Follow-up refinements (multi-turn):")}
+              </p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {FOLLOWUP_CHIPS.map((c) => (
                   <button
-                    key={c.label}
+                    key={c.labelVi}
                     type="button"
                     disabled={busy}
                     onClick={() => sendChat(c.text)}
                     className="rounded-full bg-paper px-3.5 py-1.5 text-xs font-semibold text-ink ring-1 ring-ink/10 transition-colors hover:bg-cobalt/10 hover:text-cobalt hover:ring-cobalt/30"
                   >
-                    + {c.label}
+                    + {tr(c.labelVi, c.labelEn)}
                   </button>
                 ))}
               </div>
@@ -644,7 +728,10 @@ export default function Tonight({ rated, onRate }) {
                 className="accent-cobalt"
               />
               <label htmlFor="toggle-llm">
-                Dùng LLM API để hiểu câu tự do (tự động rơi về từ điển cục bộ nếu mất mạng)
+                {tr(
+                  "Dùng AI để hiểu câu bạn gõ chính xác hơn",
+                  "Use AI to better understand what you type"
+                )}
               </label>
             </div>
           )}
@@ -659,8 +746,12 @@ export default function Tonight({ rated, onRate }) {
       ) : (
         options && (
           <div className="mt-6 rounded-3xl bg-white p-6 ring-1 ring-ink/10 md:p-8">
-            <h2 className="text-sm font-semibold">Bạn đang cảm thấy thế nào?</h2>
-            <div role="radiogroup" aria-label="Tâm trạng" className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            <h2 className="text-sm font-semibold">{tr("Bạn đang cảm thấy thế nào?", "How are you feeling?")}</h2>
+            <div
+              role="radiogroup"
+              aria-label={tr("Tâm trạng", "Mood")}
+              className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+            >
               {options.moods.map((m) => {
                 const on = mood === m.id;
                 const [bg, fg] = toneOf(m.genres[0]);
@@ -673,15 +764,19 @@ export default function Tonight({ rated, onRate }) {
                     style={on ? { background: bg, color: fg } : undefined}
                     className="rounded-2xl bg-paper px-4 py-4 text-left ring-1 ring-ink/10 transition-colors hover:ring-ink/30"
                   >
-                    <span className="block font-display text-lg font-bold">{m.label}</span>
+                    <span className="block font-display text-lg font-bold">
+                      {lang === "en" ? MOOD_EN[m.id] || m.label : m.label}
+                    </span>
                     <span className="mt-0.5 block text-xs opacity-70">{m.genres.join(", ")}</span>
                   </button>
                 );
               })}
             </div>
 
-            <h2 className="mt-6 text-sm font-semibold">Bạn có bao nhiêu thời gian?</h2>
-            <div role="radiogroup" aria-label="Thời gian" className="mt-3 flex flex-wrap gap-2">
+            <h2 className="mt-6 text-sm font-semibold">
+              {tr("Bạn có bao nhiêu thời gian?", "How much time do you have?")}
+            </h2>
+            <div role="radiogroup" aria-label={tr("Thời gian", "Time available")} className="mt-3 flex flex-wrap gap-2">
               {options.times.map((t) => (
                 <button
                   key={t.id}
@@ -692,7 +787,7 @@ export default function Tonight({ rated, onRate }) {
                     time === t.id ? "bg-ink text-white" : "bg-white ring-1 ring-ink/15 hover:bg-ink/5"
                   }`}
                 >
-                  {t.label}
+                  {lang === "en" ? TIME_EN[t.id] || t.label : t.label}
                 </button>
               ))}
             </div>
@@ -702,9 +797,9 @@ export default function Tonight({ rated, onRate }) {
               disabled={!mood || busy}
               className="mt-8 rounded-full bg-cobalt px-8 py-3 font-semibold text-white transition-colors hover:bg-cobalt/90 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {busy ? "Đang chọn..." : "Chọn phim cho tôi"}
+              {busy ? tr("Đang chọn...", "Picking...") : tr("Chọn phim cho tôi", "Pick a movie for me")}
             </button>
-            {!mood && <span className="ml-3 text-sm text-mute">Hãy chọn một tâm trạng</span>}
+            {!mood && <span className="ml-3 text-sm text-mute">{tr("Hãy chọn một tâm trạng", "Please select a mood")}</span>}
           </div>
         )
       )}
@@ -718,8 +813,11 @@ export default function Tonight({ rated, onRate }) {
 
       <div className="mt-8">
         {queue && !pick && (
-          <Notice title="Chưa có phim phù hợp">
-            Không tìm thấy phim nào khớp toàn bộ điều kiện hiện tại. Hãy thử bỏ bớt một thể loại hoặc điều kiện lọc ở trên.
+          <Notice title={tr("Chưa có phim phù hợp", "No matching movies")}>
+            {tr(
+              "Không tìm thấy phim nào khớp toàn bộ điều kiện hiện tại. Hãy thử bỏ bớt một thể loại hoặc điều kiện lọc ở trên.",
+              "No movies match all current criteria. Try removing a genre or filter condition above."
+            )}
           </Notice>
         )}
         {pick && (
@@ -734,14 +832,17 @@ export default function Tonight({ rated, onRate }) {
             {others.length > 0 && (
               <section className="mt-10">
                 <h2 className="font-display text-2xl font-extrabold">
-                  Danh sách gợi ý phù hợp khác ({others.length} phim)
+                  {tr(
+                    `Danh sách gợi ý phù hợp khác (${others.length} phim)`,
+                    `Other matching recommendations (${others.length} movies)`
+                  )}
                 </h2>
                 <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
                   {others.map((m) => (
                     <MovieCard
                       key={m.movie_id}
                       movie={m}
-                      note={m.why || (m.runtime ? `${m.runtime} phút` : undefined)}
+                      note={m.why || (m.runtime ? `${m.runtime} ${tr("phút", "min")}` : undefined)}
                       status={rated[m.movie_id]}
                       onRate={onRate}
                     />

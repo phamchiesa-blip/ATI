@@ -63,3 +63,40 @@ def fetch(movie_id: int, key: "str | None" = None, retries: int = 3) -> dict:
                 raise
             time.sleep(1 + attempt)
     raise RuntimeError("TMDB khong phan hoi")
+
+
+def _get_json(url: str, headers: "dict | None" = None) -> "dict | list":
+    req = urllib.request.Request(url, headers={"Accept": "application/json", **(headers or {})})
+    with urllib.request.urlopen(req, timeout=10) as r:
+        return json.load(r)
+
+
+def fetch_overview_vi(movie_id: int, key: "str | None" = None) -> "str | None":
+    """Tom tat tieng Viet chinh thuc tren TMDB (language=vi-VN). Khong co -> None."""
+    key = key or api_key()
+    if not key:
+        return None
+    url = f"{BASE}/movie/{movie_id}?language=vi-VN"
+    headers = {}
+    if len(key) > 40:
+        headers["Authorization"] = f"Bearer {key}"
+    else:
+        url += f"&api_key={key}"
+    try:
+        return (_get_json(url, headers).get("overview") or "").strip() or None
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return None
+        raise
+
+
+def machine_translate_vi(text: str) -> "str | None":
+    """Dich may Anh -> Viet qua Google Translate (endpoint cong khai, khong can key)."""
+    if not text:
+        return None
+    from urllib.parse import quote
+    url = ("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q="
+           + quote(text))
+    data = _get_json(url)
+    out = "".join(seg[0] for seg in (data[0] or []) if seg and seg[0])
+    return out.strip() or None

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { api } from "./api";
 import { Notice, toneOf } from "./ui";
+import { useLang } from "./i18n";
 
 const top = (list, pick, n) => {
   const counts = {};
@@ -11,11 +12,11 @@ const top = (list, pick, n) => {
     .slice(0, n);
 };
 
-function Row({ m }) {
+function Row({ m, onRemove, removeLabel }) {
   const [bg] = toneOf(m.genres?.[0]);
   return (
-    <li>
-      <a href={`#/movie/${m.movie_id}`} className="flex items-center gap-3 rounded-xl bg-white p-3 hover:bg-ink/5">
+    <li className="group flex items-center gap-2 rounded-xl bg-white pr-2 hover:bg-ink/5">
+      <a href={`#/movie/${m.movie_id}`} className="flex min-w-0 flex-1 items-center gap-3 p-3">
         <span aria-hidden className="size-8 shrink-0 rounded-lg" style={{ background: bg }} />
         <span className="min-w-0 flex-1">
           <span className="block truncate font-semibold">{m.title}</span>
@@ -24,14 +25,29 @@ function Row({ m }) {
           </span>
         </span>
       </a>
+      <button
+        type="button"
+        onClick={() => onRemove(m)}
+        title={removeLabel}
+        aria-label={`${removeLabel}: ${m.title}`}
+        className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold text-mute ring-1 ring-ink/15 transition-colors hover:bg-coral hover:text-white hover:ring-coral"
+      >
+        <X size={14} /> <span className="hidden sm:inline">{removeLabel}</span>
+      </button>
     </li>
   );
 }
 
 // Trang "Gu của bạn": tổng hợp từ lịch sử Thích / Không thích
-export default function Taste({ rev, onBrowse }) {
+export default function Taste({ rev, onBrowse, onUnrate }) {
   const [items, setItems] = useState(null);
   const [error, setError] = useState(false);
+  const { tr } = useLang();
+
+  const remove = (m) => {
+    setItems((list) => list.filter((x) => x.movie_id !== m.movie_id));
+    onUnrate?.(m);
+  };
 
   useEffect(() => {
     api
@@ -54,37 +70,56 @@ export default function Taste({ rev, onBrowse }) {
 
   return (
     <main className="mx-auto max-w-[1500px] px-5 py-8">
-      <h1 className="font-display text-4xl font-extrabold">Gu của bạn</h1>
-      <p className="mt-2 text-mute">Tổng hợp từ những phim bạn đã bấm Thích hoặc Không thích.</p>
+      <h1 className="font-display text-4xl font-extrabold">{tr("Gu của bạn", "Your Taste")}</h1>
+      <p className="mt-2 text-mute">
+        {tr(
+          "Tổng hợp từ những phim bạn đã bấm Thích hoặc Không thích.",
+          "Summarized from the movies you have Liked or Disliked."
+        )}
+      </p>
 
       <div className="mt-8">
-        {error && <Notice title="Không tải được dữ liệu">Hãy kiểm tra máy chủ API đang chạy rồi tải lại trang.</Notice>}
+        {error && (
+          <Notice title={tr("Không tải được dữ liệu", "Could not load data")}>
+            {tr(
+              "Hãy kiểm tra máy chủ API đang chạy rồi tải lại trang.",
+              "Please check that the API server is running and reload the page."
+            )}
+          </Notice>
+        )}
         {stats && stats.likes.length + stats.dislikes.length === 0 && (
           <Notice
-            title="Bạn chưa đánh giá phim nào"
+            title={tr("Bạn chưa đánh giá phim nào", "You haven't rated any movies yet")}
             action={
               <button onClick={onBrowse} className="mt-6 rounded-full bg-cobalt px-6 py-2.5 font-semibold text-white">
-                Khám phá phim
+                {tr("Khám phá phim", "Explore Movies")}
               </button>
             }
           >
-            Bấm Thích hoặc Không thích ở vài bộ phim, gu của bạn sẽ hiện ở đây.
+            {tr(
+              "Bấm Thích hoặc Không thích ở vài bộ phim, gu của bạn sẽ hiện ở đây.",
+              "Click Like or Dislike on a few movies and your taste profile will appear here."
+            )}
           </Notice>
         )}
         {stats && stats.likes.length + stats.dislikes.length > 0 && (
           <>
             <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
               <section className="rounded-3xl bg-white p-6">
-                <h2 className="font-display text-2xl font-extrabold">Thể loại bạn hay Thích</h2>
+                <h2 className="font-display text-2xl font-extrabold">
+                  {tr("Thể loại bạn hay Thích", "Your Top Liked Genres")}
+                </h2>
                 {stats.genres.length === 0 ? (
-                  <p className="mt-3 text-mute">Chưa có phim nào được Thích.</p>
+                  <p className="mt-3 text-mute">{tr("Chưa có phim nào được Thích.", "No liked movies yet.")}</p>
                 ) : (
                   <ul className="mt-4 grid gap-3">
                     {stats.genres.map(([g, n]) => (
                       <li key={g}>
                         <div className="flex justify-between text-sm font-semibold">
                           <span>{g}</span>
-                          <span className="text-mute">{n} phim</span>
+                          <span className="text-mute">
+                            {n} {tr("phim", "movies")}
+                          </span>
                         </div>
                         <div className="mt-1 h-2.5 rounded-full bg-ink/10">
                           <div
@@ -102,21 +137,25 @@ export default function Taste({ rev, onBrowse }) {
                 <div className="flex gap-8">
                   <p>
                     <span className="block font-display text-4xl font-extrabold text-cobalt">{stats.likes.length}</span>
-                    <span className="text-sm text-mute">phim đã Thích</span>
+                    <span className="text-sm text-mute">{tr("phim đã Thích", "liked movies")}</span>
                   </p>
                   <p>
                     <span className="block font-display text-4xl font-extrabold">{stats.dislikes.length}</span>
-                    <span className="text-sm text-mute">phim không thích</span>
+                    <span className="text-sm text-mute">{tr("phim không thích", "disliked movies")}</span>
                   </p>
                 </div>
                 {stats.directors.length > 0 && (
                   <>
-                    <h2 className="mt-6 font-display text-lg font-extrabold">Đạo diễn quen thuộc</h2>
+                    <h2 className="mt-6 font-display text-lg font-extrabold">
+                      {tr("Đạo diễn quen thuộc", "Favorite Directors")}
+                    </h2>
                     <ul className="mt-2 grid gap-1 text-sm">
                       {stats.directors.map(([d, n]) => (
                         <li key={d} className="flex justify-between">
                           <span>{d}</span>
-                          <span className="text-mute">{n} phim</span>
+                          <span className="text-mute">
+                            {n} {tr("phim", "movies")}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -128,15 +167,15 @@ export default function Taste({ rev, onBrowse }) {
             <div className="mt-8 grid gap-8 md:grid-cols-2">
               <section>
                 <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold">
-                  <ThumbsUp size={20} className="text-cobalt" /> Đã Thích
+                  <ThumbsUp size={20} className="text-cobalt" /> {tr("Đã Thích", "Liked")}
                 </h2>
-                <ul className="mt-3 grid gap-2">{stats.likes.map((m) => <Row key={m.movie_id} m={m} />)}</ul>
+                <ul className="mt-3 grid gap-2">{stats.likes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ thích", "Unlike")} />)}</ul>
               </section>
               <section>
                 <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold">
-                  <ThumbsDown size={20} /> Không thích
+                  <ThumbsDown size={20} /> {tr("Không thích", "Disliked")}
                 </h2>
-                <ul className="mt-3 grid gap-2">{stats.dislikes.map((m) => <Row key={m.movie_id} m={m} />)}</ul>
+                <ul className="mt-3 grid gap-2">{stats.dislikes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ không thích", "Remove dislike")} />)}</ul>
               </section>
             </div>
           </>

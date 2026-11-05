@@ -3,6 +3,7 @@ import { ArrowLeft, Check, Circle, Eye, EyeOff } from "lucide-react";
 import { api, OFFLINE_MSG } from "./api";
 import { checkPassword, EMAIL_RE } from "./Passwordrules";
 import Showcase from "./Showcase";
+import { useLang } from "./i18n";
 
 const inputCls =
   "mt-2 w-full rounded-xl bg-white px-4 py-3 ring-1 ring-ink/15 focus:ring-2 focus:ring-cobalt focus:outline-none";
@@ -14,11 +15,12 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const { lang, tr } = useLang();
   const isLogin = mode === "login";
   const set = (k) => (e) =>
     setForm((f) => ({ ...f, [k]: e.target.type === "checkbox" ? e.target.checked : e.target.value }));
 
-  const pw = checkPassword(form.password, form.email);
+  const pw = checkPassword(form.password, form.email, lang);
   const name = form.name.trim().replace(/\s+/g, " ");
   const emailOk = EMAIL_RE.test(form.email.trim());
   const nameOk = name.length >= 2 && name.length <= 30;
@@ -48,7 +50,7 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
           ? OFFLINE_MSG
           : typeof err.detail === "string"
             ? err.detail
-            : "Thông tin chưa hợp lệ, hãy kiểm tra lại."
+            : tr("Thông tin chưa hợp lệ, hãy kiểm tra lại.", "Invalid information, please check again.")
       );
       setBusy(false);
     }
@@ -58,7 +60,7 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
     <button
       type="button"
       onClick={() => setShow((v) => !v)}
-      aria-label={show ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+      aria-label={show ? tr("Ẩn mật khẩu", "Hide password") : tr("Hiện mật khẩu", "Show password")}
       className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1.5 text-mute hover:bg-ink/5"
     >
       {show ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -68,38 +70,45 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-5 py-8">
       <button onClick={onBack} className="inline-flex items-center gap-2 text-sm font-semibold hover:text-cobalt">
-        <ArrowLeft size={16} /> Tiếp tục với tư cách khách
+        <ArrowLeft size={16} /> {tr("Tiếp tục với tư cách khách", "Continue as guest")}
       </button>
 
       <div className="mt-8 grid items-center gap-12 md:grid-cols-2 md:py-8">
         <section>
           <p className="font-display text-2xl font-extrabold">Gu Phim</p>
           <h1 className="mt-6 font-display text-4xl leading-tight font-extrabold md:text-6xl">
-            Phim hợp gu bạn,
+            {tr("Phim hợp gu bạn,", "Movies that match your taste,")}
             <br />
-            chọn trong vài phút.
+            {tr("chọn trong vài phút.", "picked in minutes.")}
           </h1>
           <p className="mt-4 max-w-md text-lg text-mute">
-            Tài khoản giúp lưu lại những phim bạn đã đánh giá và gợi ý riêng cho bạn ở lần sau.
+            {tr(
+              "Tài khoản giúp lưu lại những phim bạn đã đánh giá và gợi ý riêng cho bạn ở lần sau.",
+              "An account saves your rated movies and personalized recommendations for next time."
+            )}
           </p>
           <Showcase />
         </section>
 
         <form onSubmit={submit} noValidate className="rounded-3xl bg-white p-8 md:p-10">
-          <h2 className="font-display text-3xl font-extrabold">{isLogin ? "Đăng nhập" : "Tạo tài khoản"}</h2>
+          <h2 className="font-display text-3xl font-extrabold">
+            {isLogin ? tr("Đăng nhập", "Sign In") : tr("Tạo tài khoản", "Create Account")}
+          </h2>
 
           {!isLogin && (
             <label className="mt-6 block">
-              <span className="text-sm font-semibold">Tên hiển thị</span>
+              <span className="text-sm font-semibold">{tr("Tên hiển thị", "Display Name")}</span>
               <input
                 value={form.name}
                 onChange={set("name")}
                 maxLength={30}
                 autoComplete="nickname"
-                placeholder="Ví dụ: Meobeo"
+                placeholder={tr("Ví dụ: Meobeo", "e.g., Alex")}
                 className={inputCls}
               />
-              <span className="mt-1 block text-xs text-mute">Từ 2 đến 30 ký tự</span>
+              <span className="mt-1 block text-xs text-mute">
+                {tr("Từ 2 đến 30 ký tự", "2 to 30 characters")}
+              </span>
             </label>
           )}
 
@@ -114,12 +123,14 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
               className={inputCls}
             />
             {!isLogin && form.email !== "" && !emailOk && (
-              <span className="mt-1 block text-xs text-coral">Email chưa đúng định dạng</span>
+              <span className="mt-1 block text-xs text-coral">
+                {tr("Email chưa đúng định dạng", "Invalid email format")}
+              </span>
             )}
           </label>
 
           <label className="mt-5 block">
-            <span className="text-sm font-semibold">Mật khẩu</span>
+            <span className="text-sm font-semibold">{tr("Mật khẩu", "Password")}</span>
             <span className="relative block">
               <input
                 type={show ? "text" : "password"}
@@ -160,7 +171,7 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
               </div>
 
               <label className="mt-5 block">
-                <span className="text-sm font-semibold">Nhập lại mật khẩu</span>
+                <span className="text-sm font-semibold">{tr("Nhập lại mật khẩu", "Confirm Password")}</span>
                 <input
                   type={show ? "text" : "password"}
                   value={form.confirm}
@@ -170,7 +181,9 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
                   className={inputCls}
                 />
                 {form.confirm !== "" && !match && (
-                  <span className="mt-1 block text-xs text-coral">Mật khẩu nhập lại chưa khớp</span>
+                  <span className="mt-1 block text-xs text-coral">
+                    {tr("Mật khẩu nhập lại chưa khớp", "Passwords do not match")}
+                  </span>
                 )}
               </label>
 
@@ -182,8 +195,10 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
                   className="mt-1 size-4 accent-cobalt"
                 />
                 <span className="text-mute">
-                  Tôi đồng ý để Gu Phim lưu email và lịch sử Thích / Không thích của tôi nhằm cá nhân
-                  hóa gợi ý.
+                  {tr(
+                    "Tôi đồng ý để Gu Phim lưu email và lịch sử Thích / Không thích của tôi nhằm cá nhân hóa gợi ý.",
+                    "I agree to let Gu Phim store my email and Like / Dislike history to personalize recommendations."
+                  )}
                 </span>
               </label>
             </>
@@ -200,17 +215,21 @@ export default function Auth({ initialMode = "login", onBack, onDone }) {
             disabled={!canSubmit || busy}
             className="mt-6 w-full rounded-full bg-cobalt py-3 font-semibold text-white transition-colors hover:bg-cobalt/90 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {busy ? "Đang xử lý..." : isLogin ? "Đăng nhập" : "Đăng ký"}
+            {busy
+              ? tr("Đang xử lý...", "Processing...")
+              : isLogin
+                ? tr("Đăng nhập", "Sign In")
+                : tr("Đăng ký", "Sign Up")}
           </button>
 
           <p className="mt-6 text-center text-sm text-mute">
-            {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}{" "}
+            {isLogin ? tr("Chưa có tài khoản?", "Don't have an account?") : tr("Đã có tài khoản?", "Already have an account?")}{" "}
             <button
               type="button"
               onClick={switchMode}
               className="font-semibold text-cobalt underline underline-offset-4"
             >
-              {isLogin ? "Đăng ký" : "Đăng nhập"}
+              {isLogin ? tr("Đăng ký", "Sign Up") : tr("Đăng nhập", "Sign In")}
             </button>
           </p>
         </form>

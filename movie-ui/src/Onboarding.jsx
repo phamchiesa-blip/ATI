@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { api, OFFLINE_MSG } from "./api";
 import { toneOf } from "./ui";
+import { useLang } from "./i18n";
 
 // Màn hình chọn thể loại yêu thích. Mở từ nút "Chọn thể loại" trên thanh đầu trang.
 export default function Onboarding({ onDone, onCancel }) {
@@ -9,6 +10,7 @@ export default function Onboarding({ onDone, onCancel }) {
   const [picked, setPicked] = useState([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const { tr } = useLang();
 
   useEffect(() => {
     api
@@ -28,7 +30,11 @@ export default function Onboarding({ onDone, onCancel }) {
       await api.onboarding(picked);
       onDone();
     } catch (e) {
-      setError(e.status === 0 ? OFFLINE_MSG : "Chưa lưu được lựa chọn. Hãy thử lại.");
+      setError(
+        e.status === 0
+          ? OFFLINE_MSG
+          : tr("Chưa lưu được lựa chọn. Hãy thử lại.", "Could not save your selection. Please try again.")
+      );
       setBusy(false);
     }
   };
@@ -39,20 +45,22 @@ export default function Onboarding({ onDone, onCancel }) {
         onClick={onCancel}
         className="inline-flex items-center gap-2 text-sm font-semibold hover:text-cobalt"
       >
-        <ArrowLeft size={16} /> Quay lại
+        <ArrowLeft size={16} /> {tr("Quay lại", "Back")}
       </button>
       <h1 className="mt-6 font-display text-4xl leading-tight font-extrabold md:text-6xl">
-        Bạn thích phim
+        {tr("Bạn thích phim", "What kind of movies")}
         <br />
-        kiểu nào?
+        {tr("kiểu nào?", "do you like?")}
       </h1>
       <p className="mt-4 max-w-xl text-lg text-mute">
-        Chọn vài thể loại để nhận gợi ý riêng. Những phim bạn đã Thích hoặc Không thích vẫn được giữ
-        lại khi bạn đổi thể loại.
+        {tr(
+          "Chọn vài thể loại để nhận gợi ý riêng. Những phim bạn đã Thích hoặc Không thích vẫn được giữ lại khi bạn đổi thể loại.",
+          "Pick a few genres to get personalized recommendations. Movies you have Liked or Disliked are kept when you change genres."
+        )}
       </p>
 
       <fieldset className="mt-10">
-        <legend className="text-sm font-semibold">Thể loại yêu thích</legend>
+        <legend className="text-sm font-semibold">{tr("Thể loại yêu thích", "Favorite genres")}</legend>
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {genres.map(({ name: g }) => {
             const on = picked.includes(g);
@@ -89,10 +97,12 @@ export default function Onboarding({ onDone, onCancel }) {
           disabled={picked.length === 0 || busy}
           className="rounded-full bg-cobalt px-8 py-3 font-semibold text-white transition-colors hover:bg-cobalt/90 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {busy ? "Đang lưu..." : "Lưu và xem gợi ý"}
+          {busy ? tr("Đang lưu...", "Saving...") : tr("Lưu và xem gợi ý", "Save & view recommendations")}
         </button>
         <span className="text-sm text-mute">
-          {picked.length === 0 ? "Chọn ít nhất 1 thể loại" : `Đã chọn ${picked.length}`}
+          {picked.length === 0
+            ? tr("Chọn ít nhất 1 thể loại", "Pick at least 1 genre")
+            : tr(`Đã chọn ${picked.length}`, `${picked.length} selected`)}
         </span>
       </div>
     </main>
