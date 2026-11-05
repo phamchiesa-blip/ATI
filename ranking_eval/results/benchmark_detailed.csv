@@ -1,64 +1,64 @@
 persona_id,persona_name,is_external,pool_size,test_relevant_size,scenario,m_likes,rep,seed,ranker,precision_at_10,recall_at_10,f1_at_10,recall_at_50,hit_rate_at_10,neural_used
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,0a_Random,0.1,0.0061,0.0116,0.0245,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,0a_Random,0.0,0.0,0.0,0.0184,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,1_Baseline,0.1,0.0061,0.0116,0.092,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,2_Tier1,0.2,0.0123,0.0231,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,3_Tier2_Old,0.2,0.0123,0.0231,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,0,42,3_Tier2_New,0.2,0.0123,0.0231,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,0a_Random,0.1,0.0061,0.0116,0.0061,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,1_Baseline,0.4,0.0245,0.0462,0.1288,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,2_Tier1,0.7,0.0429,0.0809,0.1288,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,3_Tier2_Old,0.7,0.0429,0.0809,0.1288,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,1,43,3_Tier2_New,0.7,0.0429,0.0809,0.1288,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,1_Baseline,0.4,0.0245,0.0462,0.1043,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,2_Tier1,0.6,0.0368,0.0694,0.1104,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,3_Tier2_Old,0.6,0.0368,0.0694,0.1104,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,2,44,3_Tier2_New,0.6,0.0368,0.0694,0.1104,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,0a_Random,0.0,0.0,0.0,0.0061,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,0a_Random,0.0,0.0,0.0,0.0184,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,1_Baseline,0.5,0.0307,0.0578,0.0982,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,2_Tier1,0.8,0.0491,0.0925,0.1288,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,3_Tier2_Old,0.8,0.0491,0.0925,0.1288,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,3,45,3_Tier2_New,0.8,0.0491,0.0925,0.1288,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,0a_Random,0.0,0.0,0.0,0.0123,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,0a_Random,0.0,0.0,0.0,0.0061,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,1_Baseline,0.0,0.0,0.0,0.0798,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,2_Tier1,0.2,0.0123,0.0231,0.0982,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,3_Tier2_Old,0.2,0.0123,0.0231,0.0982,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,4,46,3_Tier2_New,0.2,0.0123,0.0231,0.0982,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,0a_Random,0.0,0.0,0.0,0.0123,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,0a_Random,0.0,0.0,0.0,0.0184,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,1_Baseline,0.4,0.0245,0.0462,0.1043,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,2_Tier1,0.7,0.0429,0.0809,0.1227,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,3_Tier2_Old,0.7,0.0429,0.0809,0.1227,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,5,47,3_Tier2_New,0.7,0.0429,0.0809,0.1227,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,0a_Random,0.1,0.0061,0.0116,0.0184,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,0a_Random,0.1,0.0061,0.0116,0.0061,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,1_Baseline,0.2,0.0123,0.0231,0.0675,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,2_Tier1,0.2,0.0123,0.0231,0.0859,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,3_Tier2_Old,0.2,0.0123,0.0231,0.0859,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,6,48,3_Tier2_New,0.2,0.0123,0.0231,0.0859,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,0a_Random,0.0,0.0,0.0,0.0061,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,0a_Random,0.0,0.0,0.0,0.0123,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,1_Baseline,0.0,0.0,0.0,0.092,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,2_Tier1,0.2,0.0123,0.0231,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,3_Tier2_Old,0.2,0.0123,0.0231,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,7,49,3_Tier2_New,0.2,0.0123,0.0231,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,0a_Random,0.0,0.0,0.0,0.0061,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,1_Baseline,0.3,0.0184,0.0347,0.0859,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,2_Tier1,0.4,0.0245,0.0462,0.1043,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,3_Tier2_Old,0.4,0.0245,0.0462,0.1043,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,8,50,3_Tier2_New,0.4,0.0245,0.0462,0.1043,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,0a_Random,0.0,0.0,0.0,0.0123,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,0b_Popular,0.3,0.0184,0.0347,0.0798,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,1_Baseline,0.3,0.0184,0.0347,0.0982,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,2_Tier1,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,3_Tier2_Old,0.5,0.0307,0.0578,0.1166,1.0,0.0
-P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,3_Tier2_New,0.5,0.0307,0.0578,0.1166,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,1_Baseline,0.0,0.0,0.0,0.1104,0.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,2_Tier1,0.1,0.0061,0.0116,0.1227,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,3_Tier2_Old,0.1,0.0061,0.0116,0.1227,1.0,0.0
+P1,Modern Sci-Fi Explorer,False,171,163,onboarding_only,0,9,51,3_Tier2_New,0.1,0.0061,0.0116,0.1227,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,162,interactions_m1,1,0,142,0a_Random,0.0,0.0,0.0,0.0062,0.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,162,interactions_m1,1,0,142,0b_Popular,0.3,0.0185,0.0349,0.0802,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,162,interactions_m1,1,0,142,1_Baseline,0.2,0.0123,0.0233,0.0741,1.0,0.0
@@ -299,66 +299,66 @@ P1,Modern Sci-Fi Explorer,False,171,155,interactions_m10,10,9,451,1_Baseline,0.5
 P1,Modern Sci-Fi Explorer,False,171,155,interactions_m10,10,9,451,2_Tier1,0.8,0.0516,0.097,0.1161,1.0,0.0
 P1,Modern Sci-Fi Explorer,False,171,155,interactions_m10,10,9,451,3_Tier2_Old,0.8,0.0516,0.097,0.1161,1.0,1.0
 P1,Modern Sci-Fi Explorer,False,171,155,interactions_m10,10,9,451,3_Tier2_New,0.7,0.0452,0.0848,0.1161,1.0,1.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,0a_Random,0.2,0.0072,0.014,0.0181,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,0a_Random,0.1,0.0036,0.007,0.0072,1.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,0a_Random,0.0,0.0,0.0,0.0036,0.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,1_Baseline,0.2,0.0072,0.014,0.087,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,2_Tier1,0.2,0.0072,0.014,0.0906,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,3_Tier2_Old,0.2,0.0072,0.014,0.0906,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,0,1042,3_Tier2_New,0.2,0.0072,0.014,0.0906,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,0a_Random,0.2,0.0072,0.014,0.0254,1.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,0a_Random,0.0,0.0,0.0,0.0145,0.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,1_Baseline,0.1,0.0036,0.007,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,2_Tier1,0.1,0.0036,0.007,0.0797,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,3_Tier2_Old,0.1,0.0036,0.007,0.0797,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,1,1043,3_Tier2_New,0.1,0.0036,0.007,0.0797,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,0a_Random,0.0,0.0,0.0,0.0072,0.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,0a_Random,0.0,0.0,0.0,0.0109,0.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,1_Baseline,0.3,0.0109,0.021,0.087,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,2_Tier1,0.4,0.0145,0.028,0.0833,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,3_Tier2_Old,0.4,0.0145,0.028,0.0833,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,2,1044,3_Tier2_New,0.4,0.0145,0.028,0.0833,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,0a_Random,0.0,0.0,0.0,0.0145,0.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,1_Baseline,0.1,0.0036,0.007,0.0507,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,2_Tier1,0.1,0.0036,0.007,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,3_Tier2_Old,0.1,0.0036,0.007,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,3,1045,3_Tier2_New,0.1,0.0036,0.007,0.0725,1.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,0a_Random,0.0,0.0,0.0,0.0181,0.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,1_Baseline,0.1,0.0036,0.007,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,2_Tier1,0.2,0.0072,0.014,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,3_Tier2_Old,0.2,0.0072,0.014,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,4,1046,3_Tier2_New,0.2,0.0072,0.014,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,0a_Random,0.0,0.0,0.0,0.0036,0.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,0a_Random,0.1,0.0036,0.007,0.0036,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,1_Baseline,0.3,0.0109,0.021,0.0978,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,2_Tier1,0.2,0.0072,0.014,0.0906,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,3_Tier2_Old,0.2,0.0072,0.014,0.0906,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,5,1047,3_Tier2_New,0.2,0.0072,0.014,0.0906,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,0a_Random,0.2,0.0072,0.014,0.0181,1.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,0a_Random,0.0,0.0,0.0,0.0072,0.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,1_Baseline,0.2,0.0072,0.014,0.0435,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,2_Tier1,0.2,0.0072,0.014,0.0471,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,3_Tier2_Old,0.2,0.0072,0.014,0.0471,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,6,1048,3_Tier2_New,0.2,0.0072,0.014,0.0471,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,0a_Random,0.0,0.0,0.0,0.0109,0.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,0a_Random,0.1,0.0036,0.007,0.0109,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,1_Baseline,0.5,0.0181,0.035,0.0507,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,2_Tier1,0.5,0.0181,0.035,0.0471,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,3_Tier2_Old,0.5,0.0181,0.035,0.0471,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,7,1049,3_Tier2_New,0.5,0.0181,0.035,0.0471,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,0a_Random,0.0,0.0,0.0,0.0109,0.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,0a_Random,0.0,0.0,0.0,0.0109,0.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,1_Baseline,0.2,0.0072,0.014,0.0652,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,2_Tier1,0.2,0.0072,0.014,0.0797,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,3_Tier2_Old,0.2,0.0072,0.014,0.0797,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,8,1050,3_Tier2_New,0.2,0.0072,0.014,0.0797,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,0a_Random,0.0,0.0,0.0,0.0145,0.0,0.0
 P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,1_Baseline,0.7,0.0254,0.049,0.1014,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,2_Tier1,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,3_Tier2_Old,0.6,0.0217,0.042,0.1051,1.0,0.0
-P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,3_Tier2_New,0.6,0.0217,0.042,0.1051,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,1_Baseline,0.1,0.0036,0.007,0.0725,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,2_Tier1,0.2,0.0072,0.014,0.0833,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,3_Tier2_Old,0.2,0.0072,0.014,0.0833,1.0,0.0
+P2,Modern Horror Fan,False,281,276,onboarding_only,0,9,1051,3_Tier2_New,0.2,0.0072,0.014,0.0833,1.0,0.0
 P2,Modern Horror Fan,False,281,275,interactions_m1,1,0,1142,0a_Random,0.0,0.0,0.0,0.0145,0.0,0.0
 P2,Modern Horror Fan,False,281,275,interactions_m1,1,0,1142,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
 P2,Modern Horror Fan,False,281,275,interactions_m1,1,0,1142,1_Baseline,0.2,0.0073,0.014,0.0945,1.0,0.0
@@ -601,64 +601,64 @@ P2,Modern Horror Fan,False,281,268,interactions_m10,10,9,1451,3_Tier2_Old,1.0,0.
 P2,Modern Horror Fan,False,281,268,interactions_m10,10,9,1451,3_Tier2_New,0.7,0.0261,0.0504,0.1567,1.0,1.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,0a_Random,0.1,0.009,0.0165,0.009,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,1_Baseline,0.1,0.009,0.0165,0.036,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,2_Tier1,0.1,0.009,0.0165,0.045,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,3_Tier2_Old,0.1,0.009,0.0165,0.045,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,0,2042,3_Tier2_New,0.1,0.009,0.0165,0.045,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,0a_Random,0.0,0.0,0.0,0.009,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,1_Baseline,0.4,0.036,0.0661,0.1081,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,2_Tier1,0.3,0.027,0.0496,0.0991,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,3_Tier2_Old,0.3,0.027,0.0496,0.0991,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,1,2043,3_Tier2_New,0.3,0.027,0.0496,0.0991,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,1_Baseline,0.2,0.018,0.0331,0.0721,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,2_Tier1,0.3,0.027,0.0496,0.0811,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,3_Tier2_Old,0.3,0.027,0.0496,0.0811,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,2,2044,3_Tier2_New,0.3,0.027,0.0496,0.0811,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,0a_Random,0.0,0.0,0.0,0.009,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,1_Baseline,0.3,0.027,0.0496,0.045,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,2_Tier1,0.3,0.027,0.0496,0.0541,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,3_Tier2_Old,0.3,0.027,0.0496,0.0541,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,3,2045,3_Tier2_New,0.3,0.027,0.0496,0.0541,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,1_Baseline,0.4,0.036,0.0661,0.0991,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,2_Tier1,0.5,0.045,0.0826,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,3_Tier2_Old,0.5,0.045,0.0826,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,4,2046,3_Tier2_New,0.5,0.045,0.0826,0.1171,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,1_Baseline,0.5,0.045,0.0826,0.1081,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,2_Tier1,0.6,0.0541,0.0992,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,3_Tier2_Old,0.6,0.0541,0.0992,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,5,2047,3_Tier2_New,0.6,0.0541,0.0992,0.1171,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,1_Baseline,0.4,0.036,0.0661,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,2_Tier1,0.5,0.045,0.0826,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,3_Tier2_Old,0.5,0.045,0.0826,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,6,2048,3_Tier2_New,0.5,0.045,0.0826,0.1171,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,0a_Random,0.0,0.0,0.0,0.009,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,1_Baseline,0.5,0.045,0.0826,0.1081,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,2_Tier1,0.5,0.045,0.0826,0.1081,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,3_Tier2_Old,0.5,0.045,0.0826,0.1081,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,7,2049,3_Tier2_New,0.5,0.045,0.0826,0.1081,1.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,0a_Random,0.0,0.0,0.0,0.009,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,0a_Random,0.1,0.009,0.0165,0.009,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,1_Baseline,0.2,0.018,0.0331,0.0541,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,2_Tier1,0.3,0.027,0.0496,0.0541,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,3_Tier2_Old,0.3,0.027,0.0496,0.0541,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,8,2050,3_Tier2_New,0.3,0.027,0.0496,0.0541,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,0b_Popular,0.0,0.0,0.0,0.009,0.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,1_Baseline,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,2_Tier1,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,3_Tier2_Old,0.1,0.009,0.0165,0.018,1.0,0.0
-P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,3_Tier2_New,0.1,0.009,0.0165,0.018,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,1_Baseline,0.5,0.045,0.0826,0.1982,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,2_Tier1,0.6,0.0541,0.0992,0.1982,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,3_Tier2_Old,0.6,0.0541,0.0992,0.1982,1.0,0.0
+P3,Classic Crime & Noir,False,114,111,onboarding_only,0,9,2051,3_Tier2_New,0.6,0.0541,0.0992,0.1982,1.0,0.0
 P3,Classic Crime & Noir,False,114,110,interactions_m1,1,0,2142,0a_Random,0.0,0.0,0.0,0.0091,0.0,0.0
 P3,Classic Crime & Noir,False,114,110,interactions_m1,1,0,2142,0b_Popular,0.0,0.0,0.0,0.0091,0.0,0.0
 P3,Classic Crime & Noir,False,114,110,interactions_m1,1,0,2142,1_Baseline,0.1,0.0091,0.0167,0.1,1.0,0.0
@@ -899,66 +899,66 @@ P3,Classic Crime & Noir,False,114,103,interactions_m10,10,9,2451,1_Baseline,0.1,
 P3,Classic Crime & Noir,False,114,103,interactions_m10,10,9,2451,2_Tier1,0.1,0.0097,0.0177,0.0583,1.0,0.0
 P3,Classic Crime & Noir,False,114,103,interactions_m10,10,9,2451,3_Tier2_Old,0.1,0.0097,0.0177,0.0583,1.0,1.0
 P3,Classic Crime & Noir,False,114,103,interactions_m10,10,9,2451,3_Tier2_New,0.1,0.0097,0.0177,0.0583,1.0,1.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,0a_Random,0.0,0.0,0.0,0.016,0.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,0a_Random,0.1,0.008,0.0148,0.016,1.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,0a_Random,0.0,0.0,0.0,0.024,0.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,1_Baseline,0.4,0.032,0.0593,0.2,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,2_Tier1,0.6,0.048,0.0889,0.28,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,3_Tier2_Old,0.6,0.048,0.0889,0.28,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,0,3042,3_Tier2_New,0.6,0.048,0.0889,0.28,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,0a_Random,0.0,0.0,0.0,0.008,0.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,1_Baseline,0.6,0.048,0.0889,0.288,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,2_Tier1,0.8,0.064,0.1185,0.296,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,3_Tier2_Old,0.8,0.064,0.1185,0.296,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,1,3043,3_Tier2_New,0.8,0.064,0.1185,0.296,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,0a_Random,0.1,0.008,0.0148,0.008,1.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,1_Baseline,0.5,0.04,0.0741,0.224,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,2_Tier1,1.0,0.08,0.1481,0.256,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,3_Tier2_Old,1.0,0.08,0.1481,0.256,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,2,3044,3_Tier2_New,1.0,0.08,0.1481,0.256,1.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,0a_Random,0.0,0.0,0.0,0.008,0.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,1_Baseline,0.4,0.032,0.0593,0.208,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,2_Tier1,1.0,0.08,0.1481,0.216,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,3_Tier2_Old,1.0,0.08,0.1481,0.216,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,3,3045,3_Tier2_New,1.0,0.08,0.1481,0.216,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,0a_Random,0.1,0.008,0.0148,0.032,1.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,0a_Random,0.0,0.0,0.0,0.016,0.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,1_Baseline,0.6,0.048,0.0889,0.2,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,2_Tier1,0.7,0.056,0.1037,0.248,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,3_Tier2_Old,0.7,0.056,0.1037,0.248,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,4,3046,3_Tier2_New,0.7,0.056,0.1037,0.248,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,0a_Random,0.0,0.0,0.0,0.008,0.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,0a_Random,0.1,0.008,0.0148,0.008,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,1_Baseline,0.7,0.056,0.1037,0.248,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,2_Tier1,0.8,0.064,0.1185,0.304,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,3_Tier2_Old,0.8,0.064,0.1185,0.304,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,5,3047,3_Tier2_New,0.8,0.064,0.1185,0.304,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,0a_Random,0.0,0.0,0.0,0.024,0.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,0a_Random,0.0,0.0,0.0,0.016,0.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,1_Baseline,0.5,0.04,0.0741,0.224,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,2_Tier1,0.6,0.048,0.0889,0.272,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,3_Tier2_Old,0.6,0.048,0.0889,0.272,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,6,3048,3_Tier2_New,0.6,0.048,0.0889,0.272,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,0a_Random,0.0,0.0,0.0,0.008,0.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,1_Baseline,0.4,0.032,0.0593,0.216,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,2_Tier1,0.6,0.048,0.0889,0.264,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,3_Tier2_Old,0.6,0.048,0.0889,0.264,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,7,3049,3_Tier2_New,0.6,0.048,0.0889,0.264,1.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,0a_Random,0.0,0.0,0.0,0.016,0.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,1_Baseline,0.7,0.056,0.1037,0.296,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,2_Tier1,0.8,0.064,0.1185,0.312,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,3_Tier2_Old,0.8,0.064,0.1185,0.312,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,8,3050,3_Tier2_New,0.8,0.064,0.1185,0.312,1.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,0b_Popular,0.0,0.0,0.0,0.008,0.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,1_Baseline,0.6,0.048,0.0889,0.248,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,2_Tier1,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,3_Tier2_Old,0.7,0.056,0.1037,0.28,1.0,0.0
-P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,3_Tier2_New,0.7,0.056,0.1037,0.28,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,1_Baseline,0.6,0.048,0.0889,0.264,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,2_Tier1,0.8,0.064,0.1185,0.272,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,3_Tier2_Old,0.8,0.064,0.1185,0.272,1.0,0.0
+P4,Family Animation Lover,False,133,125,onboarding_only,0,9,3051,3_Tier2_New,0.8,0.064,0.1185,0.272,1.0,0.0
 P4,Family Animation Lover,False,133,124,interactions_m1,1,0,3142,0a_Random,0.0,0.0,0.0,0.0081,0.0,0.0
 P4,Family Animation Lover,False,133,124,interactions_m1,1,0,3142,0b_Popular,0.0,0.0,0.0,0.0081,0.0,0.0
 P4,Family Animation Lover,False,133,124,interactions_m1,1,0,3142,1_Baseline,0.6,0.0484,0.0896,0.2661,1.0,0.0
@@ -1199,66 +1199,66 @@ P4,Family Animation Lover,False,133,117,interactions_m10,10,9,3451,1_Baseline,0.
 P4,Family Animation Lover,False,133,117,interactions_m10,10,9,3451,2_Tier1,0.9,0.0769,0.1417,0.2564,1.0,0.0
 P4,Family Animation Lover,False,133,117,interactions_m10,10,9,3451,3_Tier2_Old,0.9,0.0769,0.1417,0.2564,1.0,1.0
 P4,Family Animation Lover,False,133,117,interactions_m10,10,9,3451,3_Tier2_New,0.9,0.0769,0.1417,0.2564,1.0,1.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,0a_Random,0.0,0.0,0.0,0.0269,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,0a_Random,0.0,0.0,0.0,0.0161,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,0a_Random,0.0,0.0,0.0,0.0054,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,0,4042,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,0a_Random,0.0,0.0,0.0,0.0108,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,1_Baseline,0.0,0.0,0.0,0.0054,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,2_Tier1,0.0,0.0,0.0,0.0054,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,3_Tier2_Old,0.0,0.0,0.0,0.0054,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,1,4043,3_Tier2_New,0.0,0.0,0.0,0.0054,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,0a_Random,0.0,0.0,0.0,0.0054,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,1_Baseline,0.4,0.0215,0.0408,0.086,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,2_Tier1,0.4,0.0215,0.0408,0.086,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,3_Tier2_Old,0.4,0.0215,0.0408,0.086,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,2,4044,3_Tier2_New,0.4,0.0215,0.0408,0.086,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,0a_Random,0.2,0.0108,0.0204,0.0161,1.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,0a_Random,0.1,0.0054,0.0102,0.0215,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,1_Baseline,0.2,0.0108,0.0204,0.0323,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,2_Tier1,0.1,0.0054,0.0102,0.0215,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,3_Tier2_Old,0.1,0.0054,0.0102,0.0215,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,3,4045,3_Tier2_New,0.1,0.0054,0.0102,0.0215,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,0a_Random,0.2,0.0108,0.0204,0.0215,1.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,0a_Random,0.0,0.0,0.0,0.0108,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,1_Baseline,0.1,0.0054,0.0102,0.0376,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,2_Tier1,0.1,0.0054,0.0102,0.0269,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,3_Tier2_Old,0.1,0.0054,0.0102,0.0269,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,4,4046,3_Tier2_New,0.1,0.0054,0.0102,0.0269,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,0a_Random,0.1,0.0054,0.0102,0.0161,1.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,1_Baseline,0.0,0.0,0.0,0.0161,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,2_Tier1,0.0,0.0,0.0,0.0108,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,3_Tier2_Old,0.0,0.0,0.0,0.0108,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,5,4047,3_Tier2_New,0.0,0.0,0.0,0.0108,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,0a_Random,0.0,0.0,0.0,0.0108,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,6,4048,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,0a_Random,0.1,0.0054,0.0102,0.0161,1.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,7,4049,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,0a_Random,0.0,0.0,0.0,0.0161,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,0a_Random,0.0,0.0,0.0,0.0161,0.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,1_Baseline,0.2,0.0108,0.0204,0.0591,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,2_Tier1,0.2,0.0108,0.0204,0.0968,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,3_Tier2_Old,0.2,0.0108,0.0204,0.0968,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,8,4050,3_Tier2_New,0.2,0.0108,0.0204,0.0968,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,0a_Random,0.0,0.0,0.0,0.0108,0.0,0.0
 P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,1_Baseline,0.3,0.0161,0.0306,0.0968,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,2_Tier1,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,3_Tier2_Old,0.3,0.0161,0.0306,0.1022,1.0,0.0
-P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,3_Tier2_New,0.3,0.0161,0.0306,0.1022,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,1_Baseline,0.1,0.0054,0.0102,0.0269,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,2_Tier1,0.1,0.0054,0.0102,0.0269,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,3_Tier2_Old,0.1,0.0054,0.0102,0.0269,1.0,0.0
+P5,Millennial Rom-Com,False,186,186,onboarding_only,0,9,4051,3_Tier2_New,0.1,0.0054,0.0102,0.0269,1.0,0.0
 P5,Millennial Rom-Com,False,186,185,interactions_m1,1,0,4142,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
 P5,Millennial Rom-Com,False,186,185,interactions_m1,1,0,4142,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
 P5,Millennial Rom-Com,False,186,185,interactions_m1,1,0,4142,1_Baseline,0.5,0.027,0.0513,0.0865,1.0,0.0
@@ -1499,66 +1499,66 @@ P5,Millennial Rom-Com,False,186,178,interactions_m10,10,9,4451,1_Baseline,0.2,0.
 P5,Millennial Rom-Com,False,186,178,interactions_m10,10,9,4451,2_Tier1,0.6,0.0337,0.0638,0.0899,1.0,0.0
 P5,Millennial Rom-Com,False,186,178,interactions_m10,10,9,4451,3_Tier2_Old,0.6,0.0337,0.0638,0.0899,1.0,1.0
 P5,Millennial Rom-Com,False,186,178,interactions_m10,10,9,4451,3_Tier2_New,0.5,0.0281,0.0532,0.0899,1.0,1.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,0a_Random,0.1,0.0099,0.018,0.0099,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,0a_Random,0.1,0.0099,0.018,0.0198,1.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,0,5042,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,0a_Random,0.0,0.0,0.0,0.0099,0.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,1_Baseline,0.3,0.0297,0.0541,0.0891,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,2_Tier1,0.6,0.0594,0.1081,0.1287,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,3_Tier2_Old,0.6,0.0594,0.1081,0.1287,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,1,5043,3_Tier2_New,0.6,0.0594,0.1081,0.1287,1.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,0a_Random,0.0,0.0,0.0,0.0099,0.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,0a_Random,0.2,0.0198,0.036,0.0198,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,1_Baseline,0.2,0.0198,0.036,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,2_Tier1,0.3,0.0297,0.0541,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,3_Tier2_Old,0.3,0.0297,0.0541,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,2,5044,3_Tier2_New,0.3,0.0297,0.0541,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,0a_Random,0.0,0.0,0.0,0.0198,0.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,0a_Random,0.1,0.0099,0.018,0.0297,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,1_Baseline,0.0,0.0,0.0,0.0495,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,2_Tier1,0.0,0.0,0.0,0.0594,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,3_Tier2_Old,0.0,0.0,0.0,0.0594,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,3,5045,3_Tier2_New,0.0,0.0,0.0,0.0594,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,0a_Random,0.0,0.0,0.0,0.0099,0.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,1_Baseline,0.3,0.0297,0.0541,0.099,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,2_Tier1,0.5,0.0495,0.0901,0.1089,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,3_Tier2_Old,0.5,0.0495,0.0901,0.1089,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,4,5046,3_Tier2_New,0.5,0.0495,0.0901,0.1089,1.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,0a_Random,0.0,0.0,0.0,0.0099,0.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,1_Baseline,0.1,0.0099,0.018,0.0594,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,2_Tier1,0.2,0.0198,0.036,0.0594,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,3_Tier2_Old,0.2,0.0198,0.036,0.0594,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,5,5047,3_Tier2_New,0.2,0.0198,0.036,0.0594,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,0a_Random,0.1,0.0099,0.018,0.0099,1.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,0a_Random,0.1,0.0099,0.018,0.0297,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,1_Baseline,0.1,0.0099,0.018,0.0396,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,2_Tier1,0.2,0.0198,0.036,0.0594,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,3_Tier2_Old,0.2,0.0198,0.036,0.0594,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,6,5048,3_Tier2_New,0.2,0.0198,0.036,0.0594,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,0a_Random,0.0,0.0,0.0,0.0198,0.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,0a_Random,0.1,0.0099,0.018,0.0099,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,1_Baseline,0.0,0.0,0.0,0.0792,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,2_Tier1,0.1,0.0099,0.018,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,3_Tier2_Old,0.1,0.0099,0.018,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,7,5049,3_Tier2_New,0.1,0.0099,0.018,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,0a_Random,0.1,0.0099,0.018,0.0198,1.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,0a_Random,0.0,0.0,0.0,0.0099,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,8,5050,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,0a_Random,0.1,0.0099,0.018,0.0297,1.0,0.0
 P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,0b_Popular,0.0,0.0,0.0,0.0495,0.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,1_Baseline,0.5,0.0495,0.0901,0.0693,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,2_Tier1,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,3_Tier2_Old,0.5,0.0495,0.0901,0.099,1.0,0.0
-P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,3_Tier2_New,0.5,0.0495,0.0901,0.099,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,1_Baseline,0.1,0.0099,0.018,0.0693,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,2_Tier1,0.1,0.0099,0.018,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,3_Tier2_Old,0.1,0.0099,0.018,0.0792,1.0,0.0
+P6,Action Thriller Buff,False,105,101,onboarding_only,0,9,5051,3_Tier2_New,0.1,0.0099,0.018,0.0792,1.0,0.0
 P6,Action Thriller Buff,False,105,100,interactions_m1,1,0,5142,0a_Random,0.0,0.0,0.0,0.01,0.0,0.0
 P6,Action Thriller Buff,False,105,100,interactions_m1,1,0,5142,0b_Popular,0.0,0.0,0.0,0.05,0.0,0.0
 P6,Action Thriller Buff,False,105,100,interactions_m1,1,0,5142,1_Baseline,0.0,0.0,0.0,0.08,0.0,0.0
@@ -1799,603 +1799,603 @@ P6,Action Thriller Buff,False,105,93,interactions_m10,10,9,5451,1_Baseline,0.0,0
 P6,Action Thriller Buff,False,105,93,interactions_m10,10,9,5451,2_Tier1,0.2,0.0215,0.0388,0.0968,1.0,0.0
 P6,Action Thriller Buff,False,105,93,interactions_m10,10,9,5451,3_Tier2_Old,0.2,0.0215,0.0388,0.0968,1.0,1.0
 P6,Action Thriller Buff,False,105,93,interactions_m10,10,9,5451,3_Tier2_New,0.2,0.0215,0.0388,0.0968,1.0,1.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,0,6042,0a_Random,0.2,0.0068,0.0131,0.0135,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,0,6042,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,0,6042,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,0,6042,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,0,6042,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,0,6042,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,1,6043,0a_Random,0.2,0.0068,0.0131,0.0203,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,1,6043,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,1,6043,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,1,6043,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,1,6043,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,1,6043,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,2,6044,0a_Random,0.0,0.0,0.0,0.0135,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,2,6044,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,2,6044,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,2,6044,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,2,6044,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,2,6044,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,3,6045,0a_Random,0.1,0.0034,0.0065,0.0101,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,3,6045,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,3,6045,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,3,6045,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,3,6045,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,3,6045,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,4,6046,0a_Random,0.0,0.0,0.0,0.0068,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,4,6046,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,4,6046,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,4,6046,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,4,6046,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,4,6046,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,5,6047,0a_Random,0.2,0.0068,0.0131,0.0203,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,5,6047,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,5,6047,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,5,6047,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,5,6047,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,5,6047,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,6,6048,0a_Random,0.1,0.0034,0.0065,0.0034,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,6,6048,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,6,6048,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,6,6048,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,6,6048,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,6,6048,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,7,6049,0a_Random,0.0,0.0,0.0,0.0068,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,7,6049,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,7,6049,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,7,6049,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,7,6049,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,7,6049,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,8,6050,0a_Random,0.2,0.0068,0.0131,0.0236,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,8,6050,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,8,6050,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,8,6050,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,8,6050,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,8,6050,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,9,6051,0a_Random,0.0,0.0,0.0,0.027,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,9,6051,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,9,6051,1_Baseline,0.4,0.0135,0.0261,0.0473,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,9,6051,2_Tier1,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,9,6051,3_Tier2_Old,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,296,onboarding_only,0,9,6051,3_Tier2_New,0.4,0.0135,0.0261,0.0541,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,0,6142,0a_Random,0.1,0.0034,0.0066,0.0034,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,0,6142,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,0,6142,1_Baseline,0.3,0.0102,0.0197,0.0407,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,0,6142,2_Tier1,0.3,0.0102,0.0197,0.0339,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,0,6142,3_Tier2_Old,0.2,0.0068,0.0131,0.0339,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,0,6142,3_Tier2_New,0.2,0.0068,0.0131,0.0339,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,1,6143,0a_Random,0.1,0.0034,0.0066,0.0169,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,1,6143,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,1,6143,1_Baseline,0.2,0.0068,0.0131,0.0441,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,1,6143,2_Tier1,0.1,0.0034,0.0066,0.0678,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,1,6143,3_Tier2_Old,0.1,0.0034,0.0066,0.0678,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,1,6143,3_Tier2_New,0.1,0.0034,0.0066,0.0678,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,2,6144,0a_Random,0.1,0.0034,0.0066,0.0136,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,2,6144,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,2,6144,1_Baseline,0.2,0.0068,0.0131,0.0169,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,2,6144,2_Tier1,0.1,0.0034,0.0066,0.0169,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,2,6144,3_Tier2_Old,0.1,0.0034,0.0066,0.0169,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,2,6144,3_Tier2_New,0.2,0.0068,0.0131,0.0169,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,3,6145,0a_Random,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,3,6145,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,3,6145,1_Baseline,0.2,0.0068,0.0131,0.0305,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,3,6145,2_Tier1,0.3,0.0102,0.0197,0.0373,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,3,6145,3_Tier2_Old,0.3,0.0102,0.0197,0.0373,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,3,6145,3_Tier2_New,0.3,0.0102,0.0197,0.0373,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,4,6146,0a_Random,0.2,0.0068,0.0131,0.0136,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,4,6146,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,4,6146,1_Baseline,0.5,0.0169,0.0328,0.0746,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,4,6146,2_Tier1,0.4,0.0136,0.0262,0.0746,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,4,6146,3_Tier2_Old,0.5,0.0169,0.0328,0.0746,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,4,6146,3_Tier2_New,0.5,0.0169,0.0328,0.0746,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,5,6147,0a_Random,0.2,0.0068,0.0131,0.0237,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,5,6147,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,5,6147,1_Baseline,0.3,0.0102,0.0197,0.0542,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,5,6147,2_Tier1,0.2,0.0068,0.0131,0.0576,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,5,6147,3_Tier2_Old,0.2,0.0068,0.0131,0.0576,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,5,6147,3_Tier2_New,0.2,0.0068,0.0131,0.0576,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,6,6148,0a_Random,0.0,0.0,0.0,0.0102,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,6,6148,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,6,6148,1_Baseline,0.6,0.0203,0.0393,0.061,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,6,6148,2_Tier1,0.7,0.0237,0.0459,0.061,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,6,6148,3_Tier2_Old,0.7,0.0237,0.0459,0.061,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,6,6148,3_Tier2_New,0.6,0.0203,0.0393,0.061,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,7,6149,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,7,6149,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,7,6149,1_Baseline,0.4,0.0136,0.0262,0.0542,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,7,6149,2_Tier1,0.4,0.0136,0.0262,0.0576,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,7,6149,3_Tier2_Old,0.4,0.0136,0.0262,0.0576,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,7,6149,3_Tier2_New,0.4,0.0136,0.0262,0.0576,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,8,6150,0a_Random,0.0,0.0,0.0,0.0102,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,8,6150,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,8,6150,1_Baseline,0.3,0.0102,0.0197,0.0475,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,8,6150,2_Tier1,0.4,0.0136,0.0262,0.0542,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,8,6150,3_Tier2_Old,0.4,0.0136,0.0262,0.0542,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,8,6150,3_Tier2_New,0.5,0.0169,0.0328,0.0542,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,9,6151,0a_Random,0.1,0.0034,0.0066,0.0068,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,9,6151,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,9,6151,1_Baseline,0.2,0.0068,0.0131,0.0339,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,9,6151,2_Tier1,0.2,0.0068,0.0131,0.0373,1.0,0.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,9,6151,3_Tier2_Old,0.2,0.0068,0.0131,0.0373,1.0,1.0
-P7,World / Non-English Cinema,True,296,295,interactions_m1,1,9,6151,3_Tier2_New,0.2,0.0068,0.0131,0.0373,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,0,6242,0a_Random,0.1,0.0034,0.0066,0.0034,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,0,6242,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,0,6242,1_Baseline,0.2,0.0068,0.0132,0.0408,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,0,6242,2_Tier1,0.2,0.0068,0.0132,0.051,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,0,6242,3_Tier2_Old,0.1,0.0034,0.0066,0.051,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,0,6242,3_Tier2_New,0.2,0.0068,0.0132,0.051,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,1,6243,0a_Random,0.0,0.0,0.0,0.0102,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,1,6243,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,1,6243,1_Baseline,0.5,0.017,0.0329,0.0442,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,1,6243,2_Tier1,0.4,0.0136,0.0263,0.0476,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,1,6243,3_Tier2_Old,0.4,0.0136,0.0263,0.0476,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,1,6243,3_Tier2_New,0.4,0.0136,0.0263,0.0476,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,2,6244,0a_Random,0.1,0.0034,0.0066,0.0102,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,2,6244,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,2,6244,1_Baseline,0.2,0.0068,0.0132,0.0374,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,2,6244,2_Tier1,0.4,0.0136,0.0263,0.0374,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,2,6244,3_Tier2_Old,0.2,0.0068,0.0132,0.0374,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,2,6244,3_Tier2_New,0.4,0.0136,0.0263,0.0374,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,3,6245,0a_Random,0.1,0.0034,0.0066,0.0136,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,3,6245,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,3,6245,1_Baseline,0.1,0.0034,0.0066,0.0204,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,3,6245,2_Tier1,0.1,0.0034,0.0066,0.0204,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,3,6245,3_Tier2_Old,0.1,0.0034,0.0066,0.0204,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,3,6245,3_Tier2_New,0.2,0.0068,0.0132,0.0204,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,4,6246,0a_Random,0.0,0.0,0.0,0.017,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,4,6246,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,4,6246,1_Baseline,0.4,0.0136,0.0263,0.0408,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,4,6246,2_Tier1,0.5,0.017,0.0329,0.0442,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,4,6246,3_Tier2_Old,0.4,0.0136,0.0263,0.0442,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,4,6246,3_Tier2_New,0.5,0.017,0.0329,0.0442,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,5,6247,0a_Random,0.1,0.0034,0.0066,0.0068,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,5,6247,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,5,6247,1_Baseline,0.1,0.0034,0.0066,0.0204,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,5,6247,2_Tier1,0.2,0.0068,0.0132,0.0306,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,5,6247,3_Tier2_Old,0.2,0.0068,0.0132,0.0306,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,5,6247,3_Tier2_New,0.2,0.0068,0.0132,0.0306,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,6,6248,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,6,6248,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,6,6248,1_Baseline,0.3,0.0102,0.0197,0.0442,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,6,6248,2_Tier1,0.5,0.017,0.0329,0.0578,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,6,6248,3_Tier2_Old,0.3,0.0102,0.0197,0.0578,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,6,6248,3_Tier2_New,0.4,0.0136,0.0263,0.0578,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,7,6249,0a_Random,0.1,0.0034,0.0066,0.017,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,7,6249,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,7,6249,1_Baseline,0.3,0.0102,0.0197,0.034,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,7,6249,2_Tier1,0.3,0.0102,0.0197,0.034,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,7,6249,3_Tier2_Old,0.3,0.0102,0.0197,0.034,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,7,6249,3_Tier2_New,0.2,0.0068,0.0132,0.034,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,8,6250,0a_Random,0.1,0.0034,0.0066,0.0272,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,8,6250,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,8,6250,1_Baseline,0.6,0.0204,0.0395,0.0612,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,8,6250,2_Tier1,0.4,0.0136,0.0263,0.0646,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,8,6250,3_Tier2_Old,0.4,0.0136,0.0263,0.0646,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,8,6250,3_Tier2_New,0.5,0.017,0.0329,0.0646,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,9,6251,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,9,6251,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,9,6251,1_Baseline,0.5,0.017,0.0329,0.0476,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,9,6251,2_Tier1,0.4,0.0136,0.0263,0.0578,1.0,0.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,9,6251,3_Tier2_Old,0.4,0.0136,0.0263,0.0578,1.0,1.0
-P7,World / Non-English Cinema,True,296,294,interactions_m3,3,9,6251,3_Tier2_New,0.4,0.0136,0.0263,0.0578,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,0,6342,0a_Random,0.1,0.0034,0.0066,0.0103,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,0,6342,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,0,6342,1_Baseline,0.1,0.0034,0.0066,0.0514,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,0,6342,2_Tier1,0.2,0.0068,0.0132,0.0548,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,0,6342,3_Tier2_Old,0.2,0.0068,0.0132,0.0548,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,0,6342,3_Tier2_New,0.1,0.0034,0.0066,0.0548,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,1,6343,0a_Random,0.0,0.0,0.0,0.0103,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,1,6343,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,1,6343,1_Baseline,0.4,0.0137,0.0265,0.0514,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,1,6343,2_Tier1,0.4,0.0137,0.0265,0.0582,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,1,6343,3_Tier2_Old,0.4,0.0137,0.0265,0.0582,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,1,6343,3_Tier2_New,0.4,0.0137,0.0265,0.0582,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,2,6344,0a_Random,0.1,0.0034,0.0066,0.0103,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,2,6344,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,2,6344,1_Baseline,0.4,0.0137,0.0265,0.0342,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,2,6344,2_Tier1,0.5,0.0171,0.0331,0.0308,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,2,6344,3_Tier2_Old,0.5,0.0171,0.0331,0.0308,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,2,6344,3_Tier2_New,0.4,0.0137,0.0265,0.0308,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,3,6345,0a_Random,0.0,0.0,0.0,0.0068,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,3,6345,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,3,6345,1_Baseline,0.0,0.0,0.0,0.0308,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,3,6345,2_Tier1,0.0,0.0,0.0,0.0342,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,3,6345,3_Tier2_Old,0.0,0.0,0.0,0.0342,0.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,3,6345,3_Tier2_New,0.0,0.0,0.0,0.0342,0.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,4,6346,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,4,6346,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,4,6346,1_Baseline,0.0,0.0,0.0,0.0308,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,4,6346,2_Tier1,0.1,0.0034,0.0066,0.0308,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,4,6346,3_Tier2_Old,0.1,0.0034,0.0066,0.0308,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,4,6346,3_Tier2_New,0.3,0.0103,0.0199,0.0308,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,5,6347,0a_Random,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,5,6347,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,5,6347,1_Baseline,0.1,0.0034,0.0066,0.0548,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,5,6347,2_Tier1,0.1,0.0034,0.0066,0.0616,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,5,6347,3_Tier2_Old,0.1,0.0034,0.0066,0.0616,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,5,6347,3_Tier2_New,0.1,0.0034,0.0066,0.0616,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,6,6348,0a_Random,0.0,0.0,0.0,0.0171,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,6,6348,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,6,6348,1_Baseline,0.2,0.0068,0.0132,0.0411,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,6,6348,2_Tier1,0.4,0.0137,0.0265,0.0411,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,6,6348,3_Tier2_Old,0.4,0.0137,0.0265,0.0411,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,6,6348,3_Tier2_New,0.3,0.0103,0.0199,0.0411,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,7,6349,0a_Random,0.0,0.0,0.0,0.0171,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,7,6349,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,7,6349,1_Baseline,0.4,0.0137,0.0265,0.0445,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,7,6349,2_Tier1,0.4,0.0137,0.0265,0.0548,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,7,6349,3_Tier2_Old,0.4,0.0137,0.0265,0.0548,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,7,6349,3_Tier2_New,0.4,0.0137,0.0265,0.0548,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,8,6350,0a_Random,0.0,0.0,0.0,0.0103,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,8,6350,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,8,6350,1_Baseline,0.1,0.0034,0.0066,0.0308,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,8,6350,2_Tier1,0.1,0.0034,0.0066,0.0274,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,8,6350,3_Tier2_Old,0.1,0.0034,0.0066,0.0274,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,8,6350,3_Tier2_New,0.1,0.0034,0.0066,0.0274,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,9,6351,0a_Random,0.3,0.0103,0.0199,0.0171,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,9,6351,0b_Popular,0.0,0.0,0.0,0.0034,0.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,9,6351,1_Baseline,0.6,0.0205,0.0397,0.0479,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,9,6351,2_Tier1,0.5,0.0171,0.0331,0.0548,1.0,0.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,9,6351,3_Tier2_Old,0.5,0.0171,0.0331,0.0548,1.0,1.0
-P7,World / Non-English Cinema,True,296,292,interactions_m5,5,9,6351,3_Tier2_New,0.4,0.0137,0.0265,0.0548,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,0,6442,0a_Random,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,0,6442,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,0,6442,1_Baseline,0.3,0.0104,0.0201,0.0486,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,0,6442,2_Tier1,0.4,0.0139,0.0268,0.0521,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,0,6442,3_Tier2_Old,0.4,0.0139,0.0268,0.0521,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,0,6442,3_Tier2_New,0.4,0.0139,0.0268,0.0521,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,1,6443,0a_Random,0.0,0.0,0.0,0.0069,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,1,6443,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,1,6443,1_Baseline,0.2,0.0069,0.0134,0.0417,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,1,6443,2_Tier1,0.1,0.0035,0.0067,0.0417,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,1,6443,3_Tier2_Old,0.1,0.0035,0.0067,0.0417,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,1,6443,3_Tier2_New,0.1,0.0035,0.0067,0.0417,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,2,6444,0a_Random,0.1,0.0035,0.0067,0.0174,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,2,6444,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,2,6444,1_Baseline,0.5,0.0174,0.0336,0.0451,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,2,6444,2_Tier1,0.6,0.0208,0.0403,0.0521,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,2,6444,3_Tier2_Old,0.6,0.0208,0.0403,0.0521,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,2,6444,3_Tier2_New,0.6,0.0208,0.0403,0.0521,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,3,6445,0a_Random,0.0,0.0,0.0,0.0139,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,3,6445,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,3,6445,1_Baseline,0.3,0.0104,0.0201,0.0486,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,3,6445,2_Tier1,0.4,0.0139,0.0268,0.0556,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,3,6445,3_Tier2_Old,0.4,0.0139,0.0268,0.0556,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,3,6445,3_Tier2_New,0.3,0.0104,0.0201,0.0556,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,4,6446,0a_Random,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,4,6446,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,4,6446,1_Baseline,0.4,0.0139,0.0268,0.059,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,4,6446,2_Tier1,0.5,0.0174,0.0336,0.059,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,4,6446,3_Tier2_Old,0.5,0.0174,0.0336,0.059,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,4,6446,3_Tier2_New,0.5,0.0174,0.0336,0.059,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,5,6447,0a_Random,0.1,0.0035,0.0067,0.0069,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,5,6447,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,5,6447,1_Baseline,0.2,0.0069,0.0134,0.0417,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,5,6447,2_Tier1,0.3,0.0104,0.0201,0.0451,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,5,6447,3_Tier2_Old,0.3,0.0104,0.0201,0.0451,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,5,6447,3_Tier2_New,0.3,0.0104,0.0201,0.0451,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,6,6448,0a_Random,0.0,0.0,0.0,0.0104,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,6,6448,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,6,6448,1_Baseline,0.6,0.0208,0.0403,0.0556,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,6,6448,2_Tier1,0.7,0.0243,0.047,0.0625,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,6,6448,3_Tier2_Old,0.7,0.0243,0.047,0.0625,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,6,6448,3_Tier2_New,0.5,0.0174,0.0336,0.0625,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,7,6449,0a_Random,0.1,0.0035,0.0067,0.0104,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,7,6449,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,7,6449,1_Baseline,0.3,0.0104,0.0201,0.0486,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,7,6449,2_Tier1,0.5,0.0174,0.0336,0.0486,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,7,6449,3_Tier2_Old,0.5,0.0174,0.0336,0.0486,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,7,6449,3_Tier2_New,0.4,0.0139,0.0268,0.0486,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,8,6450,0a_Random,0.0,0.0,0.0,0.0104,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,8,6450,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,8,6450,1_Baseline,0.1,0.0035,0.0067,0.0278,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,8,6450,2_Tier1,0.1,0.0035,0.0067,0.0278,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,8,6450,3_Tier2_Old,0.1,0.0035,0.0067,0.0278,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,8,6450,3_Tier2_New,0.2,0.0069,0.0134,0.0278,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,9,6451,0a_Random,0.0,0.0,0.0,0.0069,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,9,6451,0b_Popular,0.0,0.0,0.0,0.0035,0.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,9,6451,1_Baseline,0.7,0.0243,0.047,0.0382,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,9,6451,2_Tier1,0.7,0.0243,0.047,0.0382,1.0,0.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,9,6451,3_Tier2_Old,0.7,0.0243,0.047,0.0382,1.0,1.0
-P7,World / Non-English Cinema,True,296,288,interactions_m10,10,9,6451,3_Tier2_New,0.8,0.0278,0.0537,0.0382,1.0,1.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,0,7042,0a_Random,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,0,7042,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,0,7042,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,0,7042,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,0,7042,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,0,7042,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,1,7043,0a_Random,0.1,0.0069,0.0129,0.0207,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,1,7043,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,1,7043,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,1,7043,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,1,7043,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,1,7043,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,2,7044,0a_Random,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,2,7044,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,2,7044,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,2,7044,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,2,7044,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,2,7044,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,3,7045,0a_Random,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,3,7045,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,3,7045,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,3,7045,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,3,7045,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,3,7045,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,4,7046,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,4,7046,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,4,7046,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,4,7046,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,4,7046,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,4,7046,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,5,7047,0a_Random,0.1,0.0069,0.0129,0.0345,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,5,7047,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,5,7047,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,5,7047,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,5,7047,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,5,7047,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,6,7048,0a_Random,0.1,0.0069,0.0129,0.0138,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,6,7048,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,6,7048,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,6,7048,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,6,7048,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,6,7048,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,7,7049,0a_Random,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,7,7049,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,7,7049,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,7,7049,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,7,7049,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,7,7049,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,8,7050,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,8,7050,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,8,7050,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,8,7050,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,8,7050,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,8,7050,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,9,7051,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,9,7051,0b_Popular,0.1,0.0069,0.0129,0.0483,1.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,9,7051,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,9,7051,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,9,7051,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,145,onboarding_only,0,9,7051,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,0,7142,0a_Random,0.0,0.0,0.0,0.0208,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,0,7142,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,0,7142,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,0,7142,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,0,7142,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,0,7142,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,1,7143,0a_Random,0.1,0.0069,0.013,0.0208,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,1,7143,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,1,7143,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,1,7143,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,1,7143,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,1,7143,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,2,7144,0a_Random,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,2,7144,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,2,7144,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,2,7144,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,2,7144,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,2,7144,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,3,7145,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,3,7145,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,3,7145,1_Baseline,0.0,0.0,0.0,0.0139,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,3,7145,2_Tier1,0.1,0.0069,0.013,0.0208,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,3,7145,3_Tier2_Old,0.1,0.0069,0.013,0.0208,1.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,3,7145,3_Tier2_New,0.1,0.0069,0.013,0.0208,1.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,4,7146,0a_Random,0.3,0.0208,0.039,0.0208,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,4,7146,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,4,7146,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,4,7146,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,4,7146,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,4,7146,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,5,7147,0a_Random,0.2,0.0139,0.026,0.0139,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,5,7147,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,5,7147,1_Baseline,0.1,0.0069,0.013,0.0139,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,5,7147,2_Tier1,0.1,0.0069,0.013,0.0208,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,5,7147,3_Tier2_Old,0.0,0.0,0.0,0.0208,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,5,7147,3_Tier2_New,0.1,0.0069,0.013,0.0208,1.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,6,7148,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,6,7148,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,6,7148,1_Baseline,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,6,7148,2_Tier1,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,6,7148,3_Tier2_Old,0.0,0.0,0.0,0.0069,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,6,7148,3_Tier2_New,0.0,0.0,0.0,0.0069,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,7,7149,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,7,7149,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,7,7149,1_Baseline,0.2,0.0139,0.026,0.0278,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,7,7149,2_Tier1,0.2,0.0139,0.026,0.0417,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,7,7149,3_Tier2_Old,0.1,0.0069,0.013,0.0417,1.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,7,7149,3_Tier2_New,0.2,0.0139,0.026,0.0417,1.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,8,7150,0a_Random,0.1,0.0069,0.013,0.0069,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,8,7150,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,8,7150,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,8,7150,2_Tier1,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,8,7150,3_Tier2_Old,0.0,0.0,0.0,0.0069,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,8,7150,3_Tier2_New,0.0,0.0,0.0,0.0069,0.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,9,7151,0a_Random,0.2,0.0139,0.026,0.0139,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,9,7151,0b_Popular,0.1,0.0069,0.013,0.0486,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,9,7151,1_Baseline,0.0,0.0,0.0,0.0069,0.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,9,7151,2_Tier1,0.1,0.0069,0.013,0.0208,1.0,0.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,9,7151,3_Tier2_Old,0.1,0.0069,0.013,0.0208,1.0,1.0
-P8,Literary Adaptation Buff,True,146,144,interactions_m1,1,9,7151,3_Tier2_New,0.0,0.0,0.0,0.0208,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,0,7242,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,0,7242,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,0,7242,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,0,7242,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,0,7242,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,0,7242,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,1,7243,0a_Random,0.0,0.0,0.0,0.007,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,1,7243,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,1,7243,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,1,7243,2_Tier1,0.0,0.0,0.0,0.014,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,1,7243,3_Tier2_Old,0.0,0.0,0.0,0.014,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,1,7243,3_Tier2_New,0.0,0.0,0.0,0.014,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,2,7244,0a_Random,0.3,0.021,0.0392,0.021,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,2,7244,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,2,7244,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,2,7244,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,2,7244,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,2,7244,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,3,7245,0a_Random,0.0,0.0,0.0,0.021,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,3,7245,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,3,7245,1_Baseline,0.0,0.0,0.0,0.028,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,3,7245,2_Tier1,0.1,0.007,0.0131,0.035,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,3,7245,3_Tier2_Old,0.1,0.007,0.0131,0.035,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,3,7245,3_Tier2_New,0.2,0.014,0.0261,0.035,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,4,7246,0a_Random,0.0,0.0,0.0,0.014,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,4,7246,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,4,7246,1_Baseline,0.0,0.0,0.0,0.014,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,4,7246,2_Tier1,0.1,0.007,0.0131,0.014,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,4,7246,3_Tier2_Old,0.1,0.007,0.0131,0.014,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,4,7246,3_Tier2_New,0.1,0.007,0.0131,0.014,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,5,7247,0a_Random,0.0,0.0,0.0,0.007,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,5,7247,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,5,7247,1_Baseline,0.1,0.007,0.0131,0.021,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,5,7247,2_Tier1,0.1,0.007,0.0131,0.028,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,5,7247,3_Tier2_Old,0.1,0.007,0.0131,0.028,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,5,7247,3_Tier2_New,0.0,0.0,0.0,0.028,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,6,7248,0a_Random,0.0,0.0,0.0,0.007,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,6,7248,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,6,7248,1_Baseline,0.2,0.014,0.0261,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,6,7248,2_Tier1,0.2,0.014,0.0261,0.0559,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,6,7248,3_Tier2_Old,0.2,0.014,0.0261,0.0559,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,6,7248,3_Tier2_New,0.2,0.014,0.0261,0.0559,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,7,7249,0a_Random,0.0,0.0,0.0,0.014,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,7,7249,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,7,7249,1_Baseline,0.0,0.0,0.0,0.014,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,7,7249,2_Tier1,0.0,0.0,0.0,0.014,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,7,7249,3_Tier2_Old,0.0,0.0,0.0,0.014,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,7,7249,3_Tier2_New,0.0,0.0,0.0,0.014,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,8,7250,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,8,7250,0b_Popular,0.1,0.007,0.0131,0.049,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,8,7250,1_Baseline,0.2,0.014,0.0261,0.028,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,8,7250,2_Tier1,0.2,0.014,0.0261,0.028,1.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,8,7250,3_Tier2_Old,0.2,0.014,0.0261,0.028,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,8,7250,3_Tier2_New,0.2,0.014,0.0261,0.028,1.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,9,7251,0a_Random,0.0,0.0,0.0,0.021,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,9,7251,0b_Popular,0.0,0.0,0.0,0.042,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,9,7251,1_Baseline,0.0,0.0,0.0,0.007,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,9,7251,2_Tier1,0.0,0.0,0.0,0.007,0.0,0.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,9,7251,3_Tier2_Old,0.0,0.0,0.0,0.007,0.0,1.0
-P8,Literary Adaptation Buff,True,146,143,interactions_m3,3,9,7251,3_Tier2_New,0.1,0.007,0.0131,0.007,1.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,0,7342,0a_Random,0.2,0.0142,0.0265,0.0213,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,0,7342,0b_Popular,0.1,0.0071,0.0132,0.0426,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,0,7342,1_Baseline,0.2,0.0142,0.0265,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,0,7342,2_Tier1,0.3,0.0213,0.0397,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,0,7342,3_Tier2_Old,0.3,0.0213,0.0397,0.0496,1.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,0,7342,3_Tier2_New,0.3,0.0213,0.0397,0.0496,1.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,1,7343,0a_Random,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,1,7343,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,1,7343,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,1,7343,2_Tier1,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,1,7343,3_Tier2_Old,0.0,0.0,0.0,0.0071,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,1,7343,3_Tier2_New,0.0,0.0,0.0,0.0071,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,2,7344,0a_Random,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,2,7344,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,2,7344,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,2,7344,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,2,7344,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,2,7344,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,3,7345,0a_Random,0.1,0.0071,0.0132,0.0071,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,3,7345,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,3,7345,1_Baseline,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,3,7345,2_Tier1,0.0,0.0,0.0,0.0142,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,3,7345,3_Tier2_Old,0.0,0.0,0.0,0.0142,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,3,7345,3_Tier2_New,0.0,0.0,0.0,0.0142,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,4,7346,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,4,7346,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,4,7346,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,4,7346,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,4,7346,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,4,7346,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,5,7347,0a_Random,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,5,7347,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,5,7347,1_Baseline,0.0,0.0,0.0,0.0142,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,5,7347,2_Tier1,0.0,0.0,0.0,0.0213,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,5,7347,3_Tier2_Old,0.0,0.0,0.0,0.0213,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,5,7347,3_Tier2_New,0.0,0.0,0.0,0.0213,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,6,7348,0a_Random,0.0,0.0,0.0,0.0142,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,6,7348,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,6,7348,1_Baseline,0.0,0.0,0.0,0.0213,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,6,7348,2_Tier1,0.1,0.0071,0.0132,0.0213,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,6,7348,3_Tier2_Old,0.1,0.0071,0.0132,0.0213,1.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,6,7348,3_Tier2_New,0.1,0.0071,0.0132,0.0213,1.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,7,7349,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,7,7349,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,7,7349,1_Baseline,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,7,7349,2_Tier1,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,7,7349,3_Tier2_Old,0.0,0.0,0.0,0.0071,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,7,7349,3_Tier2_New,0.0,0.0,0.0,0.0071,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,8,7350,0a_Random,0.0,0.0,0.0,0.0142,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,8,7350,0b_Popular,0.1,0.0071,0.0132,0.0496,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,8,7350,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,8,7350,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,8,7350,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,8,7350,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,9,7351,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,9,7351,0b_Popular,0.1,0.0071,0.0132,0.0426,1.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,9,7351,1_Baseline,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,9,7351,2_Tier1,0.0,0.0,0.0,0.0071,0.0,0.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,9,7351,3_Tier2_Old,0.0,0.0,0.0,0.0071,0.0,1.0
-P8,Literary Adaptation Buff,True,146,141,interactions_m5,5,9,7351,3_Tier2_New,0.0,0.0,0.0,0.0071,0.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,0,7442,0a_Random,0.1,0.0073,0.0136,0.0146,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,0,7442,0b_Popular,0.1,0.0073,0.0136,0.0438,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,0,7442,1_Baseline,0.0,0.0,0.0,0.0073,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,0,7442,2_Tier1,0.0,0.0,0.0,0.0073,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,0,7442,3_Tier2_Old,0.0,0.0,0.0,0.0073,0.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,0,7442,3_Tier2_New,0.1,0.0073,0.0136,0.0073,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,1,7443,0a_Random,0.0,0.0,0.0,0.0073,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,1,7443,0b_Popular,0.1,0.0073,0.0136,0.0438,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,1,7443,1_Baseline,0.2,0.0146,0.0272,0.0365,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,1,7443,2_Tier1,0.2,0.0146,0.0272,0.0365,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,1,7443,3_Tier2_Old,0.2,0.0146,0.0272,0.0365,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,1,7443,3_Tier2_New,0.1,0.0073,0.0136,0.0365,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,2,7444,0a_Random,0.0,0.0,0.0,0.0073,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,2,7444,0b_Popular,0.1,0.0073,0.0136,0.0511,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,2,7444,1_Baseline,0.1,0.0073,0.0136,0.0073,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,2,7444,2_Tier1,0.1,0.0073,0.0136,0.0073,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,2,7444,3_Tier2_Old,0.1,0.0073,0.0136,0.0073,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,2,7444,3_Tier2_New,0.1,0.0073,0.0136,0.0073,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,3,7445,0a_Random,0.1,0.0073,0.0136,0.0073,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,3,7445,0b_Popular,0.0,0.0,0.0,0.0365,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,3,7445,1_Baseline,0.0,0.0,0.0,0.0146,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,3,7445,2_Tier1,0.0,0.0,0.0,0.0146,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,3,7445,3_Tier2_Old,0.0,0.0,0.0,0.0146,0.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,3,7445,3_Tier2_New,0.1,0.0073,0.0136,0.0146,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,4,7446,0a_Random,0.0,0.0,0.0,0.0073,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,4,7446,0b_Popular,0.1,0.0073,0.0136,0.0511,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,4,7446,1_Baseline,0.1,0.0073,0.0136,0.0292,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,4,7446,2_Tier1,0.2,0.0146,0.0272,0.0292,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,4,7446,3_Tier2_Old,0.2,0.0146,0.0272,0.0292,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,4,7446,3_Tier2_New,0.2,0.0146,0.0272,0.0292,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,5,7447,0a_Random,0.0,0.0,0.0,0.0146,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,5,7447,0b_Popular,0.1,0.0073,0.0136,0.0438,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,5,7447,1_Baseline,0.2,0.0146,0.0272,0.0365,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,5,7447,2_Tier1,0.2,0.0146,0.0272,0.0365,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,5,7447,3_Tier2_Old,0.2,0.0146,0.0272,0.0365,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,5,7447,3_Tier2_New,0.2,0.0146,0.0272,0.0365,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,6,7448,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,6,7448,0b_Popular,0.1,0.0073,0.0136,0.0438,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,6,7448,1_Baseline,0.1,0.0073,0.0136,0.0073,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,6,7448,2_Tier1,0.1,0.0073,0.0136,0.0146,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,6,7448,3_Tier2_Old,0.1,0.0073,0.0136,0.0146,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,6,7448,3_Tier2_New,0.1,0.0073,0.0136,0.0146,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,7,7449,0a_Random,0.1,0.0073,0.0136,0.0073,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,7,7449,0b_Popular,0.1,0.0073,0.0136,0.0511,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,7,7449,1_Baseline,0.0,0.0,0.0,0.0146,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,7,7449,2_Tier1,0.1,0.0073,0.0136,0.0146,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,7,7449,3_Tier2_Old,0.1,0.0073,0.0136,0.0146,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,7,7449,3_Tier2_New,0.1,0.0073,0.0136,0.0146,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,8,7450,0a_Random,0.0,0.0,0.0,0.0146,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,8,7450,0b_Popular,0.1,0.0073,0.0136,0.0438,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,8,7450,1_Baseline,0.0,0.0,0.0,0.0073,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,8,7450,2_Tier1,0.0,0.0,0.0,0.0146,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,8,7450,3_Tier2_Old,0.0,0.0,0.0,0.0146,0.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,8,7450,3_Tier2_New,0.0,0.0,0.0,0.0146,0.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,9,7451,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,9,7451,0b_Popular,0.1,0.0073,0.0136,0.0438,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,9,7451,1_Baseline,0.1,0.0073,0.0136,0.0292,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,9,7451,2_Tier1,0.2,0.0146,0.0272,0.0292,1.0,0.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,9,7451,3_Tier2_Old,0.2,0.0146,0.0272,0.0292,1.0,1.0
-P8,Literary Adaptation Buff,True,146,137,interactions_m10,10,9,7451,3_Tier2_New,0.0,0.0,0.0,0.0292,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,0,6042,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,0,6042,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,0,6042,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,0,6042,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,0,6042,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,0,6042,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,1,6043,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,1,6043,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,1,6043,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,1,6043,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,1,6043,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,1,6043,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,2,6044,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,2,6044,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,2,6044,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,2,6044,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,2,6044,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,2,6044,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,3,6045,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,3,6045,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,3,6045,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,3,6045,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,3,6045,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,3,6045,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,4,6046,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,4,6046,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,4,6046,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,4,6046,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,4,6046,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,4,6046,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,5,6047,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,5,6047,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,5,6047,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,5,6047,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,5,6047,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,5,6047,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,6,6048,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,6,6048,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,6,6048,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,6,6048,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,6,6048,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,6,6048,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,7,6049,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,7,6049,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,7,6049,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,7,6049,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,7,6049,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,7,6049,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,8,6050,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,8,6050,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,8,6050,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,8,6050,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,8,6050,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,8,6050,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,9,6051,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,9,6051,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,9,6051,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,9,6051,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,9,6051,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,onboarding_only,0,9,6051,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,0,6142,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,0,6142,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,0,6142,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,0,6142,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,0,6142,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,0,6142,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,1,6143,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,1,6143,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,1,6143,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,1,6143,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,1,6143,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,1,6143,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,2,6144,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,2,6144,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,2,6144,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,2,6144,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,2,6144,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,2,6144,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,3,6145,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,3,6145,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,3,6145,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,3,6145,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,3,6145,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,3,6145,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,4,6146,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,4,6146,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,4,6146,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,4,6146,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,4,6146,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,4,6146,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,5,6147,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,5,6147,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,5,6147,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,5,6147,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,5,6147,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,5,6147,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,6,6148,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,6,6148,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,6,6148,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,6,6148,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,6,6148,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,6,6148,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,7,6149,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,7,6149,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,7,6149,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,7,6149,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,7,6149,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,7,6149,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,8,6150,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,8,6150,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,8,6150,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,8,6150,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,8,6150,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,8,6150,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,9,6151,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,9,6151,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,9,6151,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,9,6151,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,9,6151,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m1,1,9,6151,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,0,6242,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,0,6242,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,0,6242,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,0,6242,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,0,6242,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,0,6242,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,1,6243,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,1,6243,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,1,6243,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,1,6243,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,1,6243,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,1,6243,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,2,6244,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,2,6244,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,2,6244,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,2,6244,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,2,6244,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,2,6244,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,3,6245,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,3,6245,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,3,6245,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,3,6245,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,3,6245,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,3,6245,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,4,6246,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,4,6246,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,4,6246,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,4,6246,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,4,6246,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,4,6246,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,5,6247,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,5,6247,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,5,6247,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,5,6247,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,5,6247,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,5,6247,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,6,6248,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,6,6248,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,6,6248,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,6,6248,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,6,6248,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,6,6248,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,7,6249,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,7,6249,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,7,6249,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,7,6249,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,7,6249,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,7,6249,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,8,6250,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,8,6250,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,8,6250,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,8,6250,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,8,6250,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,8,6250,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,9,6251,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,9,6251,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,9,6251,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,9,6251,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,9,6251,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m3,3,9,6251,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,0,6342,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,0,6342,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,0,6342,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,0,6342,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,0,6342,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,0,6342,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,1,6343,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,1,6343,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,1,6343,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,1,6343,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,1,6343,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,1,6343,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,2,6344,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,2,6344,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,2,6344,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,2,6344,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,2,6344,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,2,6344,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,3,6345,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,3,6345,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,3,6345,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,3,6345,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,3,6345,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,3,6345,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,4,6346,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,4,6346,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,4,6346,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,4,6346,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,4,6346,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,4,6346,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,5,6347,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,5,6347,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,5,6347,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,5,6347,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,5,6347,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,5,6347,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,6,6348,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,6,6348,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,6,6348,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,6,6348,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,6,6348,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,6,6348,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,7,6349,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,7,6349,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,7,6349,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,7,6349,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,7,6349,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,7,6349,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,8,6350,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,8,6350,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,8,6350,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,8,6350,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,8,6350,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,8,6350,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,9,6351,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,9,6351,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,9,6351,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,9,6351,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,9,6351,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m5,5,9,6351,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,0,6442,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,0,6442,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,0,6442,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,0,6442,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,0,6442,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,0,6442,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,1,6443,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,1,6443,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,1,6443,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,1,6443,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,1,6443,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,1,6443,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,2,6444,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,2,6444,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,2,6444,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,2,6444,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,2,6444,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,2,6444,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,3,6445,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,3,6445,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,3,6445,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,3,6445,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,3,6445,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,3,6445,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,4,6446,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,4,6446,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,4,6446,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,4,6446,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,4,6446,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,4,6446,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,5,6447,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,5,6447,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,5,6447,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,5,6447,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,5,6447,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,5,6447,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,6,6448,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,6,6448,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,6,6448,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,6,6448,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,6,6448,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,6,6448,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,7,6449,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,7,6449,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,7,6449,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,7,6449,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,7,6449,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,7,6449,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,8,6450,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,8,6450,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,8,6450,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,8,6450,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,8,6450,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,8,6450,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,9,6451,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,9,6451,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,9,6451,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,9,6451,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,9,6451,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P7,World / Non-English Cinema,True,0,0,interactions_m10,10,9,6451,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,0,7042,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,0,7042,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,0,7042,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,0,7042,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,0,7042,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,0,7042,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,1,7043,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,1,7043,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,1,7043,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,1,7043,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,1,7043,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,1,7043,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,2,7044,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,2,7044,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,2,7044,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,2,7044,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,2,7044,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,2,7044,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,3,7045,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,3,7045,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,3,7045,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,3,7045,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,3,7045,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,3,7045,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,4,7046,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,4,7046,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,4,7046,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,4,7046,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,4,7046,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,4,7046,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,5,7047,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,5,7047,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,5,7047,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,5,7047,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,5,7047,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,5,7047,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,6,7048,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,6,7048,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,6,7048,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,6,7048,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,6,7048,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,6,7048,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,7,7049,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,7,7049,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,7,7049,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,7,7049,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,7,7049,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,7,7049,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,8,7050,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,8,7050,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,8,7050,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,8,7050,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,8,7050,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,8,7050,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,9,7051,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,9,7051,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,9,7051,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,9,7051,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,9,7051,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,onboarding_only,0,9,7051,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,0,7142,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,0,7142,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,0,7142,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,0,7142,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,0,7142,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,0,7142,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,1,7143,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,1,7143,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,1,7143,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,1,7143,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,1,7143,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,1,7143,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,2,7144,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,2,7144,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,2,7144,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,2,7144,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,2,7144,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,2,7144,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,3,7145,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,3,7145,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,3,7145,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,3,7145,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,3,7145,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,3,7145,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,4,7146,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,4,7146,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,4,7146,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,4,7146,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,4,7146,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,4,7146,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,5,7147,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,5,7147,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,5,7147,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,5,7147,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,5,7147,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,5,7147,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,6,7148,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,6,7148,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,6,7148,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,6,7148,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,6,7148,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,6,7148,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,7,7149,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,7,7149,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,7,7149,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,7,7149,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,7,7149,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,7,7149,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,8,7150,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,8,7150,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,8,7150,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,8,7150,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,8,7150,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,8,7150,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,9,7151,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,9,7151,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,9,7151,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,9,7151,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,9,7151,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m1,1,9,7151,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,0,7242,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,0,7242,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,0,7242,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,0,7242,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,0,7242,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,0,7242,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,1,7243,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,1,7243,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,1,7243,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,1,7243,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,1,7243,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,1,7243,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,2,7244,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,2,7244,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,2,7244,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,2,7244,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,2,7244,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,2,7244,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,3,7245,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,3,7245,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,3,7245,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,3,7245,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,3,7245,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,3,7245,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,4,7246,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,4,7246,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,4,7246,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,4,7246,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,4,7246,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,4,7246,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,5,7247,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,5,7247,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,5,7247,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,5,7247,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,5,7247,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,5,7247,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,6,7248,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,6,7248,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,6,7248,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,6,7248,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,6,7248,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,6,7248,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,7,7249,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,7,7249,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,7,7249,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,7,7249,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,7,7249,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,7,7249,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,8,7250,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,8,7250,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,8,7250,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,8,7250,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,8,7250,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,8,7250,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,9,7251,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,9,7251,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,9,7251,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,9,7251,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,9,7251,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m3,3,9,7251,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,0,7342,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,0,7342,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,0,7342,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,0,7342,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,0,7342,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,0,7342,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,1,7343,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,1,7343,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,1,7343,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,1,7343,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,1,7343,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,1,7343,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,2,7344,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,2,7344,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,2,7344,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,2,7344,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,2,7344,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,2,7344,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,3,7345,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,3,7345,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,3,7345,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,3,7345,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,3,7345,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,3,7345,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,4,7346,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,4,7346,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,4,7346,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,4,7346,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,4,7346,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,4,7346,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,5,7347,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,5,7347,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,5,7347,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,5,7347,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,5,7347,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,5,7347,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,6,7348,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,6,7348,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,6,7348,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,6,7348,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,6,7348,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,6,7348,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,7,7349,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,7,7349,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,7,7349,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,7,7349,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,7,7349,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,7,7349,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,8,7350,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,8,7350,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,8,7350,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,8,7350,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,8,7350,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,8,7350,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,9,7351,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,9,7351,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,9,7351,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,9,7351,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,9,7351,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m5,5,9,7351,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,0,7442,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,0,7442,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,0,7442,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,0,7442,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,0,7442,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,0,7442,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,1,7443,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,1,7443,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,1,7443,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,1,7443,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,1,7443,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,1,7443,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,2,7444,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,2,7444,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,2,7444,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,2,7444,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,2,7444,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,2,7444,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,3,7445,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,3,7445,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,3,7445,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,3,7445,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,3,7445,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,3,7445,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,4,7446,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,4,7446,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,4,7446,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,4,7446,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,4,7446,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,4,7446,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,5,7447,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,5,7447,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,5,7447,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,5,7447,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,5,7447,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,5,7447,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,6,7448,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,6,7448,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,6,7448,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,6,7448,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,6,7448,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,6,7448,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,7,7449,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,7,7449,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,7,7449,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,7,7449,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,7,7449,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,7,7449,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,8,7450,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,8,7450,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,8,7450,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,8,7450,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,8,7450,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,8,7450,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,9,7451,0a_Random,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,9,7451,0b_Popular,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,9,7451,1_Baseline,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,9,7451,2_Tier1,0.0,0.0,0.0,0.0,0.0,0.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,9,7451,3_Tier2_Old,0.0,0.0,0.0,0.0,0.0,1.0
+P8,Literary Adaptation Buff,True,0,0,interactions_m10,10,9,7451,3_Tier2_New,0.0,0.0,0.0,0.0,0.0,1.0
