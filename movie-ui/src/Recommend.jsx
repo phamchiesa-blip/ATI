@@ -1,11 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Play } from "lucide-react";
-import { api } from "./api";
-import { CardButtons, GRID, HoverPreview, Notice, Overview, PosterLink, PosterTile, Rating, RateButtons, TrailerContext, useHoverPreview } from "./ui";
-import { useLang } from "./i18n";
+import { api } from "./services/apiClient";
+import { GRID } from "./utils/theme";
+import { HoverPreview, Notice } from "./components/MovieCard";
+import { CardButtons, Overview, PosterLink, PosterTile, Rating, RateButtons } from "./components/Poster";
+import { useHoverPreview } from "./hooks/useHoverPreview";
+import { TrailerContext, useLang } from "./context/AppContexts";
+import { genreLabel } from "./utils/i18nHelpers";
 
-const reasonText = (m, coldStart, tr, isHero = false) =>
+const reasonText = (m, coldStart, tr, lang = "vi", isHero = false) =>
   (coldStart || m.cold_start)
     ? (isHero
         ? tr(
@@ -16,7 +20,10 @@ const reasonText = (m, coldStart, tr, isHero = false) =>
     : m.match_percent == null
       ? tr("Được nhiều người yêu thích", "Audience favorite")
       : m.reasons?.length
-        ? tr(`Vì bạn thích ${m.reasons.join(", ")}`, `Because you like ${m.reasons.join(", ")}`)
+        ? tr(
+            `Vì bạn thích ${m.reasons.map((r) => genreLabel(r, "vi")).join(", ")}`,
+            `Because you like ${m.reasons.map((r) => genreLabel(r, "en")).join(", ")}`
+          )
         : tr("Có nội dung gần với những phim bạn đã chọn", "Similar content to movies you selected");
 
 const PARTS = [
@@ -53,7 +60,7 @@ function Breakdown({ data, coldStart }) {
 function Hero({ movie, status, onRate, coldStart }) {
   const isCold = coldStart || Boolean(movie.cold_start);
   const openTrailer = useContext(TrailerContext);
-  const { tr } = useLang();
+  const { lang, tr } = useLang();
   return (
     <section className="grid items-center gap-8 rounded-3xl bg-white p-6 md:grid-cols-[280px_1fr] md:p-10">
       <PosterLink movie={movie} size="lg" showTitle={false} />
@@ -66,12 +73,12 @@ function Hero({ movie, status, onRate, coldStart }) {
         <div className="mt-3 flex flex-wrap gap-2">
           {movie.genres.map((g) => (
             <span key={g} className="rounded-full bg-paper px-3 py-1 text-sm font-medium">
-              {g}
+              {genreLabel(g, lang)}
             </span>
           ))}
         </div>
         <Overview movie={movie} className="mt-4 line-clamp-4 leading-relaxed text-mute" />
-        <p className="mt-4 text-sm font-medium">{reasonText(movie, isCold, tr, true)}</p>
+        <p className="mt-4 text-sm font-medium">{reasonText(movie, isCold, tr, lang, true)}</p>
 
         <div className="mt-5 flex flex-wrap items-start gap-x-10 gap-y-4">
           {!isCold && movie.match_percent != null ? (
@@ -110,7 +117,7 @@ function Hero({ movie, status, onRate, coldStart }) {
 function Ticket({ movie, min, max, status, onRate, coldStart }) {
   const isCold = coldStart || Boolean(movie.cold_start);
   const [why, setWhy] = useState(false);
-  const { tr } = useLang();
+  const { lang, tr } = useLang();
   const personal = !isCold && movie.match_percent != null;
   const width = max === min ? 100 : 35 + ((movie.match_percent - min) / (max - min)) * 65;
   const { ref, pos, show, hide } = useHoverPreview();
@@ -145,7 +152,7 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
             <Rating value={movie.vote_average} />
           </p>
         )}
-        <p className="mt-2 text-xs leading-snug text-mute">{reasonText(movie, isCold, tr, false)}</p>
+        <p className="mt-2 text-xs leading-snug text-mute">{reasonText(movie, isCold, tr, lang, false)}</p>
         {movie.breakdown && (
           <>
             <button

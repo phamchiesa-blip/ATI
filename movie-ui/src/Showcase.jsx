@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { api } from "./api";
-import { Poster } from "./ui";
+import { api } from "./services/apiClient";
+import { Poster } from "./components/Poster";
 
 // Dùng khi chưa tải được phim ngẫu nhiên từ máy chủ
 const FALLBACK = [

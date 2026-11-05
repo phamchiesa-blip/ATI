@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { ArrowLeft, Check, Circle, Eye, EyeOff } from "lucide-react";
-import { api, OFFLINE_MSG } from "./api";
-import { checkPassword, EMAIL_RE } from "./Passwordrules";
+import { api, OFFLINE_MSG } from "./services/apiClient";
+import { checkPassword, EMAIL_RE } from "./utils/passwordRules";
 import Showcase from "./Showcase";
-import { useLang } from "./i18n";
+import { useLang } from "./context/AppContexts";
 
 const inputCls =
   "mt-2 w-full rounded-xl bg-white px-4 py-3 ring-1 ring-ink/15 focus:ring-2 focus:ring-cobalt focus:outline-none";

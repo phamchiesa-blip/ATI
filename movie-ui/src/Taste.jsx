@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { ThumbsDown, ThumbsUp, X } from "lucide-react";
-import { api } from "./api";
-import { Notice, toneOf } from "./ui";
-import { useLang } from "./i18n";
+import { api } from "./services/apiClient";
+import { Notice } from "./components/MovieCard";
+import { toneOf } from "./utils/theme";
+import { useLang } from "./context/AppContexts";
+import { genreLabel } from "./utils/i18nHelpers";
 
 const top = (list, pick, n) => {
   const counts = {};
@@ -12,8 +14,9 @@ const top = (list, pick, n) => {
     .slice(0, n);
 };
 
-function Row({ m, onRemove, removeLabel }) {
+function Row({ m, onRemove, removeLabel, lang }) {
   const [bg] = toneOf(m.genres?.[0]);
+  const genreStr = m.genres?.slice(0, 2).map((g) => genreLabel(g, lang)).join(", ");
   return (
     <li className="group flex items-center gap-2 rounded-xl bg-white pr-2 hover:bg-ink/5">
       <a href={`#/movie/${m.movie_id}`} className="flex min-w-0 flex-1 items-center gap-3 p-3">
@@ -21,7 +24,7 @@ function Row({ m, onRemove, removeLabel }) {
         <span className="min-w-0 flex-1">
           <span className="block truncate font-semibold">{m.title}</span>
           <span className="block truncate text-xs text-mute">
-            {[m.release_year, m.genres?.slice(0, 2).join(", ")].filter(Boolean).join(" · ")}
+            {[m.release_year, genreStr].filter(Boolean).join(" · ")}
           </span>
         </span>
       </a>
@@ -42,7 +45,7 @@ function Row({ m, onRemove, removeLabel }) {
 export default function Taste({ rev, onBrowse, onUnrate }) {
   const [items, setItems] = useState(null);
   const [error, setError] = useState(false);
-  const { tr } = useLang();
+  const { lang, tr } = useLang();
 
   const remove = (m) => {
     setItems((list) => list.filter((x) => x.movie_id !== m.movie_id));
@@ -116,7 +119,7 @@ export default function Taste({ rev, onBrowse, onUnrate }) {
                     {stats.genres.map(([g, n]) => (
                       <li key={g}>
                         <div className="flex justify-between text-sm font-semibold">
-                          <span>{g}</span>
+                          <span>{genreLabel(g, lang)}</span>
                           <span className="text-mute">
                             {n} {tr("phim", "movies")}
                           </span>
@@ -169,13 +172,13 @@ export default function Taste({ rev, onBrowse, onUnrate }) {
                 <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold">
                   <ThumbsUp size={20} className="text-cobalt" /> {tr("Đã Thích", "Liked")}
                 </h2>
-                <ul className="mt-3 grid gap-2">{stats.likes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ thích", "Unlike")} />)}</ul>
+                <ul className="mt-3 grid gap-2">{stats.likes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ thích", "Unlike")} lang={lang} />)}</ul>
               </section>
               <section>
                 <h2 className="flex items-center gap-2 font-display text-2xl font-extrabold">
                   <ThumbsDown size={20} /> {tr("Không thích", "Disliked")}
                 </h2>
-                <ul className="mt-3 grid gap-2">{stats.dislikes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ không thích", "Remove dislike")} />)}</ul>
+                <ul className="mt-3 grid gap-2">{stats.dislikes.map((m) => <Row key={m.movie_id} m={m} onRemove={remove} removeLabel={tr("Bỏ không thích", "Remove dislike")} lang={lang} />)}</ul>
               </section>
             </div>
           </>

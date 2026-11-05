@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, Check } from "lucide-react";
-import { api, OFFLINE_MSG } from "./api";
-import { toneOf } from "./ui";
-import { useLang } from "./i18n";
+import { api, OFFLINE_MSG } from "./services/apiClient";
+import { toneOf } from "./utils/theme";
+import { useLang } from "./context/AppContexts";
+import { genreLabel } from "./utils/i18nHelpers";
 
 // Màn hình chọn thể loại yêu thích. Mở từ nút "Chọn thể loại" trên thanh đầu trang.
 export default function Onboarding({ onDone, onCancel }) {
@@ -10,7 +11,7 @@ export default function Onboarding({ onDone, onCancel }) {
   const [picked, setPicked] = useState([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const { tr } = useLang();
+  const { lang, tr } = useLang();
 
   useEffect(() => {
     api
@@ -76,7 +77,7 @@ export default function Onboarding({ onDone, onCancel }) {
               >
                 <span className="flex items-center gap-2">
                   {!on && <span className="size-3 rounded-full" style={{ background: bg }} aria-hidden />}
-                  {g}
+                  {genreLabel(g, lang)}
                 </span>
                 {on && <Check size={20} aria-hidden />}
               </button>

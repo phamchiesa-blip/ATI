@@ -1,8 +1,11 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
-import { api } from "./api";
-import { GRID, MovieCard, Notice, useDebounced } from "./ui";
-import { useLang } from "./i18n";
+import { api } from "./services/apiClient";
+import { GRID } from "./utils/theme";
+import { MovieCard, Notice } from "./components/MovieCard";
+import { useDebounced } from "./hooks/useDebounced";
+import { useLang } from "./context/AppContexts";
+import { genreLabel } from "./utils/i18nHelpers";
 
 const KEY = "gu-phim-browse";
 const DEFAULTS = {
@@ -281,7 +284,7 @@ export default function Browse({ rated, onRate }) {
 
   const yearEntry = YEARS.find((x) => x.id === f.years);
   const active = [
-    ...f.genres.map((g) => ({ key: `g-${g}`, label: g, clear: () => toggleGenre(g) })),
+    ...f.genres.map((g) => ({ key: `g-${g}`, label: genreLabel(g, lang), clear: () => toggleGenre(g) })),
     ...["director", "actor", "voice", "keyword"]
       .filter((k) => f[k])
       .map((k) => ({
@@ -364,7 +367,7 @@ export default function Browse({ rated, onRate }) {
             className={chip(f.genres.includes(g.name))}
             onClick={() => toggleGenre(g.name)}
           >
-            {g.name}
+            {genreLabel(g.name, lang)}
           </button>
         ))}
       </div>

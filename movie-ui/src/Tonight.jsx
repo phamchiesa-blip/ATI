@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { AlertCircle, Bookmark, MessageSquare, Play, Plus, RotateCcw, Send, Shuffle, Sparkles, SlidersHorizontal, X } from "lucide-react";
-import { api, OFFLINE_MSG } from "./api";
-import { MovieCard, Notice, Overview, PosterLink, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
-import { translateBackendText, useLang } from "./i18n";
+import { api, OFFLINE_MSG } from "./services/apiClient";
+import { MovieCard, Notice } from "./components/MovieCard";
+import { Overview, PosterLink, RateButtons } from "./components/Poster";
+import { toneOf } from "./utils/theme";
+import { TrailerContext, WatchlistContext, useLang } from "./context/AppContexts";
+import { genreLabel, translateBackendText } from "./utils/i18nHelpers";
 
 const FOLLOWUP_CHIPS = [
   { labelVi: "Nhẹ nhàng hơn nữa", labelEn: "Lighter mood", text: "Cho mình cái nhẹ nhàng hơn nữa" },
@@ -67,7 +70,7 @@ function Pick({ movie, status, onRate, onNext, hasNext }) {
         <div className="mt-3 flex flex-wrap gap-2">
           {movie.genres.map((g) => (
             <span key={g} className="rounded-full bg-paper px-3 py-1 text-sm font-medium">
-              {g}
+              {genreLabel(g, lang)}
             </span>
           ))}
           {movie.release_year && (
@@ -126,7 +129,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
   if (!intent) return null;
 
   const genreMap = Object.fromEntries(
-    (genreLabels || []).map((g) => [g.id, lang === "en" ? g.id : g.label])
+    (genreLabels || []).map((g) => [g.id, genreLabel(g.id, lang)])
   );
   const wanted = intent.wanted_genres || [];
   const avoid = intent.avoid_genres || [];
@@ -289,7 +292,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
               .filter((g) => !wanted.includes(g.id))
               .map((g) => (
                 <option key={g.id} value={g.id}>
-                  {lang === "en" ? g.id : `${g.label} (${g.id})`}
+                  {genreLabel(g.id, lang)}
                 </option>
               ))}
           </select>
@@ -337,7 +340,7 @@ function IntentBanner({ intent, genreLabels, onUpdateIntent }) {
               .filter((g) => !avoid.includes(g.id))
               .map((g) => (
                 <option key={g.id} value={g.id}>
-                  {lang === "en" ? g.id : `${g.label} (${g.id})`}
+                  {genreLabel(g.id, lang)}
                 </option>
               ))}
           </select>
@@ -637,7 +640,7 @@ export default function Tonight({ rated, onRate }) {
                         "What do you want to watch? (e.g., “lighthearted comedy, no horror” or “like Inception”)..."
                       )
                 }
-                className="w-full rounded-full bg-paper py-3.5 pr-4 pl-11 text-sm font-medium ring-1 ring-ink/15 focus:bg-white focus:ring-2 focus:ring-cobalt focus:outline-none"
+                className="w-full rounded-full bg-paper py-3.5 pr-4 pl-11 text-sm font-medium ring-1 ring-ink/15 focus:ring-2 focus:ring-cobalt focus:outline-none"
               />
             </label>
             <button
@@ -767,7 +770,9 @@ export default function Tonight({ rated, onRate }) {
                     <span className="block font-display text-lg font-bold">
                       {lang === "en" ? MOOD_EN[m.id] || m.label : m.label}
                     </span>
-                    <span className="mt-0.5 block text-xs opacity-70">{m.genres.join(", ")}</span>
+                    <span className="mt-0.5 block text-xs opacity-70">
+                      {m.genres.map((g) => genreLabel(g, lang)).join(", ")}
+                    </span>
                   </button>
                 );
               })}

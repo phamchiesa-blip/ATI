@@ -1,6 +1,6 @@
 """
-tmdb_client.py
---------------
+backend/integrations/tmdb_client.py
+-----------------------------------
 Goi TMDB API (can key mien phi) de lay poster va trailer. Chi dung thu vien chuan.
 Dat key bang bien moi truong TMDB_API_KEY (ho tro ca API Key v3 lan Read Access Token v4).
 """
@@ -100,3 +100,4 @@ def machine_translate_vi(text: str) -> "str | None":
     data = _get_json(url)
     out = "".join(seg[0] for seg in (data[0] or []) if seg and seg[0])
     return out.strip() or None
+

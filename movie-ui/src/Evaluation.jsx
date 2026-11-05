@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { api } from "./api";
-import { Notice } from "./ui";
-import { useLang } from "./i18n";
+import { api } from "./services/apiClient";
+import { Notice } from "./components/MovieCard";
+import { useLang } from "./context/AppContexts";
 
 const KIND_COLOR = {
   reference: "#CBD5E1",
