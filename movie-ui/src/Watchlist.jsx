@@ -1,5 +1,6 @@
-import { GRID, MovieCard, Notice } from "./ui";
-import { useLang } from "./i18n";
+import { GRID } from "./utils/theme";
+import { MovieCard, Notice } from "./components/MovieCard";
+import { useLang } from "./context/AppContexts";
 
 const savedOn = (m, lang, tr) =>
   m.added_at

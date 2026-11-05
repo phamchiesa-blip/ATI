@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { ArrowLeft, Bookmark, ExternalLink, Play } from "lucide-react";
-import { api } from "./api";
-import { GRID, MovieCard, Notice, Overview, Poster, Rating, RateButtons, TrailerContext, WatchlistContext, toneOf } from "./ui";
-import { useLang } from "./i18n";
+import { api } from "./services/apiClient";
+import { GRID, toneOf } from "./utils/theme";
+import { MovieCard, Notice } from "./components/MovieCard";
+import { Overview, Poster, Rating, RateButtons } from "./components/Poster";
+import { TrailerContext, WatchlistContext, useLang } from "./context/AppContexts";
+import { genreLabel } from "./utils/i18nHelpers";
 
 const money = (n) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
@@ -150,7 +153,7 @@ export default function Detail({ id, rated, onRate, onFilter }) {
                     onClick={() => onFilter({ genres: [g] })}
                     className="rounded-full bg-paper px-3 py-1 text-sm font-medium hover:bg-ink/10"
                   >
-                    {g}
+                    {genreLabel(g, lang)}
                   </button>
                 ))}
               </div>

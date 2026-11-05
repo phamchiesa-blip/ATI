@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Info, PartyPopper, TriangleAlert, X } from "lucide-react";
-import { useLang } from "./i18n";
+import { useLang } from "./context/AppContexts";
 
 const ICONS = { welcome: PartyPopper, info: Info, error: TriangleAlert, warning: TriangleAlert };
 

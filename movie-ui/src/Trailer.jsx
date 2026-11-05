@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ExternalLink, X } from "lucide-react";
-import { api } from "./api";
-import { useLang } from "./i18n";
+import { api } from "./services/apiClient";
+import { useLang } from "./context/AppContexts";
 
 const MESSAGES = {
   no_key: [

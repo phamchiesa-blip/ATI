@@ -1,18 +1,18 @@
 """
-fetch_tmdb_posters.py
----------------------
+scripts/fetch_tmdb_posters.py
+-----------------------------
 Tai poster + trailer cho toan bo phim trong movies.db tu TMDB, luu vao accounts.db
 (bang tmdb_cache). Chay 1 lan (~5 phut cho 4772 phim), co the dung giua chung va chay lai:
 phim da co se bo qua.
 
     # PowerShell:  $env:TMDB_API_KEY="khoa_cua_ban"
-    python fetch_tmdb_posters.py
+    python scripts/fetch_tmdb_posters.py
 Xong thi khoi dong lai API (hoac doi toi 1 phut) de poster hien len.
 
 Chia se cho ca nhom (nguoi khac KHONG can key):
-    python fetch_tmdb_posters.py --export      # ghi data_module/tmdb_media.csv
-    git add data_module/tmdb_media.csv         # file nay khong chua bi mat, commit duoc
-API tu nap file nay khi khoi dong (xem _import_media_csv trong api.py).
+    python scripts/fetch_tmdb_posters.py --export      # ghi data_module/tmdb_media.csv
+    git add data_module/tmdb_media.csv                 # file nay khong chua bi mat, commit duoc
+API tu nap file nay khi khoi dong (xem import_media_csv trong backend/core/database.py).
 """
 
 import argparse
@@ -23,9 +23,13 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-import tmdb_client
+# Ho tro chay truc tiep tu thu muc goc hoac tu thu muc scripts/
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+from backend.integrations import tmdb_client
+
 DB = os.environ.get("MOVIES_DB", os.path.join(ROOT, "data_module", "src", "movies.db"))
 ACCOUNTS_DB = os.environ.get("ACCOUNTS_DB", os.path.join(ROOT, "accounts.db"))
 
@@ -70,30 +74,45 @@ def main():
     done = {r[0] for r in acc.execute("SELECT movie_id FROM tmdb_cache")}
     todo = [i for i in ids if i not in done]
     if args.limit:
-        todo = todo[: args.limit]
-    print(f"{len(done)} phim da co, can tai {len(todo)} phim.")
+        todo = todo[:args.limit]
+    total = len(todo)
+    if not total:
+        print(f"Tat ca {len(done)} phim da co trong cache.")
+        acc.close()
+        return
 
-    ok = fail = 0
+    print(f"Can tai {total} phim (da co {len(done)} phim trong cache)...")
+    success, errors = 0, 0
     t0 = time.time()
-    with ThreadPoolExecutor(args.workers) as pool:
-        futures = {pool.submit(tmdb_client.fetch, mid): mid for mid in todo}
-        for n, fut in enumerate(as_completed(futures), 1):
-            mid = futures[fut]
+
+    def task(mid):
+        return mid, tmdb_client.fetch(mid)
+
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futs = {pool.submit(task, mid): mid for mid in todo}
+        for f in as_completed(futs):
+            mid = futs[f]
             try:
-                d = fut.result()
+                mid, res = f.result()
+                now = time.time()
                 acc.execute("INSERT OR REPLACE INTO tmdb_cache VALUES (?, ?, ?, ?, ?)",
-                            (mid, d["poster_path"], d["trailer_key"], d["trailer_name"], time.time()))
-                ok += 1
-            except Exception as e:           # loi mang: bo qua, chay lai de tai tiep
-                fail += 1
-                print(f"  loi phim {mid}: {e}")
-            if n % 50 == 0:
+                            (mid, res["poster_path"], res["trailer_key"], res["trailer_name"], now))
                 acc.commit()
-                print(f"  {n}/{len(todo)}  ({time.time() - t0:.0f}s)")
-    acc.commit()
+                success += 1
+            except Exception as e:
+                errors += 1
+                print(f"[LOI] movie_id={mid}: {e}", file=sys.stderr)
+            done_cnt = success + errors
+            if done_cnt % 25 == 0 or done_cnt == total:
+                elapsed = time.time() - t0
+                speed = done_cnt / elapsed if elapsed > 0 else 0
+                eta = (total - done_cnt) / speed if speed > 0 else 0
+                print(f"[{done_cnt}/{total}] {success} thanh cong, {errors} loi "
+                      f"({speed:.1f} phim/s, con khoang {eta/60:.1f} phut)")
     acc.close()
-    print(f"Xong: {ok} thanh cong, {fail} loi. Khoi dong lai API de thay poster.")
+    print(f"Hoan tat: {success} thanh cong, {errors} loi trong {time.time() - t0:.1f}s")
 
 
 if __name__ == "__main__":
     main()
+
