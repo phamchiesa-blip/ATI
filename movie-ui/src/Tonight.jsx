@@ -668,7 +668,7 @@ export default function Tonight({ rated, onRate }) {
                 <p className="font-bold text-coral">
                   {tr("Không nhận diện được yêu cầu", "Could not recognize request")}
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-ink/80">{error}</p>
+                <p className="mt-1 text-xs leading-relaxed text-ink/80">{translateBackendText(error, lang)}</p>
               </div>
               <button
                 type="button"
@@ -811,7 +811,7 @@ export default function Tonight({ rated, onRate }) {
 
       {error && tabMode === "buttons" && (
         <p role="alert" className="mt-6 text-coral">
-          {error}
+          {translateBackendText(error, lang)}
         </p>
       )}
       {note && <p className="mt-4 text-sm text-mute">{note}</p>}

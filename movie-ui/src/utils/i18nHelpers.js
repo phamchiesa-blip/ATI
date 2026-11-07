@@ -43,6 +43,47 @@ export function genreLabel(genre, lang = "vi") {
 }
 
 const VI_TO_EN_PHRASES = [
+  // Thong bao loi Chatbot & Backend
+  [
+    "Hệ thống chưa hiểu yêu cầu tìm phim của bạn. Vui lòng mô tả tâm trạng, thể loại (hài, hành động...), thời kỳ hoặc tên phim cụ thể (VD: “giống Inception”).",
+    "The system could not understand your movie request. Please describe your mood, preferred genre (comedy, action...), time period, or a specific movie title (e.g., “like Inception”).",
+  ],
+  [
+    'Hệ thống chưa hiểu yêu cầu tìm phim của bạn. Vui lòng mô tả tâm trạng, thể loại (hài, hành động...), thời kỳ hoặc tên phim cụ thể (VD: "giống Inception").',
+    'The system could not understand your movie request. Please describe your mood, preferred genre (comedy, action...), time period, or a specific movie title (e.g., "like Inception").',
+  ],
+  [
+    "Hệ thống chưa hiểu yêu cầu tìm phim của bạn.",
+    "The system could not understand your movie request.",
+  ],
+  [
+    "Vui lòng mô tả tâm trạng, thể loại (hài, hành động...), thời kỳ hoặc tên phim cụ thể (VD: “giống Inception”).",
+    "Please describe your mood, preferred genre (comedy, action...), time period, or a specific movie title (e.g., “like Inception”).",
+  ],
+  [
+    'Vui lòng mô tả tâm trạng, thể loại (hài, hành động...), thời kỳ hoặc tên phim cụ thể (VD: "giống Inception").',
+    'Please describe your mood, preferred genre (comedy, action...), time period, or a specific movie title (e.g., "like Inception").',
+  ],
+  [
+    "Hãy nhập yêu cầu hoặc chọn một gợi ý nhanh",
+    "Please enter a request or select a quick suggestion",
+  ],
+  [
+    "Chưa chọn được phim. Hãy thử lại.",
+    "Could not pick a movie. Please try again.",
+  ],
+  [
+    "Tâm trạng không hợp lệ",
+    "Invalid mood selection",
+  ],
+  [
+    "Không tìm thấy phim",
+    "Movie not found",
+  ],
+  [
+    "Chưa kết nối được máy chủ. Hãy kiểm tra lệnh uvicorn api:app --reload đang chạy.",
+    "Could not connect to the server. Please check that 'uvicorn api:app --reload' is running.",
+  ],
   ["Mình hiểu bạn muốn:", "I understand you want:"],
   ["Chưa xác định được yêu cầu tìm phim", "Could not identify movie search criteria"],
   ["Phim hay được đánh giá cao", "Highly rated movies"],
@@ -108,6 +149,15 @@ const VI_TO_EN_PHRASES = [
 export function translateBackendText(text, lang) {
   if (!text || lang !== "en") return text;
   let out = String(text);
+
+  // Xu ly uu tien cho thong bao loi nhan dien yeu cau chatbot
+  if (
+    out.includes("chưa hiểu yêu cầu tìm phim") ||
+    out.includes("chua hieu yeu cau tim phim")
+  ) {
+    return "The system could not understand your movie request. Please describe your mood, preferred genre (comedy, action...), time period, or a specific movie title (e.g., “like Inception”).";
+  }
+
   for (const [vi, en] of VI_TO_EN_PHRASES) {
     out = out.split(vi).join(en);
   }
