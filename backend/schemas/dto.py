@@ -45,6 +45,6 @@ class TonightChatBody(BaseModel):
     previous_intent: Optional[dict] = None
     intent_override: Optional[dict] = None
     exclude: List[int] = []
-    top_n: int = 10
+    top_n: int = 24
     use_llm: bool = True
 

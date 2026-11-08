@@ -415,7 +415,7 @@ def recommend_tonight_by_mood(user_id: str, mood_id: str, time_id: str, exclude:
             )
         )
         items.append(card)
-        if len(items) >= 10:
+        if len(items) >= 24:
             break
     return {
         "items": items,
