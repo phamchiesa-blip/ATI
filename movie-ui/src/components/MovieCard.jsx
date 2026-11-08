@@ -66,10 +66,10 @@ export function MovieCard({ movie, status, onRate, note }) {
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget)) hide();
       }}
-      className="flex flex-col gap-2.5"
+      className="flex h-full flex-col gap-2.5"
     >
       <PosterTile movie={movie} status={status} onRate={onRate} />
-      <div className="min-w-0">
+      <div className="min-h-14 min-w-0">
         {movie.poster_url && <h3 className="truncate text-sm font-semibold">{movie.title}</h3>}
         <div className="mt-0.5 flex items-center gap-3">
           <Rating value={movie.vote_average} />
@@ -77,7 +77,9 @@ export function MovieCard({ movie, status, onRate, note }) {
         </div>
         {displayNote && <p className="mt-0.5 text-xs font-semibold text-cobalt">{displayNote}</p>}
       </div>
-      <CardButtons movie={movie} />
+      <div className="mt-auto">
+        <CardButtons movie={movie} />
+      </div>
       <HoverPreview movie={movie} pos={pos} />
     </article>
   );

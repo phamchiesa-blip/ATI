@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { AlertCircle, Bookmark, MessageSquare, Play, Plus, RotateCcw, Send, Shuffle, Sparkles, SlidersHorizontal, X } from "lucide-react";
-import { api, OFFLINE_MSG } from "./services/apiClient";
+import { api } from "./services/apiClient";
 import { MovieCard, Notice } from "./components/MovieCard";
 import { Overview, PosterLink, RateButtons } from "./components/Poster";
-import { toneOf } from "./utils/theme";
+import { GRID, toneOf } from "./utils/theme";
 import { TrailerContext, WatchlistContext, useLang } from "./context/AppContexts";
 import { genreLabel, translateBackendText } from "./utils/i18nHelpers";
 
@@ -43,6 +43,28 @@ const TIME_EN = {
   medium: "Around 2 hours",
   any: "Any length",
 };
+
+const INITIAL_VISIBLE_RECOMMENDATIONS = 8;
+const RECOMMENDATION_PAGE_SIZE = 6;
+
+// Store a UI error code rather than the raw API message. The API currently
+// returns Vietnamese detail strings, so rendering them directly mixes the two
+// languages whenever the visitor switches to English.
+function errorText(kind, tr) {
+  if (kind === "offline") {
+    return tr(
+      "Chưa kết nối được máy chủ. Hãy kiểm tra máy chủ API rồi thử lại.",
+      "Could not connect to the server. Please check that the API is running and try again."
+    );
+  }
+  if (kind === "unrecognized") {
+    return tr(
+      "Hệ thống chưa hiểu yêu cầu tìm phim của bạn. Vui lòng mô tả tâm trạng, thể loại, thời kỳ hoặc tên phim cụ thể.",
+      "We could not understand your movie request. Please describe a mood, genre, era, or a specific movie."
+    );
+  }
+  return tr("Chưa chọn được phim. Hãy thử lại.", "Could not pick a movie. Please try again.");
+}
 
 function Pick({ movie, status, onRate, onNext, hasNext }) {
   const openTrailer = useContext(TrailerContext);
@@ -383,16 +405,19 @@ export default function Tonight({ rated, onRate }) {
   // Danh sách kết quả chung
   const [queue, setQueue] = useState(null);
   const [cursor, setCursor] = useState(0);
+  const [visibleRecommendationCount, setVisibleRecommendationCount] = useState(INITIAL_VISIBLE_RECOMMENDATIONS);
   const [done, setDone] = useState(false);
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
+  const localizedError = errorText(error, tr);
+
   useEffect(() => {
     api
       .tonightOptions()
       .then(setOptions)
-      .catch(() => setError(OFFLINE_MSG));
+      .catch(() => setError("offline"));
   }, []);
 
   // Gửi câu hỏi vào Chat Bot
@@ -407,12 +432,13 @@ export default function Tonight({ rated, onRate }) {
         previous_intent: currentIntent,
         intent_override: overrideIntent,
         exclude: [],
-        top_n: 12,
+        top_n: 24,
         use_llm: useLlm,
       });
       setCurrentIntent(r.intent);
       setQueue(r.items);
       setCursor(0);
+      setVisibleRecommendationCount(INITIAL_VISIBLE_RECOMMENDATIONS);
       setDone(r.items.length === 0);
       setNote(
         r.intent?.max_runtime && !r.runtime_filter_applied
@@ -446,9 +472,7 @@ export default function Tonight({ rated, onRate }) {
       }
     } catch (e) {
       setError(
-        e.status === 0
-          ? OFFLINE_MSG
-          : e.message || tr("Chưa chọn được phim. Hãy thử lại.", "Could not pick a movie. Please try again.")
+        e.status === 0 ? "offline" : "unrecognized"
       );
       setQueue(null);
       setCurrentIntent(null);
@@ -477,6 +501,7 @@ export default function Tonight({ rated, onRate }) {
     setCurrentIntent(null);
     setQueue(null);
     setCursor(0);
+    setVisibleRecommendationCount(INITIAL_VISIBLE_RECOMMENDATIONS);
     setNote("");
     setError("");
     setInput("");
@@ -504,12 +529,11 @@ export default function Tonight({ rated, onRate }) {
       setCurrentIntent(null);
       setQueue(items);
       setCursor(0);
+      setVisibleRecommendationCount(INITIAL_VISIBLE_RECOMMENDATIONS);
       setDone(items.length === 0);
     } catch (e) {
       setError(
-        e.status === 0
-          ? OFFLINE_MSG
-          : tr("Chưa chọn được phim. Hãy thử lại.", "Could not pick a movie. Please try again.")
+        e.status === 0 ? "offline" : "request"
       );
     }
     setBusy(false);
@@ -531,7 +555,7 @@ export default function Tonight({ rated, onRate }) {
   };
 
   const pick = queue?.[cursor];
-  const others = queue ? queue.slice(cursor + 1, cursor + 9) : [];
+  const others = queue ? queue.filter((_, index) => index !== cursor) : [];
   const suggestions = options?.quick_suggestions || [];
 
   return (
@@ -668,7 +692,7 @@ export default function Tonight({ rated, onRate }) {
                 <p className="font-bold text-coral">
                   {tr("Không nhận diện được yêu cầu", "Could not recognize request")}
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-ink/80">{error}</p>
+                <p className="mt-1 text-xs leading-relaxed text-ink/80">{localizedError}</p>
               </div>
               <button
                 type="button"
@@ -811,7 +835,7 @@ export default function Tonight({ rated, onRate }) {
 
       {error && tabMode === "buttons" && (
         <p role="alert" className="mt-6 text-coral">
-          {error}
+          {localizedError}
         </p>
       )}
       {note && <p className="mt-4 text-sm text-mute">{note}</p>}
@@ -842,8 +866,8 @@ export default function Tonight({ rated, onRate }) {
                     `Other matching recommendations (${others.length} movies)`
                   )}
                 </h2>
-                <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
-                  {others.map((m) => (
+                <div className={`mt-4 ${GRID}`}>
+                  {others.slice(0, visibleRecommendationCount).map((m) => (
                     <MovieCard
                       key={m.movie_id}
                       movie={m}
@@ -853,6 +877,24 @@ export default function Tonight({ rated, onRate }) {
                     />
                   ))}
                 </div>
+                {visibleRecommendationCount < others.length && (
+                  <div className="mt-8 text-center">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setVisibleRecommendationCount((count) =>
+                          Math.min(count + RECOMMENDATION_PAGE_SIZE, others.length)
+                        )
+                      }
+                      className="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-cobalt ring-1 ring-cobalt/30 transition-colors hover:bg-cobalt/10"
+                    >
+                      {tr(
+                        `Xem thêm ${Math.min(RECOMMENDATION_PAGE_SIZE, others.length - visibleRecommendationCount)} phim`,
+                        `Show ${Math.min(RECOMMENDATION_PAGE_SIZE, others.length - visibleRecommendationCount)} more movies`
+                      )}
+                    </button>
+                  </div>
+                )}
               </section>
             )}
           </>

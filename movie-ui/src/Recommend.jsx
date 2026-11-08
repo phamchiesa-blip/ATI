@@ -131,14 +131,16 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget)) hide();
       }}
+      className="flex h-full flex-col"
     >
       <PosterTile movie={movie} status={status} onRate={onRate} className="rounded-b-none" />
-      <div className="relative rounded-b-xl bg-white p-3 ring-1 ring-ink/10">
+      <div className="relative flex flex-1 flex-col rounded-b-xl bg-white p-3 ring-1 ring-ink/10">
         <span className="absolute inset-x-3 top-0 border-t border-dashed border-ink/30" />
         <span className="absolute top-0 -left-2 size-4 -translate-y-1/2 rounded-full bg-paper" />
         <span className="absolute top-0 -right-2 size-4 -translate-y-1/2 rounded-full bg-paper" />
-        {personal ? (
-          <>
+        <div className="mt-1 flex min-h-11 flex-col justify-center">
+          {personal ? (
+            <>
             <p className="mt-1 flex items-baseline justify-between">
               <span className="font-display text-xl font-extrabold text-cobalt">{movie.match_percent}%</span>
               <span className="text-xs text-mute">{tr("độ hợp", "match")}</span>
@@ -146,15 +148,18 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
             <div className="mt-1 h-1.5 rounded-full bg-ink/10">
               <div className="h-full rounded-full bg-cobalt" style={{ width: `${width}%` }} />
             </div>
-          </>
-        ) : (
-          <p className="mt-1">
-            <Rating value={movie.vote_average} />
-          </p>
-        )}
-        <p className="mt-2 text-xs leading-snug text-mute">{reasonText(movie, isCold, tr, lang, false)}</p>
-        {movie.breakdown && (
-          <>
+            </>
+          ) : (
+            <p>
+              <Rating value={movie.vote_average} />
+            </p>
+          )}
+        </div>
+        <p className="mt-2 min-h-10 line-clamp-2 text-xs leading-snug text-mute">
+          {reasonText(movie, isCold, tr, lang, false)}
+        </p>
+        <div className="mt-2 min-h-7">
+          {movie.breakdown && (
             <button
               onClick={() => setWhy((v) => !v)}
               aria-expanded={why}
@@ -162,9 +167,13 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
             >
               {why ? tr("Ẩn chi tiết", "Hide details") : tr("Vì sao gợi ý?", "Why recommended?")}
             </button>
-            {why && <Breakdown data={movie.breakdown} coldStart={isCold} />}
-          </>
-        )}
+          )}
+          {why && (
+            <div className="absolute inset-x-3 top-full z-20 rounded-xl bg-white p-3 shadow-xl ring-1 ring-ink/15">
+              <Breakdown data={movie.breakdown} coldStart={isCold} />
+            </div>
+          )}
+        </div>
       </div>
       <div className="mt-3">
         <CardButtons movie={movie} />

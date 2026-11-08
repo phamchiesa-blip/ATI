@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { Search, X } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import { api } from "./services/apiClient";
 import { GRID } from "./utils/theme";
 import { MovieCard, Notice } from "./components/MovieCard";
@@ -212,7 +212,24 @@ function SearchBox({ value, onChange, onPick }) {
   );
 }
 
-const selectCls = "rounded-full bg-white px-3 py-2 text-sm font-medium ring-1 ring-ink/15";
+function Select({ children, className = "", ...props }) {
+  return (
+    <div className={`relative shrink-0 ${className}`}>
+      <select
+        {...props}
+        className="appearance-none rounded-full bg-white py-2 pr-10 pl-3 text-sm font-medium ring-1 ring-ink/15"
+      >
+        {children}
+      </select>
+      <ChevronDown
+        aria-hidden="true"
+        size={16}
+        strokeWidth={2.5}
+        className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink/70"
+      />
+    </div>
+  );
+}
 
 export default function Browse({ rated, onRate }) {
   const [f, setF] = useState(loadFilters);
@@ -318,42 +335,40 @@ export default function Browse({ rated, onRate }) {
           onChange={(v) => set({ query: v })}
           onPick={(kind, name) => set({ [kind]: name, query: "" })}
         />
-        <select
+        <Select
           aria-label={tr("Năm phát hành", "Release year")}
           value={f.years}
           onChange={(e) => set({ years: e.target.value })}
-          className={selectCls}
         >
           {YEARS.map((y) => (
             <option key={y.id} value={y.id}>
               {tr(y.labelVi, y.labelEn)}
             </option>
           ))}
-        </select>
-        <select
+        </Select>
+        <Select
           aria-label={tr("Điểm đánh giá", "Rating")}
           value={f.rating}
           onChange={(e) => set({ rating: e.target.value })}
-          className={selectCls}
         >
           {RATINGS.map((r) => (
             <option key={r.id} value={r.id}>
               {tr(r.labelVi, r.labelEn)}
             </option>
           ))}
-        </select>
-        <select
+        </Select>
+        <Select
           aria-label={tr("Sắp xếp", "Sort by")}
           value={f.sort}
           onChange={(e) => set({ sort: e.target.value })}
-          className={`${selectCls} md:ml-auto`}
+          className="md:ml-auto"
         >
           {SORTS.map((s) => (
             <option key={s.id} value={s.id}>
               {tr(s.labelVi, s.labelEn)}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
