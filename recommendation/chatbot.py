@@ -921,6 +921,61 @@ def parse_intent_local(
     intent.wanted_genres = wanted_genres
     intent.mood_labels = mood_labels
 
+    # 4.5. Nhan dien Yeu cau theo Do tuoi (Duoi 18 tuoi vs Tren 18 tuoi / 18+)
+    _UNDER_18_RE = re.compile(
+        r"\b(?:duoi\s+18\s+tuoi|duoi\s+18t?|< ?18|under\s+18|cho\s+tre\s+em|cho\s+thieu\s+nhi|cho\s+tre\s+con|cho\s+hoc\s+sinh|tuoi\s+teen|thanh\s+thieu\s+nien|for\s+kids|for\s+children|tre\s+nho|hoc\s+sinh)\b"
+    )
+    _OVER_18_RE = re.compile(
+        r"(?:\b(?:tren\s+18\s+tuoi|tren\s+18t?|> ?18|over\s+18|18\s*plus|18\s*cong|cho\s+nguoi\s+lon|danh\s+cho\s+nguoi\s+lon|nguoi\s+lon|adult)\b|18\s*\+)"
+    )
+
+    is_under_18 = bool(_UNDER_18_RE.search(positive_folded))
+    is_over_18 = bool(_OVER_18_RE.search(positive_folded))
+
+    if is_under_18 and not is_over_18:
+        for g in ("Family", "Animation", "Adventure", "Comedy"):
+            if g not in wanted_genres and g not in avoid_genres:
+                wanted_genres.append(g)
+        for g in ("Horror", "War"):
+            if g not in avoid_genres and g not in explicit_genres:
+                avoid_genres.append(g)
+        if "dưới 18 tuổi" not in mood_labels:
+            mood_labels.append("dưới 18 tuổi")
+        en_kw_parts.append("family friendly kids children animation adventure youth school")
+        positive_folded = _UNDER_18_RE.sub(" ", positive_folded)
+        folded_no_title = _UNDER_18_RE.sub(" ", folded_no_title)
+
+    elif is_over_18 and not is_under_18:
+        # Neu chua neu ro the loai cu the, mac dinh uu tien: Lang man, Hanh dong, Kinh di, Giat gan
+        if not explicit_genres:
+            for g in ("Romance", "Action", "Horror", "Thriller"):
+                if g not in wanted_genres and g not in avoid_genres:
+                    wanted_genres.append(g)
+        else:
+            # Da co the loai cu the (VD: "phim ma 18+" hoac "phim tinh cam 18+")
+            # -> giu nguyen the loai nguoi dung muon o vi tri so 1, chi bo sung the loai ho tro tuong thich
+            if "Romance" in explicit_genres:
+                if "Drama" not in wanted_genres and "Drama" not in avoid_genres:
+                    wanted_genres.append("Drama")
+            elif "Horror" in explicit_genres:
+                if "Thriller" not in wanted_genres and "Thriller" not in avoid_genres:
+                    wanted_genres.append("Thriller")
+            elif "Action" in explicit_genres:
+                if "Thriller" not in wanted_genres and "Thriller" not in avoid_genres:
+                    wanted_genres.append("Thriller")
+        for g in ("Family", "Animation"):
+            if g not in avoid_genres and g not in explicit_genres:
+                avoid_genres.append(g)
+        if "dành cho 18+" not in mood_labels:
+            mood_labels.append("dành cho 18+")
+        en_kw_parts.append("mature romance love passion action thrilling suspense horror scary adult")
+        positive_folded = _OVER_18_RE.sub(" ", positive_folded)
+        folded_no_title = _OVER_18_RE.sub(" ", folded_no_title)
+
+    intent.wanted_genres = wanted_genres
+    intent.avoid_genres = avoid_genres
+    intent.mood_labels = mood_labels
+
     # 5. Nhan dien Dao dien / Dien vien trong top 50/200 (lam truoc nam phat hanh de tranh nham "co dien" = classic)
     for f_dir, orig_dir, _col in space.directors_folded:
         if len(f_dir) >= 5 and re.search(rf"(?:^|\b){re.escape(f_dir)}(?:\b|$)", folded):

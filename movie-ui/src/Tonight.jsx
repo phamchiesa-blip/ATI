@@ -44,7 +44,7 @@ const TIME_EN = {
   any: "Any length",
 };
 
-const INITIAL_VISIBLE_RECOMMENDATIONS = 8;
+const INITIAL_VISIBLE_RECOMMENDATIONS = 12;
 const RECOMMENDATION_PAGE_SIZE = 6;
 
 // Store a UI error code rather than the raw API message. The API currently
