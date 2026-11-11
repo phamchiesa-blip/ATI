@@ -55,6 +55,32 @@ for _p in (_ROOT, _DATA_SRC, _REC_DIR):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
+
+def _load_dotenv_if_present() -> None:
+    """Tu dong nap file .env o thu muc goc (neu co) khi chay chatbot doc lap hoac qua API."""
+    env_path = os.path.join(_ROOT, ".env")
+    if not os.path.exists(env_path):
+        return
+    placeholders = {"your_gemini_api_key_here", "your_tmdb_api_key_here", "your_openai_api_key_here"}
+    try:
+        with open(env_path, encoding="utf-8") as f:
+            for raw_line in f:
+                line = raw_line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                if line.startswith("export "):
+                    line = line[7:].strip()
+                key, val = line.split("=", 1)
+                key = key.strip()
+                val = val.strip().strip('"').strip("'")
+                if key and val and val not in placeholders and not os.environ.get(key):
+                    os.environ[key] = val
+    except Exception:
+        pass
+
+
+_load_dotenv_if_present()
+
 from feature_store import (
     DEFAULT_DB_PATH,
     check_db_exists,
@@ -688,6 +714,8 @@ class ChatIntent:
     keywords_en: str = ""
     content_query_en: str = ""
     content_query_vi: str = ""
+    ai_candidate_ids: list[int] = field(default_factory=list)
+    ai_candidate_titles: list[str] = field(default_factory=list)
     is_followup: bool = False
     parser_source: str = "local"  # "local" | "llm"
 
@@ -698,6 +726,7 @@ class ChatIntent:
             or self.avoid_genres
             or self.mood_labels
             or self.similar_movie_ids
+            or self.ai_candidate_ids
             or self.matched_keywords
             or self.director
             or self.actor
@@ -722,6 +751,10 @@ class ChatIntent:
             "similar_movies": [
                 {"movie_id": mid, "title": title}
                 for mid, title in zip(self.similar_movie_ids, self.similar_movie_titles)
+            ],
+            "ai_candidates": [
+                {"movie_id": mid, "title": title}
+                for mid, title in zip(self.ai_candidate_ids, self.ai_candidate_titles)
             ],
             "matched_keywords": self.matched_keywords,
             "matched_keyword_display": self.matched_keyword_display,
@@ -1735,20 +1768,23 @@ def parse_intent_llm(
     valid_genres = space.genre_labels
     prev_json = json.dumps(previous_intent.to_dict(), ensure_ascii=False) if previous_intent else "null"
     system_prompt = (
-        "Bạn là bộ phân tích ý định tìm phim (Movie Intent Parser).\n"
+        "Bạn là chuyên gia AI gợi ý và phân tích ý định tìm phim (Movie Intent & Plot Reasoner).\n"
         f"Danh sách thể loại hợp lệ duy nhất: {json.dumps(valid_genres)}.\n"
-        "Hãy phân tích câu yêu cầu của người dùng (và ý định lượt trước nếu là câu nối tiếp) "
+        "Hãy phân tích sâu câu yêu cầu của người dùng (kể cả khi họ mô tả cốt truyện mơ hồ, ẩn dụ, hoặc nhớ mang máng nội dung phim) "
         "và trả về DUY NHẤT một JSON object hợp lệ với các trường:\n"
         "{\n"
         '  "wanted_genres": [danh sách thể loại hợp lệ người dùng muốn],\n'
         '  "avoid_genres": [danh sách thể loại hợp lệ người dùng muốn tránh],\n'
         '  "mood_labels": [1-2 cụm từ ngắn tiếng Việt mô tả tâm trạng, ví dụ "nhẹ nhàng, thư giãn"],\n'
         '  "similar_movie_names": [tên phim cụ thể nếu người dùng nhắc tới "giống phim X"],\n'
+        '  "ai_recommended_titles": [5 đến 8 tên phim tiếng Anh gốc (Original English Titles, phát hành từ 2017 trở về trước trong TMDB 5000) khớp sát nhất với cốt truyện/nội dung/yêu cầu người dùng mô tả],\n'
         '  "year_from": số nguyên hoặc null,\n'
         '  "year_to": số nguyên hoặc null,\n'
         '  "max_runtime": số phút tối đa hoặc null,\n'
-        '  "keywords_raw": cụm từ chủ đề tiếng Việt ngắn gọn,\n'
-        '  "keywords_en": 5-10 từ khóa tiếng Anh mô tả cốt truyện/bối cảnh để tìm trên TF-IDF overview,\n'
+        '  "director": tên đạo diễn (nếu có) hoặc null,\n'
+        '  "actor": tên diễn viên (nếu có) hoặc null,\n'
+        '  "keywords_raw": cụm từ chủ đề tiếng Việt ngắn gọn tóm tắt nội dung,\n'
+        '  "keywords_en": 8-15 từ khóa tiếng Anh đặc trưng nhất mô tả cốt truyện, bối cảnh, nhân vật để tìm trên TF-IDF overview,\n'
         '  "is_followup": true nếu câu này tinh chỉnh lượt trước, ngược lại false\n'
         "}\n"
         f"Ý định lượt trước: {prev_json}\n"
@@ -1823,13 +1859,36 @@ def parse_intent_llm(
         intent.similar_movie_ids = sim_ids
         intent.similar_movie_titles = sim_titles
 
+        # Khop danh sach phim do AI suy luan truc tiep tu cot truyen (ai_recommended_titles)
+        ai_ids: list[int] = []
+        ai_titles: list[str] = []
+        for name in parsed.get("ai_recommended_titles", []) or []:
+            ids_m, titles_m, _ = _match_movie_titles_in_text(f'"{name}"', _fold(f'"{name}"'), space)
+            for mid, mtitle in zip(ids_m, titles_m):
+                if mid not in ai_ids and mid not in sim_ids:
+                    ai_ids.append(mid)
+                    ai_titles.append(mtitle)
+        intent.ai_candidate_ids = ai_ids
+        intent.ai_candidate_titles = ai_titles
+
         intent.year_from = parsed.get("year_from") or local_fallback.year_from
         intent.year_to = parsed.get("year_to") or local_fallback.year_to
         intent.max_runtime = parsed.get("max_runtime") or local_fallback.max_runtime
-        intent.director = local_fallback.director
-        intent.actor = local_fallback.actor
+        intent.director = local_fallback.director or parsed.get("director")
+        intent.actor = local_fallback.actor or parsed.get("actor")
         intent.keywords_raw = str(parsed.get("keywords_raw") or local_fallback.keywords_raw or "").strip()
-        intent.keywords_en = str(parsed.get("keywords_en") or local_fallback.keywords_en or "").strip()
+        llm_kw_en = str(parsed.get("keywords_en") or "").strip()
+        intent.keywords_en = f"{llm_kw_en} {local_fallback.keywords_en}".strip()
+        intent.content_query_en = f"{llm_kw_en} {local_fallback.content_query_en}".strip()
+        intent.content_query_vi = local_fallback.content_query_vi
+
+        # Anh xa cac tu khoa tieng Anh do LLM sinh ra sang TMDB keywords trong DB
+        matched_kws = list(local_fallback.matched_keywords)
+        for en_w in re.findall(r"[a-zA-Z]{4,}", llm_kw_en.lower()):
+            if en_w in getattr(space, "keyword_to_mids", {}) and en_w not in matched_kws and len(matched_kws) < 10:
+                matched_kws.append(en_w)
+        intent.matched_keywords = matched_kws
+        intent.matched_keyword_display = local_fallback.matched_keyword_display or intent.keywords_raw
         intent.is_followup = bool(parsed.get("is_followup") or local_fallback.is_followup)
         return intent
     except Exception:
@@ -1966,8 +2025,10 @@ def _build_reason(
     reasons: list[str] = []
     m_genres = meta.get("genres", [])
 
-    # 0. Neu khop tu khoa TMDB hoac mo ta noi dung phim
-    if matched_kw_label:
+    # 0. Neu AI (LLM) suy luan truc tiep bo phim nay tu cot truyen
+    if meta.get("movie_id") in intent.ai_candidate_ids:
+        reasons.append("AI đề xuất khớp cốt truyện")
+    elif matched_kw_label:
         reasons.append(f"Từ khóa: {matched_kw_label}")
     elif intent.keywords_raw and query_cos > 0.35:
         reasons.append(f"Nội dung khớp chủ đề “{intent.keywords_raw}”")
@@ -2113,6 +2174,13 @@ def chat_recommend(
         for idx, mid_np in enumerate(space.movie_ids):
             if int(mid_np) in kw_movie_ids:
                 query_scores[idx] += 0.55
+
+    # 4.35. Tang diem vuot troi cho cac bo phim do AI (LLM) suy luan truc tiep tu cot truyen
+    if intent.ai_candidate_ids:
+        ai_id_set = set(intent.ai_candidate_ids)
+        for idx, mid_np in enumerate(space.movie_ids):
+            if int(mid_np) in ai_id_set:
+                query_scores[idx] += 0.85
 
     # 4.4. Tang diem truc tiep cho phim cua Dao dien / Dien vien (ke ca ngoai top 50/200 trong vector 324 chieu)
     if intent.director:
