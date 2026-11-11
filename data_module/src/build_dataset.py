@@ -17,6 +17,9 @@ Usage:
 """
 
 import argparse
+import csv
+import os
+import sqlite3
 import sys
 import time
 
@@ -53,7 +56,30 @@ def main():
     print(f"      vector shape: {vectors.shape}  (dims: {info['total_dims']})")
 
     print(f"[4/4] Saving to {args.db} ...")
-    save_dataset(clean, movie_ids, vectors, db_path=args.db)
+    # Sync any existing Vietnamese overview translations from accounts.db or overview_vi.csv into movies.db
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    overview_vi_map = {}
+    acc_db = os.path.join(root_dir, "accounts.db")
+    if os.path.exists(acc_db):
+        try:
+            conn = sqlite3.connect(acc_db)
+            for mid, txt in conn.execute("SELECT movie_id, text FROM overview_vi WHERE text IS NOT NULL"):
+                if txt and str(txt).strip():
+                    overview_vi_map[int(mid)] = str(txt).strip()
+            conn.close()
+        except Exception:
+            pass
+    csv_vi = os.path.join(root_dir, "data_module", "overview_vi.csv")
+    if os.path.exists(csv_vi):
+        try:
+            with open(csv_vi, newline="", encoding="utf-8") as f:
+                for r in csv.DictReader(f):
+                    if r.get("movie_id") and r.get("text"):
+                        overview_vi_map.setdefault(int(r["movie_id"]), r["text"].strip())
+        except Exception:
+            pass
+
+    save_dataset(clean, movie_ids, vectors, db_path=args.db, overview_vi_map=overview_vi_map)
 
     print(f"\nDone in {time.time() - t0:.1f}s. Database ready at: {args.db}")
 

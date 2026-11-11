@@ -59,9 +59,21 @@ def create_schema(db_path=DEFAULT_DB_PATH):
             movie_id      INTEGER PRIMARY KEY,
             title         TEXT NOT NULL,
             overview      TEXT,
+            overview_vi   TEXT,      -- Vietnamese translated overview (optional/cached)
+            tagline       TEXT,
             genres        TEXT,      -- JSON list of strings
+            keywords      TEXT,      -- JSON list of strings (all TMDB keywords)
             director      TEXT,
             cast          TEXT,      -- JSON list of strings (top-billed)
+            cast_details  TEXT,      -- JSON list of dicts [{name, character, voice}] (top 20)
+            crew_details  TEXT,      -- JSON dict {writers: [...], composers: [...]}
+            runtime       INTEGER,
+            budget        INTEGER,
+            revenue       INTEGER,
+            companies     TEXT,      -- JSON list of strings
+            countries     TEXT,      -- JSON list of strings
+            languages     TEXT,      -- JSON list of strings
+            homepage      TEXT,
             vote_average  REAL,
             vote_count    INTEGER,
             popularity    REAL,
@@ -85,25 +97,67 @@ def create_schema(db_path=DEFAULT_DB_PATH):
         );
         """
     )
+    # Ensure backward-compatible migration if `movies` table already existed with fewer columns
+    existing_cols = {r[1] for r in cur.execute("PRAGMA table_info(movies)").fetchall()}
+    migrations = [
+        ("overview_vi", "TEXT"),
+        ("tagline", "TEXT"),
+        ("keywords", "TEXT"),
+        ("cast_details", "TEXT"),
+        ("crew_details", "TEXT"),
+        ("runtime", "INTEGER"),
+        ("budget", "INTEGER"),
+        ("revenue", "INTEGER"),
+        ("companies", "TEXT"),
+        ("countries", "TEXT"),
+        ("languages", "TEXT"),
+        ("homepage", "TEXT"),
+    ]
+    for col_name, col_type in migrations:
+        if col_name not in existing_cols:
+            cur.execute(f"ALTER TABLE movies ADD COLUMN {col_name} {col_type}")
     conn.commit()
     conn.close()
 
 
-def save_dataset(df, movie_ids, vectors, db_path=DEFAULT_DB_PATH):
+def save_dataset(df, movie_ids, vectors, db_path=DEFAULT_DB_PATH, overview_vi_map=None):
     """Write the cleaned movie table + feature vectors into the database.
     Safe to re-run: it replaces any existing rows for the same movie_id."""
     create_schema(db_path)
     conn = _connect(db_path)
     cur = conn.cursor()
 
+    # Preserve existing overview_vi translations already stored in movies.db if overview_vi_map is not passed
+    existing_vi = {}
+    try:
+        for mid, txt in cur.execute("SELECT movie_id, overview_vi FROM movies WHERE overview_vi IS NOT NULL"):
+            if txt:
+                existing_vi[int(mid)] = txt
+    except Exception:
+        pass
+    if overview_vi_map:
+        existing_vi.update(overview_vi_map)
+
     movie_rows = [
         (
             int(row.movie_id),
             row.title,
             row.overview,
+            existing_vi.get(int(row.movie_id)),
+            getattr(row, "tagline", None) or None,
             json.dumps(row.genres_list, ensure_ascii=False),
+            json.dumps(getattr(row, "keywords_list", []), ensure_ascii=False),
             row.director,
             json.dumps(row.cast_list, ensure_ascii=False),
+            json.dumps(getattr(row, "cast_details_list", []), ensure_ascii=False),
+            json.dumps(getattr(row, "crew_details_dict", {"writers": [], "composers": []}), ensure_ascii=False),
+            None if pd_isnull(getattr(row, "runtime", None)) else int(float(row.runtime)),
+            int(getattr(row, "budget", 0) or 0),
+            int(getattr(row, "revenue", 0) or 0),
+            json.dumps(getattr(row, "companies_list", []), ensure_ascii=False),
+            json.dumps(getattr(row, "countries_list", []), ensure_ascii=False),
+            json.dumps(getattr(row, "languages_list", []), ensure_ascii=False),
+            getattr(row, "homepage", None) or None,
             float(row.vote_average),
             int(row.vote_count),
             float(row.popularity),
@@ -113,9 +167,11 @@ def save_dataset(df, movie_ids, vectors, db_path=DEFAULT_DB_PATH):
     ]
     cur.executemany(
         """INSERT OR REPLACE INTO movies
-           (movie_id, title, overview, genres, director, cast,
+           (movie_id, title, overview, overview_vi, tagline, genres, keywords,
+            director, cast, cast_details, crew_details, runtime, budget, revenue,
+            companies, countries, languages, homepage,
             vote_average, vote_count, popularity, release_date)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         movie_rows,
     )
 
@@ -179,7 +235,7 @@ def get_all_vectors(db_path=DEFAULT_DB_PATH):
 
 def get_movie_metadata(movie_id, db_path=DEFAULT_DB_PATH):
     """Return a dict with the human-readable info about one movie
-    (title, genres, director, cast, rating, popularity, release_date) --
+    (title, genres, director, cast, rating, popularity, release_date, plus extended metadata) --
     useful for the UI (Vo) and for displaying recommendations."""
     conn = _connect(db_path)
     conn.row_factory = sqlite3.Row
@@ -190,6 +246,19 @@ def get_movie_metadata(movie_id, db_path=DEFAULT_DB_PATH):
     result = dict(row)
     result["genres"] = json.loads(result["genres"] or "[]")
     result["cast"] = json.loads(result["cast"] or "[]")
+    for json_col, default_val in (
+        ("keywords", "[]"),
+        ("cast_details", "[]"),
+        ("crew_details", "{}"),
+        ("companies", "[]"),
+        ("countries", "[]"),
+        ("languages", "[]"),
+    ):
+        if json_col in result:
+            try:
+                result[json_col] = json.loads(result[json_col] or default_val)
+            except Exception:
+                result[json_col] = json.loads(default_val)
     return result
 
 
