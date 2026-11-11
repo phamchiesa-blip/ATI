@@ -345,6 +345,10 @@ def test_freeform_plot_and_content_queries():
             "phim về cá mập tấn công dưới biển",
             {"Jaws", "The Shallows", "Deep Blue Sea", "Shark Night"},
         ),
+        (
+            "nhóm động vật gồm sư tử, hươu cao cổ, hà mã, ngựa vằn và con chim cánh cụt",
+            {"Madagascar", "Madagascar: Escape 2 Africa", "Madagascar 3: Europe's Most Wanted", "Penguins of Madagascar"},
+        ),
     ]
     for query, expected_titles in plot_cases:
         res = chat_recommend(uid, query, db_path=DB_PATH, top_n=10, use_llm=False)
