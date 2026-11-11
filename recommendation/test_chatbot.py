@@ -321,6 +321,41 @@ def test_keyword_queries():
     print("  Keyword search test passed successfully!\n")
 
 
+def test_freeform_plot_and_content_queries():
+    print("=== Test Free-form Plot & Content Search (Tieng Viet & Tieng Anh) ===")
+    uid = "test_plot_user"
+    plot_cases = [
+        (
+            "một phi hành gia bị mắc kẹt trên sao hỏa phải tìm cách sinh tồn",
+            {"The Martian", "Red Planet", "Mission to Mars", "Interstellar"},
+        ),
+        (
+            "phim về vụ đắm tàu Titanic lịch sử lãng mạn",
+            {"Titanic"},
+        ),
+        (
+            "phim về công viên khủng long tiền sử",
+            {"Jurassic World", "Jurassic Park", "The Lost World: Jurassic Park"},
+        ),
+        (
+            "phim về cậu bé phù thủy học phép thuật ở trường",
+            {"Harry Potter and the Philosopher's Stone", "Harry Potter and the Prisoner of Azkaban", "Harry Potter and the Chamber of Secrets", "Harry Potter and the Goblet of Fire"},
+        ),
+        (
+            "phim về cá mập tấn công dưới biển",
+            {"Jaws", "The Shallows", "Deep Blue Sea", "Shark Night"},
+        ),
+    ]
+    for query, expected_titles in plot_cases:
+        res = chat_recommend(uid, query, db_path=DB_PATH, top_n=10, use_llm=False)
+        top_titles = [m["title"] for m in res["items"]]
+        assert any(t in top_titles for t in expected_titles), (
+            f"Plot query {query!r} failed! Expected one of {expected_titles}, got {top_titles[:5]}"
+        )
+        print(f"  OK plot: {query!r} -> Top-3={top_titles[:3]}")
+    print("  Free-form plot & content search passed successfully!\n")
+
+
 def test_unrecognized_and_gibberish_queries():
     print("=== Test Unrecognized and Gibberish Queries ===")
     uid = "test_gibberish_user"
@@ -350,6 +385,7 @@ def main():
 
     test_unrecognized_and_gibberish_queries()
     test_keyword_queries()
+    test_freeform_plot_and_content_queries()
     test_multi_turn_and_profile_blending()
 
     res_local = evaluate_20_queries(use_llm=False)

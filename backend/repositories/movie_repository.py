@@ -73,6 +73,13 @@ def cache_overview_vi(movie_id: int, text: str, source: str) -> None:
             "INSERT OR REPLACE INTO overview_vi VALUES (?, ?, ?, ?)",
             (movie_id, text, source, time.time()),
         )
+    try:
+        with movies_db() as mc:
+            db_cols = {r["name"] for r in mc.execute("PRAGMA table_info(movies)").fetchall()}
+            if "overview_vi" in db_cols:
+                mc.execute("UPDATE movies SET overview_vi = ? WHERE movie_id = ?", (text, movie_id))
+    except Exception:
+        pass
     _OVERVIEW_VI[movie_id] = text
 
 
@@ -135,6 +142,44 @@ def _clean(x):
 
 def _build_extra() -> dict:
     extra: dict = {}
+    # 1. Uu tien doc truc tiep tu movies.db neu da co cac cot mo rong (keywords, tagline, runtime, cast_details, crew_details...)
+    try:
+        with movies_db() as c:
+            db_cols = {r["name"] for r in c.execute("PRAGMA table_info(movies)").fetchall()}
+            if "keywords" in db_cols and "runtime" in db_cols:
+                rows = c.execute(
+                    "SELECT movie_id, tagline, runtime, budget, revenue, companies, countries, "
+                    "languages, keywords, homepage, vote_count, cast_details, crew_details "
+                    "FROM movies"
+                ).fetchall()
+                for r in rows:
+                    mid = int(r["movie_id"])
+                    kws = json.loads(r["keywords"] or "[]")
+                    _KW_ALL[mid] = kws
+                    people = json.loads(r["cast_details"] or "[]")
+                    _CAST20[mid] = [(p["name"], bool(p.get("voice"))) for p in people if p.get("name")]
+                    crew_dict = json.loads(r["crew_details"] or '{"writers": [], "composers": []}')
+                    extra[mid] = {
+                        "tagline": _clean(r["tagline"]),
+                        "runtime": int(r["runtime"]) if r["runtime"] is not None else None,
+                        "budget": int(r["budget"]) if r["budget"] else None,
+                        "revenue": int(r["revenue"]) if r["revenue"] else None,
+                        "companies": json.loads(r["companies"] or "[]")[:4],
+                        "countries": json.loads(r["countries"] or "[]"),
+                        "languages": json.loads(r["languages"] or "[]"),
+                        "keywords": kws[:10],
+                        "homepage": _clean(r["homepage"]),
+                        "vote_count": int(r["vote_count"]) if r["vote_count"] is not None else None,
+                        "cast_members": [p for p in people if not p.get("voice")][:12],
+                        "voice_cast": [p for p in people if p.get("voice")][:12],
+                        "crew": crew_dict if isinstance(crew_dict, dict) else {"writers": [], "composers": []},
+                    }
+                if extra:
+                    return extra
+    except Exception:
+        pass
+
+    # 2. Fallback doc tu CSV goc neu movies.db la ban cu chua co cac cot mo rong
     movies_csv, credits_csv = _find_csv("movies"), _find_csv("credits")
     if not movies_csv:
         return extra

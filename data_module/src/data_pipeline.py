@@ -62,16 +62,58 @@ def load_raw(movies_csv_path: str, credits_csv_path: str) -> pd.DataFrame:
     return df
 
 
+def _extract_cast_details(crew_or_cast_list, limit=20):
+    """Extract detailed top-N cast members [{name, character, voice}] sorted by billing order."""
+    import re
+    sorted_cast = sorted(
+        [d for d in crew_or_cast_list if isinstance(d, dict) and d.get("name")],
+        key=lambda d: d.get("order", 999),
+    )[:limit]
+    people = []
+    for d in sorted_cast:
+        raw_char = str(d.get("character") or "")
+        people.append({
+            "name": d.get("name"),
+            "character": re.sub(r"\s*\(.*?\)", "", raw_char).strip(),
+            "voice": "(voice" in raw_char.lower(),
+        })
+    return people
+
+
+def _extract_crew_details(crew_list):
+    """Extract writers and composers from the crew list."""
+    writers = list(
+        dict.fromkeys(
+            d["name"]
+            for d in crew_list
+            if isinstance(d, dict) and d.get("name") and d.get("job") in ("Screenplay", "Writer", "Story", "Novel")
+        )
+    )[:3]
+    composers = list(
+        dict.fromkeys(
+            d["name"]
+            for d in crew_list
+            if isinstance(d, dict) and d.get("name") and d.get("job") == "Original Music Composer"
+        )
+    )[:2]
+    return {"writers": writers, "composers": composers}
+
+
 def clean_and_parse(df: pd.DataFrame, top_cast_n: int = 5) -> pd.DataFrame:
     """Clean missing/invalid rows and turn the raw JSON-like text columns
     into simple Python lists/strings that are easy to work with later.
 
     Adds these new columns:
-        genres_list    -> list[str]
-        keywords_list  -> list[str]
-        cast_list      -> list[str]   (top `top_cast_n` billed actors only)
-        director       -> str or None
-        release_year   -> int or None
+        genres_list       -> list[str]
+        keywords_list     -> list[str]
+        cast_list         -> list[str]   (top `top_cast_n` billed actors for feature vectors)
+        cast_details_list -> list[dict]  (top 20 billed actors with character & voice info)
+        crew_details_dict -> dict        (writers & composers)
+        companies_list    -> list[str]
+        countries_list    -> list[str]
+        languages_list    -> list[str]
+        director          -> str or None
+        release_year      -> int or None
     """
     df = df.copy()
 
@@ -86,14 +128,33 @@ def clean_and_parse(df: pd.DataFrame, top_cast_n: int = 5) -> pd.DataFrame:
     df["vote_average"] = df["vote_average"].fillna(0.0)
     df["vote_count"] = df["vote_count"].fillna(0)
     df["overview"] = df["overview"].fillna("")
+    df["tagline"] = df.get("tagline", pd.Series([""] * len(df))).fillna("")
+    df["homepage"] = df.get("homepage", pd.Series([""] * len(df))).fillna("")
+    df["runtime"] = pd.to_numeric(df.get("runtime"), errors="coerce")
+    df["budget"] = pd.to_numeric(df.get("budget"), errors="coerce").fillna(0).astype(int)
+    df["revenue"] = pd.to_numeric(df.get("revenue"), errors="coerce").fillna(0).astype(int)
 
     # Parse the JSON-like text columns.
     df["genres_list"] = df["genres"].apply(_safe_literal_eval).apply(_extract_names)
     df["keywords_list"] = df["keywords"].apply(_safe_literal_eval).apply(_extract_names)
+    df["companies_list"] = (
+        df["production_companies"].apply(_safe_literal_eval).apply(lambda lst: _extract_names(lst, limit=4))
+        if "production_companies" in df.columns else [[] for _ in range(len(df))]
+    )
+    df["countries_list"] = (
+        df["production_countries"].apply(_safe_literal_eval).apply(_extract_names)
+        if "production_countries" in df.columns else [[] for _ in range(len(df))]
+    )
+    df["languages_list"] = (
+        df["spoken_languages"].apply(_safe_literal_eval).apply(_extract_names)
+        if "spoken_languages" in df.columns else [[] for _ in range(len(df))]
+    )
     cast_parsed = df["cast"].apply(_safe_literal_eval)
     df["cast_list"] = cast_parsed.apply(lambda lst: _extract_names(lst, limit=top_cast_n))
+    df["cast_details_list"] = cast_parsed.apply(_extract_cast_details)
     crew_parsed = df["crew"].apply(_safe_literal_eval)
     df["director"] = crew_parsed.apply(_extract_director)
+    df["crew_details_dict"] = crew_parsed.apply(_extract_crew_details)
 
     # release_date -> release_year (used for the "Newness" signal later).
     df["release_date"] = pd.to_datetime(df["release_date"], errors="coerce")

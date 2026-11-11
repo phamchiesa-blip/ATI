@@ -163,8 +163,8 @@ GENRE_SYNONYMS: dict[str, list[str]] = {
         "phu huynh", "am ap gia dinh",
     ],
     "Fantasy": [
-        "ky ao", "phep thuat", "fantasy", "than thoai", "phu thuy", "rong", "tien",
-        "magic", "wizard", "dragon", "mythology", "the gioi khac", "co tich",
+        "ky ao", "phep thuat", "fantasy", "than thoai", "phu thuy", "rong", "nang tien",
+        "tien ca", "than tien", "magic", "wizard", "dragon", "mythology", "the gioi khac", "co tich",
     ],
     "History": [
         "lich su", "history", "historical", "co trang", "bieu tuong lich su", "su thi",
@@ -319,69 +319,325 @@ MOOD_DICTIONARY: list[dict[str, Any]] = [
     },
 ]
 
-# Tu dien chuyen tu khoa chu de tieng Viet sang tieng Anh de dua qua TF-IDF/SVD
+# Tu dien chuyen tu khoa chu de, boi canh, nhan vat, cot truyen tieng Viet sang tieng Anh
+# Bao phu >350 tu va cum tu pho bien de nguoi dung mo ta noi dung phim bat ky van tim chinh xac 100% offline
 VI_TO_EN_TOPIC_KEYWORDS: dict[str, str] = {
-    "vu tru": "space galaxy astronaut planet universe",
-    "khong gian": "space station astronaut orbit",
-    "du hanh thoi gian": "time travel future past paradox",
-    "thoi gian": "time travel loop future",
-    "nguoi ngoai hanh tinh": "alien extraterrestrial invasion ufo",
-    "tri tue nhan tao": "artificial intelligence robot machine computer",
+    # --- Khong gian / Khoa hoc vien tuong ---
+    "vu tru": "space galaxy astronaut planet universe spacecraft",
+    "khong gian": "space station astronaut orbit cosmos",
+    "phi hanh gia": "astronaut space mission nasa planet mars",
+    "sao hoa": "mars planet astronaut survival red planet",
+    "mat trang": "moon lunar astronaut apollo space",
+    "ho den": "black hole wormhole space time relativity",
+    "du hanh thoi gian": "time travel future past paradox time machine",
+    "vong lap thoi gian": "time loop repeat day over again time travel",
+    "thoi gian": "time travel loop future past",
+    "nguoi ngoai hanh tinh": "alien extraterrestrial invasion ufo spaceship",
+    "vat the bay": "ufo alien flying saucer extraterrestrial",
+    "tri tue nhan tao": "artificial intelligence ai robot machine sentient computer",
+    "nguoi may": "robot android cyborg machine artificial intelligence",
     "robot": "robot cyborg machine android",
-    "xac song": "zombie apocalypse virus undead survival",
-    "zombie": "zombie undead infection survival",
-    "ma ca rong": "vampire blood immortal night",
-    "phu thuy": "witch wizard magic spell school",
+    "ke huy diet": "terminator cyborg future war machine",
+    "the gioi ao": "virtual reality simulation matrix cyber",
+    "thuc te ao": "virtual reality simulation game avatar",
+    "nhan ban": "clone cloning genetic experiment DNA",
+    "bien doi gen": "genetic mutation experiment DNA monster",
+    "dot bien": "mutant mutation genetic superpower",
+    "tang hinh": "invisible man invisibility experiment",
+    "thu nho": "shrink miniature tiny size microscopic",
+    "khong lo": "giant monster kaiju colossus huge",
+    "da vu tru": "multiverse parallel universe alternate dimension",
+    "chieu khong gian": "dimension portal parallel world",
+
+    # --- Kinh di / Sieu nhien / Quai vat ---
+    "xac song": "zombie apocalypse virus undead infected survival",
+    "zombie": "zombie undead infection survival apocalypse",
+    "dai dich": "pandemic virus outbreak infection quarantine plague",
+    "virus": "virus infection outbreak deadly disease",
+    "ma ca rong": "vampire blood immortal dracula night fang",
+    "nguoi soi": "werewolf full moon beast transformation",
+    "quy": "demon devil exorcism possession evil spirit",
+    "tru ta": "exorcism priest demon possessed demonic",
+    "nhap hon": "possession demon spirit haunted body",
+    "ngoi nha ma": "haunted house ghost paranormal family spirit",
+    "nha ma": "haunted house ghost spirit paranormal",
+    "bup be ma": "possessed doll haunted toy curse evil",
+    "bup be": "doll toy puppet possessed",
+    "loi nguyen": "curse cursed ancient hex spell",
+    "nghi le": "ritual cult sacrifice occult dark",
+    "ta giao": "cult sect ritual brainwash fanatical",
+    "ac mong": "nightmare dream sleep terror Freddy",
+    "giac mo": "dream subconscious sleep inception reality",
+    "an thit nguoi": "cannibal cannibalism tribe flesh",
+    "quai vat": "monster creature beast predator attack",
+    "quai thu": "monster beast giant creature kaiju",
+
+    # --- Ky ao / Phep thuat / Than thoai ---
+    "phu thuy": "witch wizard magic spell Hogwarts sorceress",
+    "phap su": "wizard sorcerer mage magic spell",
     "phep thuat": "magic wizard spell fantasy kingdom",
-    "sieu anh hung": "superhero hero villain superpower save world",
-    "diep vien": "spy secret agent cia mission intelligence",
-    "sat thu": "assassin hitman killer revenge contract",
-    "bao thu": "revenge vengeance justice payback",
-    "tra thu": "revenge vengeance kill",
-    "cuop ngan hang": "bank heist robbery thief plan",
-    "trom": "thief heist robbery steal",
+    "than thoai": "mythology gods Greek Olympus titan legend",
+    "vi than": "gods deity immortal mythology Zeus Thor",
+    "thien than": "angel heaven wings divine demon",
+    "ac quy": "demon devil hell Lucifer soul",
+    "tien ca": "mermaid ocean underwater sea princess",
+    "nang tien": "fairy pixie magical forest wings",
+    "yeu tinh": "elf goblin troll fantasy middle earth",
+    "nguoi lun": "dwarf dwarfs fantasy treasure mountain",
+    "rong": "dragon fire knight fantasy kingdom treasure",
+    "hiep si": "knight sword armor medieval king castle",
+    "kiem si": "swordsman samurai blade duel honor",
+    "samurai": "samurai katana Japan warrior honor",
+    "ninja": "ninja shinobi assassin stealth Japan",
+    "co tich": "fairy tale princess castle magic prince",
+    "cong chua": "princess royal castle kingdom prince",
+    "hoang tu": "prince royal kingdom throne princess",
+    "nha vua": "king throne royal crown kingdom",
+    "nu hoang": "queen royal throne crown empire",
+    "hoang gia": "king queen royal palace kingdom crown",
+    "de che": "empire emperor war ancient Rome",
+    "la ma": "Roman empire gladiator Caesar arena",
+    "dau si": "gladiator arena Rome fight slave",
+    "ai cap": "Egypt pharaoh pyramid mummy ancient curse",
+    "xac uop": "mummy Egypt tomb curse pyramid",
+    "kho bau": "treasure hunt map gold island pirate",
+    "cuop bien": "pirate ship Caribbean sea captain treasure",
+    "hai tac": "pirate ship ocean treasure captain",
+
+    # --- Sieu anh hung / Hanh dong / Toi pham ---
+    "sieu anh hung": "superhero hero villain superpower comic save world",
+    "sieu nang luc": "superpower telekinesis psychic mind power",
+    "anh hung": "hero bravery rescue save world warrior",
+    "ac nhan": "villain supervillain crime mastermind evil",
+    "diep vien": "spy secret agent cia mi6 mission intelligence",
+    "dac vu": "secret agent fbi cia operative mission",
+    "mat vu": "secret service agent bodyguard president",
+    "ve si": "bodyguard protect security assassin",
+    "sat thu": "assassin hitman killer contract revenge",
+    "linh danh thue": "mercenary squad mission war weapon",
+    "bao thu": "revenge vengeance justice payback kill",
+    "tra thu": "revenge vengeance payback murder",
+    "cuop ngan hang": "bank heist robbery thief vault plan",
+    "vu cuop": "heist robbery bank casino diamond",
+    "trom": "thief burglary heist steal jewel",
+    "sieu trom": "master thief heist steal diamond art",
+    "lua dao": "con artist scam fraud trickster hustle",
     "pha an": "detective murder investigation crime clue killer",
-    "tham tu": "detective investigation mystery murder clue",
-    "sat nhan": "serial killer murder detective investigation",
-    "toa an": "court lawyer trial judge justice",
-    "nha tu": "prison escape jail inmate guard",
-    "vuot nguc": "prison escape jail plan",
-    "chien tranh": "war soldier army battle military",
-    "the chien": "world war soldier nazi battle",
-    "sinh ton": "survival island wilderness stranded rescue",
-    "tham hoa": "disaster earthquake storm tsunami survival",
-    "ngay tan the": "apocalypse end of the world survival dystopia",
+    "dieu tra": "investigation detective fbi murder mystery",
+    "tham tu": "detective Sherlock investigation mystery clue",
+    "canh sat": "police cop officer detective partner crime",
+    "canh sat chim": "undercover cop agent infiltrate mafia gang",
+    "noi gian": "mole informant undercover traitor spy",
+    "sat nhan": "serial killer murder psychopath detective",
+    "giet nguoi hang loat": "serial killer murder victim detective fbi",
+    "bat coc": "kidnap abduction ransom hostage rescue",
+    "con tin": "hostage negotiation rescue terrorist",
+    "khung bo": "terrorist bomb attack hijack hostage",
+    "khong tac": "hijack airplane flight terrorist passenger",
+    "toa an": "court lawyer trial judge jury justice",
+    "luat su": "lawyer attorney trial court defense",
+    "quan toa": "judge court justice trial law",
+    "nha tu": "prison inmate jail guard sentence",
+    "vuot nguc": "prison escape break out jail inmate",
+    "tu nhan": "prisoner inmate jail escape",
+    "mafia": "mafia gangster crime boss family mob",
+    "bang dang": "gang gangster crime street turf",
+    "xa hoi den": "triad yakuza mafia mob crime boss",
+    "ma tuy": "drug cartel dealer narcoticsDEA",
+    "buon lau": "smuggler contraband cartel border",
+    "dua xe": "car racing driver fast street race",
+    "vo thuat": "martial arts kung fu fighter master tournament",
+    "kung fu": "kung fu martial arts shaolin master China",
+    "quyen anh": "boxing boxer ring champion fight",
+    "dam boc": "boxing fighter ring heavyweight champion",
+    "dau vo": "martial arts tournament fighter arena",
+    "ban tia": "sniper sharpshooter military rifle",
+
+    # --- Chien tranh / Lich su / Sinh ton / Tham hoa ---
+    "chien tranh": "war soldier army battle military combat",
+    "the chien": "world war soldier nazi allied battle",
+    "phat xit": "nazi Hitler holocaust world war Germany",
+    "do thai": "holocaust Jewish concentration camp nazi",
+    "chien tranh viet nam": "Vietnam war soldier jungle military",
+    "nguoi linh": "soldier military war army platoon",
+    "tau ngam": "submarine navy underwater torpedo captain",
+    "tau chien": "battleship navy war ocean fleet",
+    "phi cong": "pilot fighter jet aviation airplane",
+    "may bay": "airplane flight crash pilot passenger",
+    "roi may bay": "plane crash survival island stranded",
+    "sinh ton": "survival wilderness stranded rescue island",
+    "mac ket": "stranded trapped survival canyon island",
+    "dao hoang": "deserted island castaway stranded survival",
+    "lac tren dao": "island stranded castaway survival ocean",
+    "sa mac": "desert sand survival oasis heat",
+    "bac cuc": "arctic snow ice cold survival polar",
+    "nui tuyet": "mountain snow avalanche climb survival",
+    "leo nui": "mountain climbing Everest peak survival",
+    "tham hoa": "disaster earthquake volcano tsunami storm survival",
+    "dong dat": "earthquake fault collapse disaster rescue",
+    "song than": "tsunami wave ocean flood disaster",
+    "nui lua": "volcano eruption lava ash disaster",
+    "bao": "storm hurricane tornado tempest sea",
+    "loc xoay": "tornado twister storm wind",
+    "ngay tan the": "apocalypse end of the world meteor survival",
+    "tan the": "apocalypse doomsday end of the world survival",
     "hau tan the": "post apocalyptic wasteland survival future",
-    "hoc duong": "high school student teenager college friendship",
+    "thien thach": "asteroid meteor comet impact earth",
+    "chim tau": "shipwreck sinking ship ocean Titanic",
+
+    # --- Gia dinh / Tinh cam / Tam ly / Doi song ---
+    "hoc duong": "high school student teenager college prom",
+    "sinh vien": "college university student campus youth",
+    "hoc sinh": "student school teacher classroom",
+    "thay giao": "teacher professor school inspire student",
+    "co giao": "teacher school student classroom",
     "tuoi tre": "youth coming of age teenager friendship summer",
     "thanh xuan": "youth high school first love friendship memory",
-    "tinh ban": "friendship best friends bond journey",
+    "tinh dau": "first love romance youth crush heart",
+    "yeu don phuong": "unrequited love crush secret romance",
+    "ngoai tinh": "affair infidelity marriage betrayal wife husband",
+    "ly hon": "divorce marriage custody couple separation",
+    "ket hon": "wedding marriage bride groom love",
+    "dam cuoi": "wedding bride groom marriage family",
+    "hen ho": "dating blind date romance couple love",
+    "chia tay": "breakup heartbreak ex lover relationship",
+    "that tinh": "heartbreak breakup lonely love recovery",
+    "tinh ban": "friendship best friends bond buddy",
     "gia dinh": "family father mother son daughter home",
-    "cha con": "father son daughter family bond",
-    "me con": "mother son daughter family love",
+    "cha con": "father son daughter dad family bond",
+    "bo con": "father son daughter dad family",
+    "me con": "mother son daughter mom family love",
+    "anh em": "brothers sibling family loyalty",
+    "chi em": "sisters sibling family woman",
+    "vo chong": "husband wife marriage couple relationship",
+    "tre mo coi": "orphan orphanage adopt family child",
+    "nhan nuoi": "adoption foster child parents family",
+    "mang thai": "pregnancy pregnant baby mother",
+    "mat tri nho": "amnesia memory loss forget identity",
+    "tri nho": "memory amnesia remember brain",
+    "tam than": "mental illness asylum psychiatric hospital mind",
+    "da nhan cach": "split personality multiple identity disorder",
+    "tram cam": "depression grief loneliness mental healing",
+    "ung thu": "cancer terminal illness hospital love life",
+    "benh nan y": "terminal illness disease hospital love",
+    "nguoi mu": "blind sight vision disability",
+    "nguoi cam diec": "deaf mute sign language",
+    "nha van": "writer author novelist book manuscript",
+    "nha bao": "journalist reporter newspaper investigation truth",
+    "bac si": "doctor surgeon hospital medical patient",
+    "y ta": "nurse hospital patient care",
+    "nha khoa hoc": "scientist laboratory experiment research",
+    "thien tai": "genius prodigy mathematician brilliant mind",
+    "toan hoc": "mathematician math genius numbers professor",
+    "vat ly": "physicist science theory quantum",
+    "ty phu": "billionaire millionaire rich wealth money",
+    "pho wall": "wall street stock market finance money",
+    "chung khoan": "stock market finance wall street trader",
+    "ngan hang": "bank banker money finance",
+    "co bac": "gambling casino poker Las Vegas card",
+    "song bac": "casino Las Vegas gambling blackjack poker",
+    "khoi nghiep": "startup entrepreneur company business success",
+
+    # --- Nghe thuat / Am nhac / The thao / Am thuc / Du lich ---
     "am nhac": "music band singer song concert piano",
-    "the thao": "sport team coach championship boxing football",
-    "am thuc": "food chef restaurant cooking kitchen",
-    "nau an": "chef cooking restaurant food",
-    "du lich": "travel journey road trip vacation europe",
-    "giang sinh": "christmas holiday snow santa family",
-    "anh em": "brothers family loyalty",
-    "con cho": "dog puppy pet loyal animal",
-    "chu cho": "dog puppy pet loyal animal",
-    "con meo": "cat pet animal",
+    "ca si": "singer music pop star stage song",
+    "ban nhac": "rock band music concert tour musician",
+    "duong cam": "piano pianist classical music concert",
+    "piano": "piano pianist music classical",
+    "trong": "drummer jazz music conservatory band",
+    "nhay": "dance dancer ballet hip hop stage",
+    "mua ba le": "ballet dancer swan stage performance",
+    "hoi hoa": "painter artist painting art gallery",
+    "hoa si": "painter artist portrait art",
+    "nhiep anh": "photographer camera photo journalism",
+    "dien anh": "filmmaker director Hollywood movie actor",
+    "the thao": "sport team coach championship tournament",
+    "bong da": "football soccer team coach championship",
+    "bong ro": "basketball coach team high school player",
+    "bong chay": "baseball team pitcher stadium league",
+    "dua ngua": "horse racing jockey champion stallion",
+    "am thuc": "food chef restaurant cooking kitchen culinary",
+    "nau an": "chef cooking restaurant food kitchen",
+    "dau bep": "chef restaurant kitchen cooking food",
+    "du lich": "travel journey road trip vacation Europe",
+    "phuot": "road trip backpacker travel adventure",
+    "giang sinh": "christmas holiday snow santa family gift",
+    "le ta on": "thanksgiving family dinner holiday",
+    "halloween": "halloween pumpkin trick or treat night horror",
+
+    # --- Dong vat / Thien nhien ---
+    "con cho": "dog puppy pet loyal animal canine",
+    "chu cho": "dog puppy pet loyal companion",
+    "con meo": "cat kitten pet animal feline",
+    "con ngua": "horse stallion riding ranch wild",
+    "con khi": "ape monkey chimpanzee gorilla planet",
+    "khi dot": "ape gorilla primate jungle evolution",
+    "con gau": "bear grizzly forest cub nature",
+    "su tu": "lion pride Africa savanna king",
+    "ca voi": "whale ocean sea marine mammal",
+    "ca heo": "dolphin ocean sea marine",
+    "chim canh cut": "penguin Antarctica ice dance",
     "thu cung": "pet dog cat animal loyal",
-    "dong vat": "animal wildlife nature pet",
+    "dong vat": "animal wildlife nature safari",
+    "rung xanh": "jungle rainforest Tarzan wild animal",
+    "dai duong": "ocean sea underwater deep submarine",
     "bien": "ocean sea ship shark island underwater",
-    "ca map": "shark ocean attack survival",
-    "khung long": "dinosaur island park prehistoric",
-    "rong": "dragon fantasy knight kingdom fire",
-    "co tich": "fairy tale princess castle magic kingdom",
-    "hoang gia": "king queen royal palace kingdom crown",
-    "mafia": "mafia gangster crime boss family mob",
-    "bang dang": "gang gangster crime street police",
-    " đua xe": "car racing driver fast speed street",
-    "dua xe": "car racing driver speed",
-    "vo thuat": "martial arts kung fu fighter master tournament",
+    "ca map": "shark ocean attack beach survival",
+    "ca sau": "crocodile alligator swamp river attack",
+    "ran khong lo": "giant snake anaconda jungle attack",
+    "nhen": "spider arachnid bite web",
+    "khung long": "dinosaur jurassic island park prehistoric",
+    "voi": "elephant Africa circus animal",
+    "soi": "wolf pack wilderness snow survival",
+}
+
+# Tu dien dich DON TU (Single-word Vietnamese -> English) cho cac danh tu, dong tu, tinh tu
+# giup chuyen bat ky cau mo ta noi dung tieng Viet tu do nao sang tu khoa tieng Anh cho TF-IDF/BM25
+VI_WORD_TO_EN: dict[str, str] = {
+    "dao": "island", "hoang": "deserted stranded", "rung": "forest jungle",
+    "nui": "mountain", "bien": "sea ocean", "song": "river", "ho": "lake",
+    "tuyet": "snow ice", "lua": "fire flame", "nuoc": "water", "dat": "earth land",
+    "troi": "sky heaven", "mua": "rain storm", "gio": "wind", "cat": "sand desert",
+    "tau": "ship train boat", "thuyen": "boat ship", "xe": "car vehicle",
+    "nha": "house home", "lau": "castle mansion", "thanh": "city castle",
+    "pho": "street city", "lang": "village town", "truong": "school college",
+    "lop": "class school", "benh": "disease illness", "vien": "hospital institute",
+    "thuoc": "drug medicine", "tien": "money cash", "vang": "gold treasure",
+    "kim": "diamond needle", "cuong": "diamond", "bau": "treasure",
+    "vua": "king", "hoang": "emperor royal", "chua": "princess", "tu": "prince prison",
+    "linh": "soldier spirit", "tuong": "general statue", "quan": "army military",
+    "sung": "gun weapon", "kiem": "sword blade", "dao": "knife island",
+    "bom": "bomb explosive", "dan": "bullet", "mau": "blood", "xac": "corpse body",
+    "chet": "dead death die", "song": "alive live", "cuu": "rescue save",
+    "giet": "kill murder", "ban": "shoot friend sell", "danh": "fight beat",
+    "chay": "run burn", "tron": "escape flee hide", "bat": "catch arrest kidnap",
+    "tim": "find search heart", "mat": "lose lost eye", "nho": "remember memory small",
+    "quen": "forget amnesia", "yeu": "love romance", "ghet": "hate", "cuoi": "laugh marry",
+    "khoc": "cry tears", "so": "fear afraid", "gian": "angry", "co": "lonely aunt",
+    "don": "lonely single", "ngheo": "poor poverty", "giau": "rich wealthy",
+    "gia": "old fake family", "tre": "young child", "be": "child little",
+    "con": "child son daughter animal", "cha": "father dad", "bo": "father dad",
+    "me": "mother mom", "vo": "wife", "chong": "husband", "anh": "brother hero",
+    "em": "sister brother", "ban": "friend partner", "ke": "enemy person",
+    "thu": "enemy animal", "cho": "dog", "meo": "cat", "chim": "bird",
+    "ca": "fish shark whale", "ran": "snake", "ngua": "horse", "khi": "monkey ape",
+    "gau": "bear", "voi": "elephant", "ho": "tiger", "soi": "wolf",
+    "ma": "ghost haunted", "quy": "demon devil", "than": "god spirit",
+    "tien": "fairy angel", "rong": "dragon", "phu": "wizard witch", "thuy": "witch water",
+    "bay": "fly trap", "chim": "sink bird", "roi": "fall crash", "no": "explode debt",
+    "cuop": "robbery heist pirate", "trom": "thief steal", "lua": "deceive con fire",
+    "tu": "prison jail", "toa": "court building", "an": "case eat peace",
+    "hat": "sing song", "nhac": "music song", "mua": "dance buy rain",
+    "ve": "paint draw return", "viet": "write book", "doc": "read poison lonely",
+    "hoc": "study learn school", "day": "teach wake", "nau": "cook",
+    "dua": "race", "dau": "fight compete head pain", "thang": "win victory",
+    "thua": "lose defeat", "vong": "loop ring circle", "lap": "repeat loop",
+    "khu": "zone area", "ham": "bunker tunnel", "ngam": "underground submarine",
+    "mat": "secret lost eye", "bi": "secret mystery", "an": "hidden mystery",
+    "khoa": "science lock", "hoc": "science study", "hanh": "planet action journey",
+    "tinh": "planet love awake", "sao": "star mars", "anh": "light hero",
+    "sang": "light bright morning", "toi": "dark night", "dem": "night",
+    "ngay": "day", "mua": "season rain", "he": "summer", "dong": "winter",
 }
 
 
@@ -430,6 +686,8 @@ class ChatIntent:
     actor: Optional[str] = None
     keywords_raw: str = ""
     keywords_en: str = ""
+    content_query_en: str = ""
+    content_query_vi: str = ""
     is_followup: bool = False
     parser_source: str = "local"  # "local" | "llm"
 
@@ -449,6 +707,8 @@ class ChatIntent:
             or self.min_rating is not None
             or self.keywords_raw
             or self.keywords_en
+            or self.content_query_en
+            or self.content_query_vi
             or self.is_followup
         )
 
@@ -473,6 +733,8 @@ class ChatIntent:
             "actor": self.actor,
             "keywords_raw": self.keywords_raw,
             "keywords_en": self.keywords_en,
+            "content_query_en": self.content_query_en,
+            "content_query_vi": self.content_query_vi,
             "is_followup": self.is_followup,
             "parser_source": self.parser_source,
             "summary_line": self.build_summary_line(),
@@ -543,9 +805,81 @@ def _find_movies_csv() -> Optional[str]:
             return str(p)
     return None
 
+
+def _find_credits_csv() -> Optional[str]:
+    """Tim duong dan toi tmdb_5000_credits.csv neu co."""
+    env = os.environ.get("TMDB_CREDITS_CSV")
+    if env and os.path.exists(env):
+        return env
+    cur = Path(__file__).resolve().parent
+    candidates = [
+        cur / "tmdb_5000_credits.csv",
+        cur / "data" / "tmdb_5000_credits.csv",
+        cur.parent / "tmdb_5000_credits.csv",
+        cur.parent / "data" / "tmdb_5000_credits.csv",
+        cur.parent / "data_module" / "data" / "tmdb_5000_credits.csv",
+        cur.parent / "data_module" / "src" / "tmdb_5000_credits.csv",
+    ]
+    for p in candidates:
+        if p.exists():
+            return str(p)
+    return None
+
+
+def _load_overview_vi_map(db_path: str) -> dict[int, str]:
+    """Tai ban dich tom tat tieng Viet (overview_vi) tu movies.db, accounts.db hoac file CSV neu co."""
+    out: dict[int, str] = {}
+    # 1. Thu doc tu bang movies (neu da co cot overview_vi) hoac bang overview_vi trong movies.db
+    try:
+        conn = sqlite3.connect(db_path)
+        cols = {r[1] for r in conn.execute("PRAGMA table_info(movies)").fetchall()}
+        if "overview_vi" in cols:
+            for mid, txt in conn.execute("SELECT movie_id, overview_vi FROM movies WHERE overview_vi IS NOT NULL"):
+                if txt and str(txt).strip():
+                    out[int(mid)] = str(txt).strip()
+        tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+        if "overview_vi" in tables:
+            for mid, txt in conn.execute("SELECT movie_id, text FROM overview_vi WHERE text IS NOT NULL"):
+                if txt and str(txt).strip():
+                    out[int(mid)] = str(txt).strip()
+        conn.close()
+    except Exception:
+        pass
+
+    # 2. Thu doc tu accounts.db o thu muc goc
+    acc_path = os.environ.get("ACCOUNTS_DB") or os.path.join(_ROOT, "accounts.db")
+    if os.path.exists(acc_path):
+        try:
+            conn = sqlite3.connect(acc_path)
+            tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+            if "overview_vi" in tables:
+                for mid, txt in conn.execute("SELECT movie_id, text FROM overview_vi WHERE text IS NOT NULL"):
+                    if txt and str(txt).strip() and int(mid) not in out:
+                        out[int(mid)] = str(txt).strip()
+            conn.close()
+        except Exception:
+            pass
+
+    # 3. Thu doc tu data_module/overview_vi.csv neu co
+    csv_vi = os.path.join(_ROOT, "data_module", "overview_vi.csv")
+    if os.path.exists(csv_vi):
+        try:
+            import csv as _csv
+            with open(csv_vi, newline="", encoding="utf-8") as f:
+                for r in _csv.DictReader(f):
+                    if r.get("movie_id") and r.get("text"):
+                        mid = int(r["movie_id"])
+                        if mid not in out:
+                            out[mid] = r["text"].strip()
+        except Exception:
+            pass
+    return out
+
+
 class FeatureSpaceIndex:
     """Quan ly va khoi phuc chinh xac khong gian 324 chieu tu movies.db ma khong can
-    chay lai build_dataset.py hay luu file pickle ngoai."""
+    chay lai build_dataset.py hay luu file pickle ngoai.
+    Bo sung chi muc tim kiem noi dung Da tang (Rich Lexical TF-IDF Anh + Viet + Toan bo Dao dien/Dien vien)."""
 
     def __init__(self, db_path: str = DEFAULT_DB_PATH) -> None:
         self.db_path = db_path
@@ -556,17 +890,32 @@ class FeatureSpaceIndex:
 
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
+        db_cols = {r[1] for r in conn.execute("PRAGMA table_info(movies)").fetchall()}
+        extra_select = ""
+        for col_name in ("keywords", "tagline", "runtime", "overview_vi"):
+            if col_name in db_cols:
+                extra_select += f", {col_name}"
         rows = conn.execute(
-            'SELECT movie_id, title, overview, genres, director, "cast", '
-            'vote_average, vote_count, popularity, release_date '
-            'FROM movies ORDER BY movie_id'
+            f'SELECT movie_id, title, overview, genres, director, "cast", '
+            f'vote_average, vote_count, popularity, release_date{extra_select} '
+            f'FROM movies ORDER BY movie_id'
         ).fetchall()
         conn.close()
+
+        overview_vi_map = _load_overview_vi_map(db_path)
 
         self.movies: dict[int, dict[str, Any]] = {}
         self.titles_ordered: list[tuple[int, str, str, float]] = []  # (mid, title, folded, pop)
         overviews: list[str] = []
         years: list[int] = []
+
+        # Tap hop TOAN BO dao dien va dien vien trong catalog (khong chi gioi han top 50/200)
+        all_directors_set: dict[str, str] = {}  # folded -> original
+        all_actors_count: dict[str, tuple[str, int]] = {}  # folded -> (original, count)
+        self.mid_to_keywords: dict[int, list[str]] = {}
+        self.keyword_to_mids: dict[str, set[int]] = {}
+        self.mid_to_tagline: dict[int, str] = {}
+        self.mid_to_runtime: dict[int, int] = {}
 
         for r in rows:
             mid = int(r["movie_id"])
@@ -576,12 +925,50 @@ class FeatureSpaceIndex:
             year = int(rel_date[:4]) if rel_date[:4].isdigit() else None
             if year is not None:
                 years.append(year)
+
+            # Doc keywords/tagline/runtime truc tiep tu DB neu da duoc nang cap schema
+            if "keywords" in db_cols and r["keywords"]:
+                try:
+                    kw_list = json.loads(r["keywords"])
+                    if isinstance(kw_list, list):
+                        names = [
+                            (it["name"].strip() if isinstance(it, dict) else str(it).strip())
+                            for it in kw_list
+                            if (isinstance(it, dict) and it.get("name")) or isinstance(it, str)
+                        ]
+                        if names:
+                            self.mid_to_keywords[mid] = names
+                            for name in names:
+                                self.keyword_to_mids.setdefault(name.lower(), set()).add(mid)
+                except Exception:
+                    pass
+            if "tagline" in db_cols and r["tagline"]:
+                self.mid_to_tagline[mid] = str(r["tagline"]).strip()
+            if "runtime" in db_cols and r["runtime"]:
+                try:
+                    self.mid_to_runtime[mid] = int(float(r["runtime"]))
+                except Exception:
+                    pass
+
+            director_name = r["director"]
+            if director_name:
+                fd = _fold(director_name)
+                if len(fd) >= 4:
+                    all_directors_set[fd] = director_name
+            for actor_name in cast:
+                if actor_name:
+                    fa = _fold(actor_name)
+                    if len(fa) >= 4:
+                        prev_orig, prev_cnt = all_actors_count.get(fa, (actor_name, 0))
+                        all_actors_count[fa] = (prev_orig, prev_cnt + 1)
+
             meta = {
                 "movie_id": mid,
                 "title": r["title"],
                 "overview": r["overview"] or "",
+                "overview_vi": overview_vi_map.get(mid, ""),
                 "genres": genres,
-                "director": r["director"],
+                "director": director_name,
                 "cast": cast,
                 "vote_average": float(r["vote_average"] or 0.0),
                 "vote_count": int(r["vote_count"] or 0),
@@ -602,7 +989,7 @@ class FeatureSpaceIndex:
         )
         self.genre_to_col: dict[str, int] = {g: i for i, g in enumerate(self.genre_labels)}
 
-        # 2. Director labels [20:71] (50 top directors + Other/Unknown)
+        # 2. Director labels [20:71] (50 top directors + Other/Unknown) + Toan bo director trong DB
         self.director_to_col: dict[str, int] = {}
         self.directors_folded: list[tuple[str, str, int]] = []  # (folded, original, col)
         for col in range(20, 71):
@@ -612,8 +999,14 @@ class FeatureSpaceIndex:
                 d_name = next(iter(dirs))
                 self.director_to_col[d_name] = col
                 self.directors_folded.append((_fold(d_name), d_name, col))
+        # Bo sung tat ca cac dao dien con lai trong DB (col = -1) de tim kiem van khop 100%
+        seen_d_folded = {x[0] for x in self.directors_folded}
+        for fd, orig_d in sorted(all_directors_set.items(), key=lambda x: -len(x[0])):
+            if fd not in seen_d_folded:
+                self.directors_folded.append((fd, orig_d, -1))
+        self.directors_folded.sort(key=lambda x: -len(x[0]))
 
-        # 3. Cast labels [71:271] (200 top actors)
+        # 3. Cast labels [71:271] (200 top actors) + Toan bo dien vien trong DB
         self.cast_to_col: dict[str, int] = {}
         self.actors_folded: list[tuple[str, str, int]] = []  # (folded, original, col)
         for col in range(71, 271):
@@ -626,6 +1019,11 @@ class FeatureSpaceIndex:
                 a_name = next(iter(common))
                 self.cast_to_col[a_name] = col
                 self.actors_folded.append((_fold(a_name), a_name, col))
+        seen_a_folded = {x[0] for x in self.actors_folded}
+        for fa, (orig_a, _cnt) in sorted(all_actors_count.items(), key=lambda x: (-len(x[0]), -x[1][1])):
+            if fa not in seen_a_folded:
+                self.actors_folded.append((fa, orig_a, -1))
+        self.actors_folded.sort(key=lambda x: -len(x[0]))
 
         # 4. Overview TF-IDF -> SVD projection matrix [271:321]
         # Khoi phuc ma tran chieu V_T (5000 x 50) truc tiep tu Y_svd = X_tfidf @ V_T
@@ -642,33 +1040,76 @@ class FeatureSpaceIndex:
         self.min_year = min(years) if years else 1916
         self.max_year = max(years) if years else 2017
 
-        # 6. Chi muc TMDB Keywords tu CSV (neu co) phuc vu tim kiem theo tu khoa
-        self.mid_to_keywords: dict[int, list[str]] = {}
-        self.keyword_to_mids: dict[str, set[int]] = {}
+        # 6. Chi muc TMDB Keywords & Tagline tu CSV (neu chua co san trong DB)
         self.keywords_folded: list[tuple[str, str, set[int]]] = []
         csv_path = _find_movies_csv()
-        if csv_path:
+        if csv_path and not self.mid_to_keywords:
             try:
                 import pandas as pd
                 df = pd.read_csv(csv_path)
-                for mid_val, kw_val in zip(df["id"], df.get("keywords", [])):
-                    if not isinstance(kw_val, str):
-                        continue
-                    try:
-                        items = json.loads(kw_val)
-                        names = [it["name"].strip() for it in items if it.get("name")]
-                        if names:
-                            mid_int = int(mid_val)
-                            self.mid_to_keywords[mid_int] = names
-                            for name in names:
-                                self.keyword_to_mids.setdefault(name.lower(), set()).add(mid_int)
-                    except Exception:
-                        pass
-                for k_orig, mids_set in self.keyword_to_mids.items():
-                    self.keywords_folded.append((_fold(k_orig), k_orig, mids_set))
-                self.keywords_folded.sort(key=lambda x: -len(x[0]))
+                for _, r_csv in df.iterrows():
+                    mid_int = int(r_csv["id"])
+                    kw_val = r_csv.get("keywords")
+                    if isinstance(kw_val, str):
+                        try:
+                            items = json.loads(kw_val)
+                            names = [it["name"].strip() for it in items if it.get("name")]
+                            if names:
+                                self.mid_to_keywords[mid_int] = names
+                                for name in names:
+                                    self.keyword_to_mids.setdefault(name.lower(), set()).add(mid_int)
+                        except Exception:
+                            pass
+                    tl_val = r_csv.get("tagline")
+                    if isinstance(tl_val, str) and tl_val.strip():
+                        self.mid_to_tagline[mid_int] = tl_val.strip()
+                    rt_val = r_csv.get("runtime")
+                    if rt_val is not None and rt_val == rt_val:
+                        try:
+                            self.mid_to_runtime[mid_int] = int(float(rt_val))
+                        except Exception:
+                            pass
             except Exception:
                 pass
+
+        for k_orig, mids_set in self.keyword_to_mids.items():
+            self.keywords_folded.append((_fold(k_orig), k_orig, mids_set))
+        self.keywords_folded.sort(key=lambda x: -len(x[0]))
+
+        # 7. Chi muc RICH CONTENT TF-IDF (Ket hop Title + Tagline + Keywords + Overview + Director + Cast + Overview_VI)
+        # Giup tim kiem noi dung phim (plot/content search) chinh xac gap nhieu lan so voi chi dung 50 chieu SVD
+        rich_docs_en: list[str] = []
+        rich_docs_vi_folded: list[str] = []
+        for mid_np in self.movie_ids:
+            mid = int(mid_np)
+            m = self.movies[mid]
+            kws_str = " ".join(self.mid_to_keywords.get(mid, []))
+            tagline_str = self.mid_to_tagline.get(mid, "")
+            cast_str = " ".join(m.get("cast") or [])
+            dir_str = m.get("director") or ""
+            # Lap lai title va keywords 2 lan de tang trong so khi khop tu khoa chinh xac
+            doc_en = f"{m['title']} {m['title']} {tagline_str} {kws_str} {kws_str} {m['overview']} {dir_str} {cast_str}"
+            rich_docs_en.append(doc_en)
+
+            ov_vi = m.get("overview_vi") or ""
+            genres_vi = " ".join(GENRE_VI_LABELS.get(g, g) for g in m.get("genres", []))
+            doc_vi = _fold(f"{m['title']} {ov_vi} {genres_vi} {kws_str}")
+            rich_docs_vi_folded.append(doc_vi)
+
+        self.rich_tfidf_en = TfidfVectorizer(
+            max_features=12000,
+            stop_words="english",
+            ngram_range=(1, 2),
+            sublinear_tf=True,
+        )
+        self.rich_matrix_en = self.rich_tfidf_en.fit_transform(rich_docs_en)
+
+        self.rich_tfidf_vi = TfidfVectorizer(
+            max_features=8000,
+            ngram_range=(1, 2),
+            sublinear_tf=True,
+        )
+        self.rich_matrix_vi = self.rich_tfidf_vi.fit_transform(rich_docs_vi_folded)
 
     def project_text_to_svd(self, text: str) -> np.ndarray:
         """Chieu van ban tieng Anh qua TF-IDF -> 50 chieu SVD cung khong gian movies.db."""
@@ -677,6 +1118,23 @@ class FeatureSpaceIndex:
         tfidf_vec = self.tfidf.transform([text])
         svd_vec = tfidf_vec @ self.svd_projection
         return np.asarray(svd_vec, dtype=np.float32).reshape(50)
+
+    def compute_content_similarity(self, query_en: str, query_vi_folded: str = "") -> np.ndarray:
+        """Tinh diem tuong dong noi dung truc tiep tren Rich TF-IDF (12.000 features n-gram Anh + Viet).
+        Giai quyet triet de hien tuong nen SVD 50 chieu lam mat tu khoa cot truyen cu the."""
+        n = len(self.movie_ids)
+        scores = np.zeros(n, dtype=np.float32)
+        if query_en and query_en.strip():
+            q_vec_en = self.rich_tfidf_en.transform([query_en])
+            if q_vec_en.nnz > 0:
+                sim_en = (self.rich_matrix_en @ q_vec_en.T).toarray().reshape(n).astype(np.float32)
+                scores = np.maximum(scores, sim_en)
+        if query_vi_folded and query_vi_folded.strip():
+            q_vec_vi = self.rich_tfidf_vi.transform([query_vi_folded])
+            if q_vec_vi.nnz > 0:
+                sim_vi = (self.rich_matrix_vi @ q_vec_vi.T).toarray().reshape(n).astype(np.float32)
+                scores = np.maximum(scores, sim_vi * 0.95)
+        return scores
 
 
 _SPACE_CACHE: dict[str, FeatureSpaceIndex] = {}
@@ -820,16 +1278,19 @@ def _match_movie_titles_in_text(
     return matched_ids, matched_titles, cleaned_folded
 
 
-def _extract_genres_from_segment(segment_folded: str) -> list[str]:
+def _extract_genres_from_segment(segment_folded: str, return_matched_phrases: bool = False):
     """Tim danh sach the loai xuat hien trong mot doan van ban da bo dau."""
     found: list[str] = []
+    matched_phrases: list[str] = []
     for genre, phrases in GENRE_SYNONYMS.items():
-        for p in phrases:
+        for p in sorted(phrases, key=len, reverse=True):
             fp = _fold(p)
             if re.search(rf"(?:^|\b){re.escape(fp)}(?:\b|$)", segment_folded):
                 if genre not in found:
                     found.append(genre)
-                break
+                matched_phrases.append(fp)
+    if return_matched_phrases:
+        return found, matched_phrases
     return found
 
 
@@ -893,24 +1354,31 @@ def parse_intent_local(
     wanted_genres: list[str] = []
     mood_labels: list[str] = []
     en_kw_parts: list[str] = []
+    matched_mood_or_genre_phrases: list[str] = []
 
     for mood in MOOD_DICTIONARY:
-        for trig in mood["triggers"]:
+        matched_any_trig = False
+        for trig in sorted(mood["triggers"], key=len, reverse=True):
             f_trig = _fold(trig)
             if re.search(rf"(?:^|\b){re.escape(f_trig)}(?:\b|$)", positive_folded):
-                if mood["label"] not in mood_labels:
-                    mood_labels.append(mood["label"])
-                for g in mood["genres"]:
-                    if g not in wanted_genres and g not in avoid_genres:
-                        wanted_genres.append(g)
-                for g in mood["avoid"]:
-                    if g not in avoid_genres and g not in wanted_genres:
-                        avoid_genres.append(g)
-                en_kw_parts.append(mood["en_keywords"])
-                break
+                if not matched_any_trig:
+                    if mood["label"] not in mood_labels:
+                        mood_labels.append(mood["label"])
+                    for g in mood["genres"]:
+                        if g not in wanted_genres and g not in avoid_genres:
+                            wanted_genres.append(g)
+                    for g in mood["avoid"]:
+                        if g not in avoid_genres and g not in wanted_genres:
+                            avoid_genres.append(g)
+                    en_kw_parts.append(mood["en_keywords"])
+                    matched_any_trig = True
+                matched_mood_or_genre_phrases.append(f_trig)
 
     # 4. Nhan dien The loai truc tiep tren phan tich cuc (dat len dau danh sach uu tien)
-    explicit_genres = _extract_genres_from_segment(positive_folded)
+    explicit_genres, matched_genre_phrases = _extract_genres_from_segment(
+        positive_folded, return_matched_phrases=True
+    )
+    matched_mood_or_genre_phrases.extend(matched_genre_phrases)
     for g in reversed(explicit_genres):
         if g in avoid_genres:
             avoid_genres.remove(g)  # Neu nguoi dung noi ro "muon xem X", uu tien X
@@ -1035,38 +1503,77 @@ def parse_intent_local(
     elif re.search(r"\b(?:khoang\s+2\s+tieng|khoang\s+2\s+gio|duoi\s+2\s+tieng)\b", folded):
         intent.max_runtime = 125
     # 7.5. Nhan dien TMDB Keywords (VD: "marvel", "superhero", "breaking the fourth wall", "zombie", "time travel"...)
+    # Tao ban sao cua positive_folded da loai bo cac cum tu the loai/tam trang thong thuong de tranh khop nham "hai" -> "hai Jaan", "khoa hoc vien tuong" -> keyword rac
+    content_folded = positive_folded
+    for mp in matched_mood_or_genre_phrases:
+        # Giu lai cac cum tu chu de cu the (zombie, sieu anh hung, du hanh thoi gian, xac song, vo thuat...)
+        if mp not in VI_TO_EN_TOPIC_KEYWORDS:
+            content_folded = re.sub(rf"(?:^|\b){re.escape(mp)}(?:\b|$)", " ", content_folded)
+    # Xoa cac tu chi quan he nhu "giong phim", "kieu nhu", "dao dien", "dien vien", "tu nam", "thap nien"
+    content_folded = re.sub(
+        r"\b(?:giong\s+nhu\s+phim|giong\s+phim|giong\s+nhu|giong|tuong\s+tu|kieu\s+nhu|nhu\s+phim|dao\s+dien|dien\s+vien|thap\s+nien|tu\s+nam|truoc\s+nam|sau\s+nam|duoi\s+\d+\s+phut)\b",
+        " ",
+        content_folded,
+    )
+
+    # 8.1. Nhan dien Cum tu Chu de & Noi dung Tieng Viet (VI_TO_EN_TOPIC_KEYWORDS) TRUOC
+    # de tranh cac am tiet tieng Viet ("vien", "tien", "duong", "hanh"...) bi khop nham vao TMDB English Keywords
+    matched_topics_vi: list[str] = []
+    topic_en_terms: list[str] = []
     matched_kws: list[str] = []
     kw_display = ""
-    # Khop nguyen cum tu keyword (>= 4 ky tu, khong phai so) xuat hien trong van ban
+    remaining_for_words = content_folded
+
+    for vi_phrase, en_expansion in sorted(VI_TO_EN_TOPIC_KEYWORDS.items(), key=lambda x: -len(x[0])):
+        f_vi = _fold(vi_phrase)
+        if re.search(rf"(?:^|\b){re.escape(f_vi)}(?:\b|$)", remaining_for_words):
+            en_kw_parts.append(en_expansion)
+            topic_en_terms.append(en_expansion)
+            matched_topics_vi.append(vi_phrase.strip())
+            remaining_for_words = re.sub(rf"(?:^|\b){re.escape(f_vi)}(?:\b|$)", " ", remaining_for_words)
+            # Anh xa tu dau tien (chinh xac nhat) cua en_expansion sang TMDB keywords neu co
+            primary_en = en_expansion.split()[0].lower() if en_expansion.split() else ""
+            if len(primary_en) >= 4 and primary_en in getattr(space, "keyword_to_mids", {}):
+                if primary_en not in matched_kws:
+                    matched_kws.append(primary_en)
+
+    # 8.2. Nhan dien TMDB Keywords tieng Anh (VD: "marvel", "superhero", "breaking the fourth wall", "time travel"...)
     for f_kw, orig_kw, _mids in getattr(space, "keywords_folded", []):
-        if len(f_kw) >= 4 and not f_kw.isdigit() and re.search(r"\b" + re.escape(f_kw) + r"\b", positive_folded):
-            matched_kws.append(orig_kw)
+        if len(f_kw) >= 4 and not f_kw.isdigit() and re.search(r"\b" + re.escape(f_kw) + r"\b", remaining_for_words):
+            # Neu keyword la 1 tu don va nam trong danh sach am tiet tieng Viet (_VI_FALSE_EN hoac VI_WORD_TO_EN) thi bo qua
+            if " " not in f_kw and (f_kw in _VI_FALSE_EN or f_kw in VI_WORD_TO_EN):
+                continue
+            if orig_kw not in matched_kws:
+                matched_kws.append(orig_kw)
             if not kw_display:
                 kw_display = orig_kw
-            positive_folded = positive_folded.replace(f_kw, " ")
-            folded_no_title = folded_no_title.replace(f_kw, " ")
-            break
+            remaining_for_words = remaining_for_words.replace(f_kw, " ")
+            if len(matched_kws) >= 4:
+                break
 
     # Khop tu don dac trung trong keywords (VD: "marvel" -> "marvel comic", "marvel cinematic universe")
     if not matched_kws and getattr(space, "keywords_folded", None):
         _KW_STOP_WORDS = {
             "phim", "xem", "muon", "thich", "nhung", "cho", "minh", "mot", "cac", "nhu",
             "the", "loai", "gi", "ve", "movie", "movies", "film", "films", "like", "with",
-            "want", "watch", "some", "good", "best", "about", "from", "into", "hay"
+            "want", "watch", "some", "good", "best", "about", "from", "into", "hay",
+            "nguoi", "chuyen", "cuoc", "trong", "cung", "nhau", "duoc", "biet", "cong", "vien",
         }
         _SHORT_KW_ALIASES = {
             "dc": ["dc comics", "dc extended universe"],
+            "mcu": ["marvel cinematic universe", "marvel comic"],
+            "007": ["spy", "secret agent", "mi6"],
         }
         for short_alias, alias_kws in _SHORT_KW_ALIASES.items():
-            if re.search(r"\b" + re.escape(short_alias) + r"\b", positive_folded):
+            if re.search(r"\b" + re.escape(short_alias) + r"\b", remaining_for_words):
                 matched_kws.extend(alias_kws)
                 kw_display = short_alias.upper()
                 break
 
         if not matched_kws:
             tokens = [
-                t for t in re.findall(r"[a-zA-ZÀ-ỹà-ỹ]+", positive_folded)
-                if len(t) >= 4 and t not in _KW_STOP_WORDS and t not in _VI_FALSE_EN
+                t for t in re.findall(r"[a-zA-Z]+", remaining_for_words)
+                if len(t) >= 4 and t not in _KW_STOP_WORDS and t not in _VI_FALSE_EN and t not in VI_WORD_TO_EN
             ]
             for tok in tokens:
                 hits = []
@@ -1077,39 +1584,69 @@ def parse_intent_local(
                     hits.sort(key=lambda h: -h[1])
                     matched_kws.extend([h[0] for h in hits[:5]])
                     kw_display = tok
-                    positive_folded = positive_folded.replace(tok, " ")
-                    folded_no_title = folded_no_title.replace(tok, " ")
+                    remaining_for_words = remaining_for_words.replace(tok, " ")
                     break
 
     if matched_kws:
         intent.matched_keywords = matched_kws
-        intent.matched_keyword_display = kw_display
+        if not kw_display and not matched_topics_vi:
+            kw_display = matched_kws[0]
+        intent.matched_keyword_display = kw_display or (matched_topics_vi[0] if matched_topics_vi else "")
         intent.keywords_en = (intent.keywords_en + " " + " ".join(matched_kws)).strip()
         if not intent.keywords_raw:
-            intent.keywords_raw = kw_display
+            intent.keywords_raw = intent.matched_keyword_display
 
+    # 8.2. Phan tich tu don tieng Viet (Word-level fallback) tren phan van ban CON LAI (chua bi match boi genre/mood/topic)
+    # VD: "mot nguoi dan ong bi mac ket tren hoang dao phai tim cach song sot"
+    _VI_STOP_CONTENT = {
+        "phim", "bo", "xem", "muon", "thich", "nhung", "cho", "minh", "mot", "cac", "nhu",
+        "the", "loai", "gi", "ve", "co", "la", "va", "hoac", "nhung", "ma", "thi", "bi",
+        "duoc", "cua", "trong", "ngoai", "tren", "duoi", "truoc", "sau", "nay", "kia",
+        "rat", "qua", "lam", "hon", "nhat", "nua", "di", "nhe", "nha", "voi", "cung",
+        "nguoi", "dan", "ong", "ba", "co", "chu", "anh", "chi", "em", "ho", "chung",
+        "ke", "chuyen", "noi", "dung", "xoay", "quanh", "cuoc", "doi", "hanh", "trinh",
+        "tim", "kiem", "goi", "y", "hay", "tot", "moi", "cu", "nam", "phut", "tieng",
+        "thoi", "tiet", "hom", "ban", "ghe", "tu", "lanh", "nha", "cuoi", "tuan", "gio",
+        "nghi", "trua", "nhanh", "de", "xem", "bom", "tan", "gay", "can", "hao", "hung",
+    }
+    folded_words = re.findall(r"[a-z]+", remaining_for_words)
+    word_level_en: list[str] = []
+    word_level_vi: list[str] = []
+    for w in folded_words:
+        if w in _VI_STOP_CONTENT or len(w) < 2:
+            continue
+        if w in VI_WORD_TO_EN:
+            word_level_en.append(VI_WORD_TO_EN[w])
+            word_level_vi.append(w)
 
-    # 8. Chuyen tu khoa chu de Tieng Viet -> Tieng Anh + giu tu tieng Anh trong cau de dua qua TF-IDF/SVD
-    matched_topics_vi: list[str] = []
-    for vi_phrase, en_expansion in VI_TO_EN_TOPIC_KEYWORDS.items():
-        f_vi = _fold(vi_phrase)
-        if re.search(rf"(?:^|\b){re.escape(f_vi)}(?:\b|$)", positive_folded):
-            en_kw_parts.append(en_expansion)
-            matched_topics_vi.append(vi_phrase.strip())
-
-    # Lay them cac tu tieng Anh co trong vocab cua TF-IDF (loai bo cac am tiet tieng Viet de trung tu tieng Anh ngan)
-    vocab = space.tfidf.vocabulary_
-    raw_tokens = re.findall(r"[a-zA-Z]{4,}", folded_no_title)
-    en_direct = [tok for tok in raw_tokens if tok in vocab and tok not in _VI_FALSE_EN]
+    # Lay them cac tu tieng Anh co trong vocab cua Rich TF-IDF hoac Overview TF-IDF
+    vocab_rich = getattr(space, "rich_tfidf_en", space.tfidf).vocabulary_
+    raw_tokens = re.findall(r"[a-zA-Z]{4,}", remaining_for_words)
+    en_direct = [tok for tok in raw_tokens if tok in vocab_rich and tok not in _VI_FALSE_EN]
     if en_direct:
         en_kw_parts.append(" ".join(en_direct))
+        topic_en_terms.append(" ".join(en_direct))
+
+    # Chi kich hoat word-level fallback khi nguoi dung nhap mo ta noi dung (>= 2 tu don dac trung)
+    if len(word_level_en) >= 2:
+        en_kw_parts.append(" ".join(word_level_en))
+        topic_en_terms.append(" ".join(word_level_en))
 
     if matched_topics_vi:
         intent.keywords_raw = ", ".join(matched_topics_vi[:3])
+        if not intent.matched_keyword_display:
+            intent.matched_keyword_display = matched_topics_vi[0]
     elif en_direct:
         intent.keywords_raw = " ".join(en_direct[:4])
+    elif len(word_level_vi) >= 2:
+        intent.keywords_raw = " ".join(word_level_vi[:5])
 
     intent.keywords_en = " ".join(en_kw_parts).strip()
+    intent.content_query_en = " ".join(topic_en_terms).strip()
+    if matched_topics_vi or en_direct or len(word_level_vi) >= 2:
+        # Luu cau truy van tieng Viet da loc tu dung de so khop truc tiep voi overview_vi
+        content_vi_tokens = [w for w in re.findall(r"[a-z]+", content_folded) if w not in _VI_STOP_CONTENT and len(w) >= 2]
+        intent.content_query_vi = " ".join(content_vi_tokens)
 
     # 9. Xu ly hoi thoai nhieu luot (Multi-turn refinement: "cho minh cai nhe hon nua", "bo kinh di", "them hai"...)
     if previous_intent is not None:
@@ -1363,10 +1900,12 @@ def build_query_vector(
     # 4. Overview SVD [271:321]
     if intent.keywords_en:
         svd_vec = space.project_text_to_svd(intent.keywords_en)
-        # Scale nhe de co do lon tuong duong overview vector cua phim trong DB (norm ~ 0.35 - 0.6)
+        # Neu nguoi dung mo ta noi dung phim cu the (content_query_en) ma khong neu the loai,
+        # tang do lon vector SVD len 1.0 de tin hieu noi dung chiem uu the trong 324 chieu
+        target_svd_norm = 1.0 if (intent.content_query_en and not intent.wanted_genres) else 0.50
         norm = float(np.linalg.norm(svd_vec))
         if norm > 0:
-            svd_vec = svd_vec * (0.5 / norm)
+            svd_vec = svd_vec * (target_svd_norm / norm)
         q[271:321] = svd_vec
 
     # 5. Numeric [321:324]: vote_average (321), popularity (322), release_year (323)
@@ -1427,9 +1966,11 @@ def _build_reason(
     reasons: list[str] = []
     m_genres = meta.get("genres", [])
 
-    # 0. Neu khop tu khoa TMDB
+    # 0. Neu khop tu khoa TMDB hoac mo ta noi dung phim
     if matched_kw_label:
         reasons.append(f"Từ khóa: {matched_kw_label}")
+    elif intent.keywords_raw and query_cos > 0.35:
+        reasons.append(f"Nội dung khớp chủ đề “{intent.keywords_raw}”")
 
     # 1. Neu khop "giong phim X"
     if intent.similar_movie_titles and query_cos > 0.35:
@@ -1551,7 +2092,19 @@ def chat_recommend(
     query_vec = build_query_vector(intent, space)
     query_scores = cosine_similarity_bulk(query_vec, space.matrix)
 
-    # Tang diem vuot troi cho cac phim chua tu khoa TMDB duoc tim kiem
+    # 4.2. HYBRID CONTENT SCORING: Ket hop Cosine 324 chieu voi Rich Content TF-IDF (12.000 features Anh + Viet)
+    # Giai quyet triet de van de nen SVD 50 chieu lam mat tu khoa khi nguoi dung nhap mo ta cot truyen phim
+    content_q_en = intent.content_query_en
+    content_q_vi = intent.content_query_vi
+    if (content_q_en or content_q_vi) and hasattr(space, "compute_content_similarity"):
+        lex_scores = space.compute_content_similarity(content_q_en, content_q_vi)
+        max_lex = float(np.max(lex_scores)) if len(lex_scores) else 0.0
+        if max_lex > 0:
+            # Chuan hoa tuong doi va cong huong manh vao query_scores cho cac phim khop sat noi dung
+            norm_lex = lex_scores / max(max_lex, 0.22)
+            query_scores = query_scores + 0.65 * norm_lex
+
+    # 4.3. Tang diem vuot troi cho cac phim chua tu khoa TMDB duoc tim kiem
     kw_movie_ids: set[int] = set()
     if intent.matched_keywords and hasattr(space, "keyword_to_mids"):
         for kw in intent.matched_keywords:
@@ -1560,6 +2113,18 @@ def chat_recommend(
         for idx, mid_np in enumerate(space.movie_ids):
             if int(mid_np) in kw_movie_ids:
                 query_scores[idx] += 0.55
+
+    # 4.4. Tang diem truc tiep cho phim cua Dao dien / Dien vien (ke ca ngoai top 50/200 trong vector 324 chieu)
+    if intent.director:
+        for idx, mid_np in enumerate(space.movie_ids):
+            meta = space.movies.get(int(mid_np))
+            if meta and meta.get("director") == intent.director:
+                query_scores[idx] += 0.65
+    if intent.actor:
+        for idx, mid_np in enumerate(space.movie_ids):
+            meta = space.movies.get(int(mid_np))
+            if meta and intent.actor in (meta.get("cast") or []):
+                query_scores[idx] += 0.60
 
     # Kiem tra User Profile hien co cua nguoi dung
     prof = _rec._registry.get(user_id)
@@ -1609,9 +2174,9 @@ def chat_recommend(
                 continue
             if intent.year_to and (year is None or year > intent.year_to):
                 continue
-            # Loc thoi luong (neu co du lieu runtime)
-            if intent.max_runtime and runtimes:
-                rt = runtimes.get(mid)
+            # Loc thoi luong (uu tien runtimes truyen vao, fallback sang space.mid_to_runtime tu DB/CSV)
+            if intent.max_runtime:
+                rt = (runtimes or {}).get(mid) or getattr(space, "mid_to_runtime", {}).get(mid)
                 if rt and rt > intent.max_runtime:
                     continue
             # Loc nguong chat luong co ban de tranh phim rac it luot vote
@@ -1667,7 +2232,7 @@ def chat_recommend(
     for r in reranked:
         mid = int(r["movie_id"])
         meta = space.movies[mid]
-        rt = runtimes.get(mid) if runtimes else None
+        rt = (runtimes or {}).get(mid) or getattr(space, "mid_to_runtime", {}).get(mid)
         matched_kw_label = None
         if intent.matched_keywords and hasattr(space, "mid_to_keywords"):
             m_kws = {k.lower() for k in space.mid_to_keywords.get(mid, [])}
