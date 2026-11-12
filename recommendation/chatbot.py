@@ -1345,7 +1345,7 @@ def _extract_genres_from_segment(segment_folded: str, return_matched_phrases: bo
 
 
 def is_gibberish(text: str) -> bool:
-    """Kiem tra chuoi ky tu vo nghia / go linh tinh (VD: 'dddd', 'aaaaa', '???', '123456')."""
+    """Kiem tra chuoi ky tu vo nghia / go linh tinh (VD: 'dddd', 'aaaaa', '???', '123456', 'gadgshdfshas')."""
     s = (text or "").strip()
     if not s:
         return True
@@ -1355,6 +1355,29 @@ def is_gibberish(text: str) -> bool:
         return True
     if len(s.split()) == 1 and re.search(r"(.)\1{3,}", s, flags=re.IGNORECASE):
         return True
+
+    # Phan tich tung tu (bo dau) de phat hien go phim ngau nhien (keyboard smash)
+    folded_words = re.findall(r"[a-z]+", _fold(s))
+    if not folded_words:
+        return True
+
+    vowels = set("aeiouy")
+    for w in folded_words:
+        # 1. Cum >= 5 phu am lien tiep (VD: 'gadgshdfshas' co 'dgshdfsh', 'asdfghjkl' co 'sdfghjkl')
+        if re.search(r"[bcdfghjklmnpqrstvwxz]{5,}", w):
+            return True
+        # 2. Tu dai >= 4 ky tu nhung khong co bat ky nguyen am nao (tru cac tu viet tat hop le ngan)
+        if len(w) >= 4 and not any(ch in vowels for ch in w):
+            return True
+        # 3. Tu dai >= 8 ky tu nhung ty le nguyen am qua thap (< 18%) hoac lap cap ky tu vo nghia
+        if len(w) >= 8:
+            v_ratio = sum(1 for ch in w if ch in vowels) / len(w)
+            if v_ratio < 0.18:
+                return True
+        # 4. Mau ban phim QWERTY pho bien
+        if any(pat in w for pat in ("asdf", "sdfg", "dfgh", "fghj", "ghjk", "hjkl", "qwerty", "werty", "zxcv", "xcvb")):
+            return True
+
     return False
 
 
@@ -1814,9 +1837,15 @@ def parse_intent_llm(
     system_prompt = (
         "Bạn là chuyên gia AI gợi ý và phân tích ý định tìm phim (Movie Intent & Plot Reasoner).\n"
         f"Danh sách thể loại hợp lệ duy nhất: {json.dumps(valid_genres)}.\n"
-        "Hãy phân tích sâu câu yêu cầu của người dùng (kể cả khi họ mô tả cốt truyện mơ hồ, ẩn dụ, hoặc nhớ mang máng nội dung phim) "
+        "QUY TẮC QUAN TRỌNG VỀ CHUỖI VÔ NGHĨA / KHÔNG LIÊN QUAN ĐẾN PHIM:\n"
+        "- Nếu câu người dùng là chuỗi ký tự gõ phím ngẫu nhiên vô nghĩa (gibberish / keyboard smash, ví dụ: 'gadgshdfshas', 'asdfgh', 'xyz123') "
+        "HOẶC câu hỏi hoàn toàn không liên quan đến việc tìm/xem phim (ví dụ: 'thời tiết hôm nay thế nào', 'bàn ghế tủ lạnh', '1+1 bằng mấy'), "
+        "bạn BẮT BUỘC phải đặt \"is_meaningless\": true và để TẤT CẢ các mảng/chuỗi khác rỗng (\"wanted_genres\": [], \"mood_labels\": [], \"ai_recommended_titles\": [], \"keywords_raw\": \"\", \"keywords_en\": \"\"). "
+        "TUYỆT ĐỐI KHÔNG tự suy diễn chuỗi vô nghĩa thành tâm trạng 'khó hiểu', 'ngẫu nhiên', 'bí ẩn' hay từ khóa 'không rõ nghĩa'.\n"
+        "Nếu là yêu cầu tìm phim hợp lệ (kể cả mô tả cốt truyện mơ hồ, ẩn dụ, hoặc nhớ mang máng nội dung phim), hãy phân tích sâu "
         "và trả về DUY NHẤT một JSON object hợp lệ với các trường:\n"
         "{\n"
+        '  "is_meaningless": true nếu câu vô nghĩa hoặc không liên quan đến tìm phim, ngược lại false,\n'
         '  "wanted_genres": [danh sách thể loại hợp lệ người dùng muốn],\n'
         '  "avoid_genres": [danh sách thể loại hợp lệ người dùng muốn tránh],\n'
         '  "mood_labels": [1-2 cụm từ ngắn tiếng Việt mô tả tâm trạng, ví dụ "nhẹ nhàng, thư giãn"],\n'
@@ -1895,13 +1924,34 @@ def parse_intent_llm(
 
         # Ket hop ket qua LLM voi bộ khớp tên phim cục bộ trong catalog
         local_fallback = parse_intent_local(message, space, previous_intent)
+
+        # Neu LLM bao cau vo nghia hoac tu che cac nhan "khong ro nghia / vo nghia / ngau nhien"
+        # trong khi local_fallback cung rong -> tra ve intent rong ngay lap tuc
+        _LLM_HALLUCINATED_EMPTY = (
+            "khong ro nghia", "vo nghia", "khong co y nghia", "khong hieu",
+            "ky tu ngau nhien", "chuoi ngau nhien", "tu khoa khong ro",
+            "gibberish", "meaningless", "nonsense", "random", "unknown", "none", "null", "n/a",
+        )
+        raw_kw_folded = _fold(str(parsed.get("keywords_raw") or "")).strip()
+        raw_moods_folded = [_fold(str(x)).strip() for x in (parsed.get("mood_labels") or []) if x]
+        if parsed.get("is_meaningless") is True and local_fallback.is_empty():
+            return ChatIntent(parser_source="llm")
+        if local_fallback.is_empty() and (
+            any(bad in raw_kw_folded for bad in _LLM_HALLUCINATED_EMPTY)
+            or any(any(bad in m for bad in ("khong ro", "vo nghia", "ngau nhien", "kho hieu", "gibberish")) for m in raw_moods_folded)
+        ):
+            return ChatIntent(parser_source="llm")
+
         intent = ChatIntent(parser_source="llm")
         intent.wanted_genres = [g for g in parsed.get("wanted_genres", []) if g in valid_genres]
         intent.avoid_genres = [
             g for g in parsed.get("avoid_genres", [])
             if g in valid_genres and g not in intent.wanted_genres
         ]
-        intent.mood_labels = [str(x) for x in parsed.get("mood_labels", []) if x][:3]
+        intent.mood_labels = [
+            str(x) for x in parsed.get("mood_labels", [])
+            if x and not any(bad in _fold(str(x)) for bad in _LLM_HALLUCINATED_EMPTY)
+        ][:3]
 
         # Khop ten phim tu similar_movie_names cua LLM + local matcher
         sim_ids = list(local_fallback.similar_movie_ids)
