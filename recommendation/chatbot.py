@@ -170,11 +170,11 @@ GENRE_SYNONYMS: dict[str, list[str]] = {
         "hoat hinh", "animation", "anime", "cartoon", "pixar", "disney", "ghibli", "3d animation",
     ],
     "Comedy": [
-        "hai", "hai huoc", "comedy", "vui", "vui nhon", "cuoi", "giai tri", "funny",
+        "hai", "phim hai", "the loai hai", "hai huoc", "comedy", "vui nhon", "mac cuoi", "buon cuoi", "cuoi be bung", "giai tri", "funny",
         "humorous", "sitcom", "romcom", "rom-com", "hai lang man",
     ],
     "Crime": [
-        "toi pham", "hinh su", "crime", "gangster", "mafia", "cuop", "heist",
+        "toi pham", "hinh su", "crime", "gangster", "mafia", "vu cuop", "bang cuop", "heist",
         "canh sat", "police", "detective", "pha an", "buon lau", "sat nhan",
     ],
     "Documentary": [
@@ -189,7 +189,7 @@ GENRE_SYNONYMS: dict[str, list[str]] = {
         "phu huynh", "am ap gia dinh",
     ],
     "Fantasy": [
-        "ky ao", "phep thuat", "fantasy", "than thoai", "phu thuy", "rong", "nang tien",
+        "ky ao", "phep thuat", "fantasy", "than thoai", "phu thuy", "con rong", "phim rong", "nang tien",
         "tien ca", "than tien", "magic", "wizard", "dragon", "mythology", "the gioi khac", "co tich",
     ],
     "History": [
@@ -197,8 +197,8 @@ GENRE_SYNONYMS: dict[str, list[str]] = {
         "biography", "tieu su", "co that",
     ],
     "Horror": [
-        "kinh di", "horror", "ma", "quy", "rung ron", "am anh", "scary", "ghost",
-        "zombie", "xac song", "quai vat", "slasher", "creepy", "jump scare", "mau me",
+        "kinh di", "horror", "phim ma", "ma quy", "con ma", "bong ma", "rung ron", "am anh",
+        "scary", "ghost", "zombie", "xac song", "quai vat", "slasher", "creepy", "jump scare", "mau me",
     ],
     "Music": [
         "am nhac", "nhac kich", "music", "musical", "ca hat", "ban nhac", "concert", "ca si",
@@ -208,12 +208,12 @@ GENRE_SYNONYMS: dict[str, list[str]] = {
         "twist", "giai ma", "whodunit", "detective", "ky bi",
     ],
     "Romance": [
-        "lang man", "tinh cam", "romance", "romantic", "tinh yeu", "yeu", "hen ho",
+        "lang man", "tinh cam", "romance", "romantic", "tinh yeu", "yeu nhau", "phim yeu", "hen ho",
         "cap doi", "love", "love story", "ngot ngao", "that tinh", "chia tay",
     ],
     "Science Fiction": [
         "khoa hoc vien tuong", "vien tuong", "sci-fi", "scifi", "science fiction",
-        "vu tru", "khong gian", "space", "tuong lai", "future", "robot", "ai",
+        "vu tru", "khong gian", "space", "tuong lai", "future", "robot", "tri tue nhan tao",
         "nguoi ngoai hanh tinh", "alien", "du hanh thoi gian", "time travel", "cyberpunk", "dystopia",
     ],
     "Thriller": [
@@ -281,7 +281,7 @@ MOOD_DICTIONARY: list[dict[str, Any]] = [
         "id": "sad_touching",
         "label": "buồn, cảm động, sâu lắng",
         "triggers": [
-            "buon", "cam dong", "sau lang", "khoc", "lay dong", "tam trang", "co don",
+            "tam trang buon", "phim buon", "ket buon", "cam dong", "sau lang", "khoc het nuoc mat", "roi nuoc mat", "lay dong", "tam trang", "co don",
             "that tinh", "emotional", "touching", "sad", "tearjerker", "heartbreaking", "melancholy",
         ],
         "genres": ["Drama", "Romance"],
@@ -596,15 +596,21 @@ VI_TO_EN_TOPIC_KEYWORDS: dict[str, str] = {
     "chu cho": "dog puppy pet loyal companion",
     "con meo": "cat kitten pet animal feline",
     "con ngua": "horse stallion riding ranch wild",
+    "ngua van": "zebra zoo Africa Madagascar Marty",
+    "huou cao co": "giraffe zoo Africa Madagascar Melman",
+    "ha ma": "hippo hippopotamus zoo Africa Madagascar Gloria",
+    "vuon thu": "zoo central park animals escape Madagascar",
+    "so thu": "zoo animals escape central park",
     "con khi": "ape monkey chimpanzee gorilla planet",
     "khi dot": "ape gorilla primate jungle evolution",
     "con gau": "bear grizzly forest cub nature",
-    "su tu": "lion pride Africa savanna king",
+    "gau truc": "panda kung fu China bamboo dragon warrior",
+    "su tu": "lion pride Africa savanna king zoo Alex",
     "ca voi": "whale ocean sea marine mammal",
     "ca heo": "dolphin ocean sea marine",
-    "chim canh cut": "penguin Antarctica ice dance",
+    "chim canh cut": "penguin penguins Antarctica ice Madagascar",
     "thu cung": "pet dog cat animal loyal",
-    "dong vat": "animal wildlife nature safari",
+    "dong vat": "animal animals wildlife zoo nature",
     "rung xanh": "jungle rainforest Tarzan wild animal",
     "dai duong": "ocean sea underwater deep submarine",
     "bien": "ocean sea ship shark island underwater",
@@ -1170,17 +1176,19 @@ class FeatureSpaceIndex:
         return scores
 
 
-_SPACE_CACHE: dict[str, FeatureSpaceIndex] = {}
+_SPACE_CACHE: dict[str, tuple[float, FeatureSpaceIndex]] = {}
 _SPACE_LOCK = threading.RLock()
 
 
 def get_feature_space(db_path: str = DEFAULT_DB_PATH) -> FeatureSpaceIndex:
-    """Singleton lazy loader cho FeatureSpaceIndex theo db_path."""
+    """Singleton lazy loader cho FeatureSpaceIndex theo db_path (tu dong reload khi file movies.db duoc cap nhat)."""
     abs_path = os.path.abspath(db_path)
+    mtime = os.path.getmtime(abs_path) if os.path.exists(abs_path) else 0.0
     with _SPACE_LOCK:
-        if abs_path not in _SPACE_CACHE:
-            _SPACE_CACHE[abs_path] = FeatureSpaceIndex(abs_path)
-        return _SPACE_CACHE[abs_path]
+        cached = _SPACE_CACHE.get(abs_path)
+        if cached is None or cached[0] != mtime:
+            _SPACE_CACHE[abs_path] = (mtime, FeatureSpaceIndex(abs_path))
+        return _SPACE_CACHE[abs_path][1]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -1315,10 +1323,16 @@ def _extract_genres_from_segment(segment_folded: str, return_matched_phrases: bo
     """Tim danh sach the loai xuat hien trong mot doan van ban da bo dau."""
     found: list[str] = []
     matched_phrases: list[str] = []
+    # Loai bo cac cum tu so luong/thu tu "hai nguoi", "hai anh em", "hai chi em", "hai the gioi", "thu hai"...
+    seg_clean = re.sub(
+        r"\b(?:hai\s+(?:nguoi|anh\s+em|chi\s+em|vo\s+chong|ban|cha\s+con|me\s+con|the\s+gioi|quoc\s+gia|phe|bang\s+dang|ca\s+the)|thu\s+hai)\b",
+        " ",
+        segment_folded,
+    )
     for genre, phrases in GENRE_SYNONYMS.items():
         for p in sorted(phrases, key=len, reverse=True):
             fp = _fold(p)
-            if re.search(rf"(?:^|\b){re.escape(fp)}(?:\b|$)", segment_folded):
+            if re.search(rf"(?:^|\b){re.escape(fp)}(?:\b|$)", seg_clean):
                 if genre not in found:
                     found.append(genre)
                 matched_phrases.append(fp)
@@ -1624,7 +1638,7 @@ def parse_intent_local(
         intent.matched_keywords = matched_kws
         if not kw_display and not matched_topics_vi:
             kw_display = matched_kws[0]
-        intent.matched_keyword_display = kw_display or (matched_topics_vi[0] if matched_topics_vi else "")
+        intent.matched_keyword_display = kw_display or (", ".join(matched_topics_vi[:4]) if matched_topics_vi else "")
         intent.keywords_en = (intent.keywords_en + " " + " ".join(matched_kws)).strip()
         if not intent.keywords_raw:
             intent.keywords_raw = intent.matched_keyword_display
@@ -1666,9 +1680,9 @@ def parse_intent_local(
         topic_en_terms.append(" ".join(word_level_en))
 
     if matched_topics_vi:
-        intent.keywords_raw = ", ".join(matched_topics_vi[:3])
+        intent.keywords_raw = ", ".join(matched_topics_vi[:4])
         if not intent.matched_keyword_display:
-            intent.matched_keyword_display = matched_topics_vi[0]
+            intent.matched_keyword_display = ", ".join(matched_topics_vi[:4])
     elif en_direct:
         intent.keywords_raw = " ".join(en_direct[:4])
     elif len(word_level_vi) >= 2:
