@@ -359,6 +359,10 @@ def test_freeform_plot_and_content_queries():
             "nhóm động vật gồm sư tử, hươu cao cổ, hà mã, ngựa vằn và con chim cánh cụt",
             {"Madagascar", "Madagascar: Escape 2 Africa", "Madagascar 3: Europe's Most Wanted", "Penguins of Madagascar"},
         ),
+        (
+            "film about a boy learn magic at a wizard school",
+            {"Harry Potter and the Philosopher's Stone", "Harry Potter and the Goblet of Fire", "Harry Potter and the Prisoner of Azkaban", "Harry Potter and the Chamber of Secrets"},
+        ),
     ]
     for query, expected_titles in plot_cases:
         res = chat_recommend(uid, query, db_path=DB_PATH, top_n=10, use_llm=False)

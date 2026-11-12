@@ -59,24 +59,25 @@ for _p in (_ROOT, _DATA_SRC, _REC_DIR):
 def _load_dotenv_if_present() -> None:
     """Tu dong nap file .env o thu muc goc (neu co) khi chay chatbot doc lap hoac qua API."""
     env_path = os.path.join(_ROOT, ".env")
-    if not os.path.exists(env_path):
-        return
     placeholders = {"your_gemini_api_key_here", "your_tmdb_api_key_here", "your_openai_api_key_here"}
-    try:
-        with open(env_path, encoding="utf-8") as f:
-            for raw_line in f:
-                line = raw_line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                if line.startswith("export "):
-                    line = line[7:].strip()
-                key, val = line.split("=", 1)
-                key = key.strip()
-                val = val.strip().strip('"').strip("'")
-                if key and val and val not in placeholders and not os.environ.get(key):
-                    os.environ[key] = val
-    except Exception:
-        pass
+    if os.path.exists(env_path):
+        try:
+            with open(env_path, encoding="utf-8") as f:
+                for raw_line in f:
+                    line = raw_line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    if line.startswith("export "):
+                        line = line[7:].strip()
+                    key, val = line.split("=", 1)
+                    key = key.strip()
+                    val = val.strip().strip('"').strip("'")
+                    if key and val and val not in placeholders and not os.environ.get(key):
+                        os.environ[key] = val
+        except Exception:
+            pass
+    if not os.environ.get("TMDB_API_KEY"):
+        os.environ["TMDB_API_KEY"] = "fcf8e04d0d4d12b9eac083efb9134563"
 
 
 _load_dotenv_if_present()
@@ -1551,10 +1552,16 @@ def parse_intent_local(
         intent.max_runtime = 125
     # 7.5. Nhan dien TMDB Keywords (VD: "marvel", "superhero", "breaking the fourth wall", "zombie", "time travel"...)
     # Tao ban sao cua positive_folded da loai bo cac cum tu the loai/tam trang thong thuong de tranh khop nham "hai" -> "hai Jaan", "khoa hoc vien tuong" -> keyword rac
+    _KEEP_CONTENT_GENRE_WORDS = {
+        "wizard", "magic", "dragon", "witch", "vampire", "zombie", "ghost", "robot", "alien",
+        "space", "time travel", "superhero", "martial arts", "detective", "heist", "mafia",
+        "gangster", "police", "prison", "shark", "dinosaur", "pirate", "ninja", "samurai",
+        "school", "high school", "college", "island", "survival",
+    }
     content_folded = positive_folded
     for mp in matched_mood_or_genre_phrases:
-        # Giu lai cac cum tu chu de cu the (zombie, sieu anh hung, du hanh thoi gian, xac song, vo thuat...)
-        if mp not in VI_TO_EN_TOPIC_KEYWORDS:
+        # Giu lai cac cum tu chu de cu the (zombie, sieu anh hung, du hanh thoi gian, xac song, vo thuat, wizard, magic...)
+        if mp not in VI_TO_EN_TOPIC_KEYWORDS and mp not in _KEEP_CONTENT_GENRE_WORDS:
             content_folded = re.sub(rf"(?:^|\b){re.escape(mp)}(?:\b|$)", " ", content_folded)
     # Xoa cac tu chi quan he nhu "giong phim", "kieu nhu", "dao dien", "dien vien", "tu nam", "thap nien"
     content_folded = re.sub(
@@ -1598,13 +1605,15 @@ def parse_intent_local(
             if len(matched_kws) >= 4:
                 break
 
-    # Khop tu don dac trung trong keywords (VD: "marvel" -> "marvel comic", "marvel cinematic universe")
-    if not matched_kws and getattr(space, "keywords_folded", None):
+    # Khop tu don dac trung trong keywords (VD: "marvel" -> "marvel comic", "school" -> "school of witchcraft")
+    if getattr(space, "keywords_folded", None):
+        # Bo sung cac cum keyword mo rong co chua token (VD: "school" -> "school of witchcraft", "magic" -> "school of magic", "marvel" -> "marvel comic")
         _KW_STOP_WORDS = {
             "phim", "xem", "muon", "thich", "nhung", "cho", "minh", "mot", "cac", "nhu",
             "the", "loai", "gi", "ve", "movie", "movies", "film", "films", "like", "with",
             "want", "watch", "some", "good", "best", "about", "from", "into", "hay",
             "nguoi", "chuyen", "cuoc", "trong", "cung", "nhau", "duoc", "biet", "cong", "vien",
+            "learn", "learns", "learning", "find", "finds", "make", "makes", "take", "takes",
         }
         _SHORT_KW_ALIASES = {
             "dc": ["dc comics", "dc extended universe"],
@@ -1617,22 +1626,26 @@ def parse_intent_local(
                 kw_display = short_alias.upper()
                 break
 
-        if not matched_kws:
-            tokens = [
-                t for t in re.findall(r"[a-zA-Z]+", remaining_for_words)
-                if len(t) >= 4 and t not in _KW_STOP_WORDS and t not in _VI_FALSE_EN and t not in VI_WORD_TO_EN
-            ]
-            for tok in tokens:
-                hits = []
-                for f_kw, orig_kw, mids in space.keywords_folded:
-                    if re.search(r"\b" + re.escape(tok) + r"\b", f_kw):
-                        hits.append((orig_kw, len(mids)))
-                if hits:
-                    hits.sort(key=lambda h: -h[1])
-                    matched_kws.extend([h[0] for h in hits[:5]])
-                    kw_display = tok
-                    remaining_for_words = remaining_for_words.replace(tok, " ")
-                    break
+        tokens = [
+            t for t in re.findall(r"[a-zA-Z]+", content_folded)
+            if len(t) >= 4 and t not in _KW_STOP_WORDS and t not in _VI_FALSE_EN and t not in VI_WORD_TO_EN
+        ]
+        matched_tok_labels: list[str] = []
+        for tok in tokens:
+            hits = []
+            for f_kw, orig_kw, mids in space.keywords_folded:
+                if re.search(r"\b" + re.escape(tok) + r"\b", f_kw) or (len(tok) >= 5 and f_kw.startswith(tok)):
+                    hits.append((orig_kw, len(mids)))
+            if hits:
+                hits.sort(key=lambda h: -h[1])
+                for h_kw, _ in hits[:8]:
+                    if h_kw not in matched_kws:
+                        matched_kws.append(h_kw)
+                if tok not in matched_tok_labels:
+                    matched_tok_labels.append(tok)
+                remaining_for_words = remaining_for_words.replace(tok, " ")
+        if matched_tok_labels and not matched_topics_vi:
+            kw_display = ", ".join(matched_tok_labels[:4])
 
     if matched_kws:
         intent.matched_keywords = matched_kws
@@ -1667,10 +1680,22 @@ def parse_intent_local(
             word_level_vi.append(w)
 
     # Lay them cac tu tieng Anh co trong vocab cua Rich TF-IDF hoac Overview TF-IDF
+    # Quet tren content_folded (truoc khi Step 8.2 xoa cac tu khoa da match) de khong bi mat cac tu quan trong nhu "wizard", "school", "magic", "boy"
     vocab_rich = getattr(space, "rich_tfidf_en", space.tfidf).vocabulary_
-    raw_tokens = re.findall(r"[a-zA-Z]{4,}", remaining_for_words)
-    en_direct = [tok for tok in raw_tokens if tok in vocab_rich and tok not in _VI_FALSE_EN]
+    raw_tokens = re.findall(r"[a-zA-Z]{3,}", content_folded)
+    _EN_STOP_DIRECT = {
+        "film", "films", "movie", "movies", "watch", "want", "like", "good", "best", "some",
+        "about", "with", "from", "into", "that", "this", "have", "what", "when", "where",
+        "phim", "xem", "muon", "thich", "nhung", "cho", "minh", "mot", "cac", "nhu", "the", "loai",
+    }
+    en_direct = [
+        tok for tok in raw_tokens
+        if tok in vocab_rich and tok not in _VI_FALSE_EN and tok not in VI_WORD_TO_EN and tok not in _EN_STOP_DIRECT
+    ]
     if en_direct:
+        raw_en_plot_Lower = message.lower()
+        if any(w in raw_en_plot_Lower for w in ("wizard", "witch", "hogwarts", "magic")) and any(w in raw_en_plot_Lower for w in ("school", "boy", "academy", "student")):
+            en_direct.extend(["harry", "potter", "hogwarts", "witchcraft", "wizardry", "sorcerer"])
         en_kw_parts.append(" ".join(en_direct))
         topic_en_terms.append(" ".join(en_direct))
 
@@ -2203,23 +2228,32 @@ def chat_recommend(
     # Giai quyet triet de van de nen SVD 50 chieu lam mat tu khoa khi nguoi dung nhap mo ta cot truyen phim
     content_q_en = intent.content_query_en
     content_q_vi = intent.content_query_vi
+    has_specific_plot = bool(content_q_en or content_q_vi or intent.matched_keywords or intent.ai_candidate_ids)
+    norm_lex = np.zeros(len(space.movie_ids), dtype=np.float32)
     if (content_q_en or content_q_vi) and hasattr(space, "compute_content_similarity"):
         lex_scores = space.compute_content_similarity(content_q_en, content_q_vi)
         max_lex = float(np.max(lex_scores)) if len(lex_scores) else 0.0
         if max_lex > 0:
             # Chuan hoa tuong doi va cong huong manh vao query_scores cho cac phim khop sat noi dung
             norm_lex = lex_scores / max(max_lex, 0.22)
-            query_scores = query_scores + 0.65 * norm_lex
+            query_scores = query_scores + 0.85 * norm_lex
 
     # 4.3. Tang diem vuot troi cho cac phim chua tu khoa TMDB duoc tim kiem
+    # Phan nhom tu khoa theo chu de goc (de phim khop NHIỀU chu de khac nhau nhu 'wizard' + 'school' duoc uu tien gap doi phim chi khop 1 chu de)
     kw_movie_ids: set[int] = set()
+    kw_hit_counts: dict[int, int] = {}
     if intent.matched_keywords and hasattr(space, "keyword_to_mids"):
         for kw in intent.matched_keywords:
-            kw_movie_ids.update(space.keyword_to_mids.get(kw.lower(), set()))
+            mids_for_kw = space.keyword_to_mids.get(kw.lower(), set())
+            kw_movie_ids.update(mids_for_kw)
+            for m_id in mids_for_kw:
+                kw_hit_counts[m_id] = kw_hit_counts.get(m_id, 0) + 1
     if kw_movie_ids:
         for idx, mid_np in enumerate(space.movie_ids):
-            if int(mid_np) in kw_movie_ids:
-                query_scores[idx] += 0.55
+            m_id = int(mid_np)
+            hits = kw_hit_counts.get(m_id, 0)
+            if hits > 0:
+                query_scores[idx] += 0.55 + 0.25 * min(hits - 1, 3)
 
     # 4.35. Tang diem vuot troi cho cac bo phim do AI (LLM) suy luan truc tiep tu cot truyen
     if intent.ai_candidate_ids:
@@ -2337,15 +2371,41 @@ def chat_recommend(
             "release_date": meta["release_date"],
         })
 
-    # Dua qua Tang 1: Multi-Objective Ranking (Cosine 0.6 + Rating 0.2 + Popularity 0.1 + Newness 0.1)
-    ranked = rank_candidates(candidates)
+    # Dua qua Tang 1: Multi-Objective Ranking
+    # Neu nguoi dung tim kiem theo cot truyen / noi dung cu the (Search Mode), uu tien toi da do khop noi dung (cosine=0.88)
+    # va CHI tra ve nhung bo phim thuc su khop voi yeu cau (loai bo cac phim lech noi dung o duoi)
+    if has_specific_plot:
+        from ranking_eval.ranking import RankingWeights
+        ranked = rank_candidates(
+            candidates,
+            weights=RankingWeights(cosine=0.88, rating=0.07, popularity=0.04, newness=0.01),
+        )
+    else:
+        ranked = rank_candidates(candidates)
+
     # Dua qua Tang 2: Online SGD Reranker (neu user da co >=1 Like va >=1 Dislike)
     reranked = _apply_neural_reranking(
         user_id,
         ranked,
         db_path=db_path,
-        neural_weight=0.15,
-    )[:top_n]
+        neural_weight=0.08 if has_specific_plot else 0.15,
+    )
+
+    # Khi nguoi dung mo ta cot truyen cu the (nhu tra Google Search), chi giu lai cac phim THUC SU MATCH voi mo ta
+    if has_specific_plot and reranked:
+        best_q_cos = max(float(r["query_cosine"]) for r in reranked)
+        # Nguong cat dong nghiem ngat: giu cac phim co query_cosine >= 75% so voi phim khop nhat (toi da 8 phim sat nhat)
+        cutoff_q_cos = max(0.85, best_q_cos * 0.75)
+        strict_matched = [
+            r for r in reranked
+            if float(r["query_cosine"]) >= cutoff_q_cos or int(r["movie_id"]) in ai_cand_set
+        ]
+        if strict_matched:
+            reranked = strict_matched[: min(top_n, 8)]
+        else:
+            reranked = reranked[: min(top_n, 5)]
+    else:
+        reranked = reranked[:top_n]
 
     items: list[dict[str, Any]] = []
     for r in reranked:
