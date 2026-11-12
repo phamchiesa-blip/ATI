@@ -1791,7 +1791,7 @@ def parse_intent_llm(
         '  "avoid_genres": [danh sách thể loại hợp lệ người dùng muốn tránh],\n'
         '  "mood_labels": [1-2 cụm từ ngắn tiếng Việt mô tả tâm trạng, ví dụ "nhẹ nhàng, thư giãn"],\n'
         '  "similar_movie_names": [tên phim cụ thể nếu người dùng nhắc tới "giống phim X"],\n'
-        '  "ai_recommended_titles": [5 đến 8 tên phim tiếng Anh gốc (Original English Titles, phát hành từ 2017 trở về trước trong TMDB 5000) khớp sát nhất với cốt truyện/nội dung/yêu cầu người dùng mô tả],\n'
+        '  "ai_recommended_titles": [5 đến 8 tên phim tiếng Anh gốc (Original English Titles) khớp sát nhất với cốt truyện/nội dung/yêu cầu người dùng mô tả],\n'
         '  "year_from": số nguyên hoặc null,\n'
         '  "year_to": số nguyên hoặc null,\n'
         '  "max_runtime": số phút tối đa hoặc null,\n'
@@ -1874,14 +1874,44 @@ def parse_intent_llm(
         intent.similar_movie_titles = sim_titles
 
         # Khop danh sach phim do AI suy luan truc tiep tu cot truyen (ai_recommended_titles)
+        # Neu phim AI goi y chua co trong movies.db, tu dong tim & dong bo tu TMDB API ve DB (Hybrid On-Demand Sync)
         ai_ids: list[int] = []
         ai_titles: list[str] = []
+        missing_titles: list[str] = []
         for name in parsed.get("ai_recommended_titles", []) or []:
             ids_m, titles_m, _ = _match_movie_titles_in_text(f'"{name}"', _fold(f'"{name}"'), space)
-            for mid, mtitle in zip(ids_m, titles_m):
-                if mid not in ai_ids and mid not in sim_ids:
-                    ai_ids.append(mid)
-                    ai_titles.append(mtitle)
+            if ids_m:
+                for mid, mtitle in zip(ids_m, titles_m):
+                    if mid not in ai_ids and mid not in sim_ids:
+                        ai_ids.append(mid)
+                        ai_titles.append(mtitle)
+            elif name and str(name).strip():
+                missing_titles.append(str(name).strip())
+
+        if missing_titles and os.environ.get("TMDB_API_KEY", "").strip():
+            try:
+                from sync_tmdb import search_tmdb_movie_id_by_title, sync_movies_from_tmdb
+                tmdb_key = os.environ["TMDB_API_KEY"].strip()
+                new_tmdb_ids: list[int] = []
+                for m_title in missing_titles[:3]:
+                    found_mid = search_tmdb_movie_id_by_title(m_title, tmdb_key, timeout=2.5)
+                    if found_mid and found_mid not in space.movies and found_mid not in new_tmdb_ids:
+                        new_tmdb_ids.append(found_mid)
+                if new_tmdb_ids:
+                    sync_res = sync_movies_from_tmdb(
+                        db_path=space.db_path,
+                        mode="ids",
+                        explicit_ids=new_tmdb_ids,
+                    )
+                    if sync_res.get("inserted", 0) > 0:
+                        space = get_feature_space(space.db_path)
+                        for n_mid in new_tmdb_ids:
+                            if n_mid in space.movies and n_mid not in ai_ids and n_mid not in sim_ids:
+                                ai_ids.append(n_mid)
+                                ai_titles.append(space.movies[n_mid]["title"])
+            except Exception:
+                pass
+
         intent.ai_candidate_ids = ai_ids
         intent.ai_candidate_titles = ai_titles
 
@@ -2156,6 +2186,8 @@ def chat_recommend(
         intent = base
     else:
         intent = parse_user_query(message, db_path=db_path, previous_intent=prev_obj, use_llm=use_llm)
+        # Cap nhat lai space neu parse_intent_llm vua dong bo them phim moi tu TMDB vao movies.db
+        space = get_feature_space(db_path)
 
     if not intent_override and intent.is_empty():
         raise ValueError(
@@ -2233,6 +2265,7 @@ def chat_recommend(
     skip_ids = set(exclude_ids or set()) | interacted_ids | set(intent.similar_movie_ids)
     wanted_set = set(intent.wanted_genres)
     avoid_set = set(intent.avoid_genres)
+    ai_cand_set = set(intent.ai_candidate_ids)
 
     def _filter_pass(strict_genre: bool = True, strict_quality: bool = True) -> list[int]:
         passed: list[int] = []
@@ -2246,6 +2279,10 @@ def chat_recommend(
             m_genres = set(meta["genres"])
             # Luon loc cung the loai bi tranh (Avoid genres)
             if avoid_set and (m_genres & avoid_set):
+                continue
+            # Cac phim do AI suy luan truc tiep tu cot truyen duoc uu tien giu lai (mien khong vi pham avoid_set)
+            if mid in ai_cand_set:
+                passed.append(idx)
                 continue
             # Loc the loai muon (neu co)
             if strict_genre and wanted_set and not (m_genres & wanted_set):
