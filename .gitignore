@@ -11,6 +11,9 @@ ENV/
 # Dữ liệu & Database
 *.db
 *.db*
+!data_module/src/movies.db
+!data_module/tmdb_media.csv
+!data_module/overview_vi.csv
 data/
 data/*.csv
 tmdb_5000_*.csv
