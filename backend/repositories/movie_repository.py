@@ -61,7 +61,7 @@ def _check_db_reload() -> None:
 
 
 def get_poster_url(movie_id: int, size: str = "w342") -> Optional[str]:
-    """Poster tu bang tmdb_cache. Lam moi moi 60 giay."""
+    """Poster tu bang tmdb_cache. Lam moi moi 60 giay; neu thieu se tu dong tai on-demand tu TMDB."""
     global _POSTERS, _POSTERS_AT
     if time.time() - _POSTERS_AT > 60:
         with accounts_db() as c:
@@ -73,6 +73,20 @@ def get_poster_url(movie_id: int, size: str = "w342") -> Optional[str]:
             }
         _POSTERS_AT = time.time()
     p = _POSTERS.get(movie_id)
+    if p is None and movie_id not in _POSTERS:
+        try:
+            from backend.integrations import tmdb_client
+            if tmdb_client.api_key():
+                d = tmdb_client.fetch(movie_id, retries=1)
+                p = d.get("poster_path")
+                _POSTERS[movie_id] = p
+                with accounts_db() as c:
+                    c.execute(
+                        "INSERT OR REPLACE INTO tmdb_cache VALUES (?, ?, ?, ?, ?)",
+                        (movie_id, p, d.get("trailer_key"), d.get("trailer_name"), time.time()),
+                    )
+        except Exception:
+            _POSTERS[movie_id] = None
     return f"https://image.tmdb.org/t/p/{size}{p}" if p else None
 
 
