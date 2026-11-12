@@ -36,6 +36,28 @@ _CAST20: dict = {}      # movie_id -> [(ten, la_long_tieng)]
 _INDEX: Optional[dict] = None
 _TITLES: Optional[list] = None
 _ALL_VECTORS: Optional[tuple] = None
+_DB_MTIME: float = 0.0
+
+
+def _check_db_reload() -> None:
+    """Tu dong lam moi cache trong RAM neu file movies.db vua duoc cap nhat phim moi."""
+    global _EXTRA, _INDEX, _TITLES, _ALL_VECTORS, _DB_MTIME, _OVERVIEW_VI_AT, _POSTERS_AT
+    try:
+        mtime = os.path.getmtime(DB) if os.path.exists(DB) else 0.0
+    except Exception:
+        mtime = 0.0
+    if mtime != _DB_MTIME:
+        with _LOCK:
+            if mtime != _DB_MTIME:
+                _EXTRA = None
+                _KW_ALL.clear()
+                _CAST20.clear()
+                _INDEX = None
+                _TITLES = None
+                _ALL_VECTORS = None
+                _OVERVIEW_VI_AT = 0.0
+                _POSTERS_AT = 0.0
+                _DB_MTIME = mtime
 
 
 def get_poster_url(movie_id: int, size: str = "w342") -> Optional[str]:
@@ -55,14 +77,27 @@ def get_poster_url(movie_id: int, size: str = "w342") -> Optional[str]:
 
 
 def get_cached_overview_vi(movie_id: int) -> Optional[str]:
-    """Tom tat tieng Viet da dich san (bang overview_vi). Lam moi moi 60 giay."""
+    """Tom tat tieng Viet da dich san (bang overview_vi hoac movies.overview_vi). Lam moi moi 60 giay."""
     global _OVERVIEW_VI, _OVERVIEW_VI_AT
     if time.time() - _OVERVIEW_VI_AT > 60:
-        with accounts_db() as c:
-            _OVERVIEW_VI = {
-                r["movie_id"]: r["text"]
-                for r in c.execute("SELECT movie_id, text FROM overview_vi WHERE text IS NOT NULL")
-            }
+        merged: dict = {}
+        try:
+            with movies_db() as mc:
+                db_cols = {r["name"] for r in mc.execute("PRAGMA table_info(movies)").fetchall()}
+                if "overview_vi" in db_cols:
+                    for r in mc.execute("SELECT movie_id, overview_vi FROM movies WHERE overview_vi IS NOT NULL"):
+                        if r["overview_vi"]:
+                            merged[int(r["movie_id"])] = r["overview_vi"]
+        except Exception:
+            pass
+        try:
+            with accounts_db() as c:
+                for r in c.execute("SELECT movie_id, text FROM overview_vi WHERE text IS NOT NULL"):
+                    if r["text"]:
+                        merged[int(r["movie_id"])] = r["text"]
+        except Exception:
+            pass
+        _OVERVIEW_VI = merged
         _OVERVIEW_VI_AT = time.time()
     return _OVERVIEW_VI.get(movie_id)
 
@@ -201,8 +236,9 @@ def _build_extra() -> dict:
 
 
 def load_extra_metadata() -> dict:
-    """Doc CSV 1 lan, giu trong bo nho."""
+    """Doc DB/CSV 1 lan, giu trong bo nho (tu dong reload khi movies.db thay doi)."""
     global _EXTRA
+    _check_db_reload()
     with _LOCK:
         if _EXTRA is None:
             _EXTRA = _build_extra()
@@ -238,6 +274,7 @@ def _build_index() -> dict:
 
 def get_search_index() -> dict:
     global _INDEX
+    _check_db_reload()
     with _LOCK:
         if _INDEX is None:
             _INDEX = _build_index()
@@ -247,6 +284,7 @@ def get_search_index() -> dict:
 def get_titles_index() -> list:
     """[(movie_id, title, title_da_bo_dau, nam)] xep theo do pho bien giam dan."""
     global _TITLES
+    _check_db_reload()
     with _LOCK:
         if _TITLES is None:
             with movies_db() as c:
@@ -269,6 +307,7 @@ def get_titles_index() -> list:
 
 def get_cached_all_vectors() -> tuple:
     global _ALL_VECTORS
+    _check_db_reload()
     if _ALL_VECTORS is None:
         _ALL_VECTORS = get_all_vectors(db_path=DB)
     return _ALL_VECTORS
