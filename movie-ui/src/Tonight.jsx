@@ -396,7 +396,6 @@ export default function Tonight({ rated, onRate }) {
   const [input, setInput] = useState("");
   const [turns, setTurns] = useState([]); // [{ userText, summary, count, isFollowup }]
   const [currentIntent, setCurrentIntent] = useState(null);
-  const [useLlm, setUseLlm] = useState(true);
 
   // State cho chế độ chọn nút truyền thống (giữ lại làm tùy chọn phụ)
   const [mood, setMood] = useState("");
@@ -433,7 +432,7 @@ export default function Tonight({ rated, onRate }) {
         intent_override: overrideIntent,
         exclude: [],
         top_n: 24,
-        use_llm: useLlm,
+        use_llm: true,
       });
       setCurrentIntent(r.intent);
       setQueue(r.items);
@@ -741,25 +740,6 @@ export default function Tonight({ rated, onRate }) {
                   </button>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* Tùy chọn bật/tắt LLM API nếu máy chủ có cấu hình key */}
-          {options?.llm_available && (
-            <div className="mt-4 flex items-center gap-2 text-xs text-mute">
-              <input
-                id="toggle-llm"
-                type="checkbox"
-                checked={useLlm}
-                onChange={(e) => setUseLlm(e.target.checked)}
-                className="accent-cobalt"
-              />
-              <label htmlFor="toggle-llm">
-                {tr(
-                  "Dùng AI để hiểu câu bạn gõ chính xác hơn",
-                  "Use AI to better understand what you type"
-                )}
-              </label>
             </div>
           )}
 

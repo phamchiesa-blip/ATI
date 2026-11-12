@@ -230,6 +230,25 @@ def _tmdb_get(endpoint: str, api_key: str, params: Optional[dict[str, Any]] = No
     return None
 
 
+def search_tmdb_movie_id_by_title(title: str, api_key: str, timeout: float = 3.5) -> Optional[int]:
+    """Tim movie_id tren TMDB theo ten phim tieng Anh hoac tieng Viet."""
+    q = (title or "").strip()
+    if not q:
+        return None
+    data = _tmdb_get("/search/movie", api_key, {"query": q, "include_adult": "false", "page": 1}, timeout=timeout)
+    if not data or not data.get("results"):
+        return None
+    # Uu tien ket qua co vote_count >= 15 va vote_average > 0
+    results = [r for r in data["results"] if (r.get("vote_count") or 0) >= 15 and (r.get("vote_average") or 0) > 0]
+    if not results:
+        return None
+    q_low = q.lower()
+    for r in results:
+        if (r.get("title") or "").strip().lower() == q_low or (r.get("original_title") or "").strip().lower() == q_low:
+            return int(r["id"])
+    return int(results[0]["id"])
+
+
 def discover_tmdb_movie_ids(
     api_key: str,
     mode: str = "years",
