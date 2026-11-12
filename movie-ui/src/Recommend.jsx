@@ -138,6 +138,13 @@ function Ticket({ movie, min, max, status, onRate, coldStart }) {
         <span className="absolute inset-x-3 top-0 border-t border-dashed border-ink/30" />
         <span className="absolute top-0 -left-2 size-4 -translate-y-1/2 rounded-full bg-paper" />
         <span className="absolute top-0 -right-2 size-4 -translate-y-1/2 rounded-full bg-paper" />
+        {movie.poster_url && (
+          <h3 className="mt-1 truncate text-sm font-bold text-ink" title={movie.title}>
+            <a href={`#/movie/${movie.movie_id}`} className="hover:text-cobalt">
+              {movie.title}
+            </a>
+          </h3>
+        )}
         <div className="mt-1 flex min-h-11 flex-col justify-center">
           {personal ? (
             <>
