@@ -382,16 +382,21 @@ def test_unrecognized_and_gibberish_queries():
         "aaaaa",
         "???",
         "123456",
+        "gadgshdfshas",
+        "asdfghjkl",
+        "qwertyuiop",
         "thời tiết hôm nay thế nào",
         "bàn ghế tủ lạnh",
     ]
     for q in gibberish_queries:
-        try:
-            chat_recommend(uid, q, db_path=DB_PATH, use_llm=False)
-            raise AssertionError(f"Query {q!r} should have raised ValueError!")
-        except ValueError as e:
-            print(f"  OK rejected: {q!r:30} -> {e}")
-    print("  All gibberish and unrecognized queries properly raised ValueError!\n")
+        for use_llm_flag in (False, True):
+            try:
+                chat_recommend(uid, q, db_path=DB_PATH, use_llm=use_llm_flag)
+                raise AssertionError(f"Query {q!r} (use_llm={use_llm_flag}) should have raised ValueError!")
+            except ValueError as e:
+                if not use_llm_flag:
+                    print(f"  OK rejected: {q!r:30} -> {e}")
+    print("  All gibberish and unrecognized queries properly raised ValueError (both Local & LLM)!\n")
 
 
 def main():
