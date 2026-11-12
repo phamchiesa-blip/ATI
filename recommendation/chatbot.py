@@ -1176,17 +1176,19 @@ class FeatureSpaceIndex:
         return scores
 
 
-_SPACE_CACHE: dict[str, FeatureSpaceIndex] = {}
+_SPACE_CACHE: dict[str, tuple[float, FeatureSpaceIndex]] = {}
 _SPACE_LOCK = threading.RLock()
 
 
 def get_feature_space(db_path: str = DEFAULT_DB_PATH) -> FeatureSpaceIndex:
-    """Singleton lazy loader cho FeatureSpaceIndex theo db_path."""
+    """Singleton lazy loader cho FeatureSpaceIndex theo db_path (tu dong reload khi file movies.db duoc cap nhat)."""
     abs_path = os.path.abspath(db_path)
+    mtime = os.path.getmtime(abs_path) if os.path.exists(abs_path) else 0.0
     with _SPACE_LOCK:
-        if abs_path not in _SPACE_CACHE:
-            _SPACE_CACHE[abs_path] = FeatureSpaceIndex(abs_path)
-        return _SPACE_CACHE[abs_path]
+        cached = _SPACE_CACHE.get(abs_path)
+        if cached is None or cached[0] != mtime:
+            _SPACE_CACHE[abs_path] = (mtime, FeatureSpaceIndex(abs_path))
+        return _SPACE_CACHE[abs_path][1]
 
 
 # ═══════════════════════════════════════════════════════════════════════════

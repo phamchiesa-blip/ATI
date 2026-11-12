@@ -86,3 +86,30 @@ def overview_translated(movie_id: int, lang: str = "vi"):
 def similar_movies(movie_id: int, k: int = 8):
     return get_similar_movies(movie_id=movie_id, k=k)
 
+
+@router.post("/movies/sync-tmdb")
+def sync_tmdb_catalog(
+    mode: str = "recent",
+    start_year: int = 2017,
+    end_year: int = 2026,
+    per_year: int = 10,
+    limit: int = 25,
+    force: bool = False,
+):
+    """Dong bo phim moi tu TMDB API truc tiep vao movies.db + accounts.db (giu nguyen vector 324D)."""
+    from sync_tmdb import sync_movies_from_tmdb
+    from backend.repositories.movie_repository import _check_db_reload
+    from chatbot import get_feature_space
+
+    res = sync_movies_from_tmdb(
+        mode=mode,
+        start_year=start_year,
+        end_year=end_year,
+        per_year=per_year,
+        recent_limit=limit,
+        force_update=force,
+    )
+    _check_db_reload()
+    get_feature_space()
+    return res
+
