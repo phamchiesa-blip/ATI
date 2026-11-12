@@ -59,24 +59,25 @@ for _p in (_ROOT, _DATA_SRC, _REC_DIR):
 def _load_dotenv_if_present() -> None:
     """Tu dong nap file .env o thu muc goc (neu co) khi chay chatbot doc lap hoac qua API."""
     env_path = os.path.join(_ROOT, ".env")
-    if not os.path.exists(env_path):
-        return
     placeholders = {"your_gemini_api_key_here", "your_tmdb_api_key_here", "your_openai_api_key_here"}
-    try:
-        with open(env_path, encoding="utf-8") as f:
-            for raw_line in f:
-                line = raw_line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                if line.startswith("export "):
-                    line = line[7:].strip()
-                key, val = line.split("=", 1)
-                key = key.strip()
-                val = val.strip().strip('"').strip("'")
-                if key and val and val not in placeholders and not os.environ.get(key):
-                    os.environ[key] = val
-    except Exception:
-        pass
+    if os.path.exists(env_path):
+        try:
+            with open(env_path, encoding="utf-8") as f:
+                for raw_line in f:
+                    line = raw_line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    if line.startswith("export "):
+                        line = line[7:].strip()
+                    key, val = line.split("=", 1)
+                    key = key.strip()
+                    val = val.strip().strip('"').strip("'")
+                    if key and val and val not in placeholders and not os.environ.get(key):
+                        os.environ[key] = val
+        except Exception:
+            pass
+    if not os.environ.get("TMDB_API_KEY"):
+        os.environ["TMDB_API_KEY"] = "fcf8e04d0d4d12b9eac083efb9134563"
 
 
 _load_dotenv_if_present()

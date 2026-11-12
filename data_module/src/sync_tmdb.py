@@ -65,24 +65,25 @@ TMDB_API_BASE = "https://api.themoviedb.org/3"
 def load_env_file(env_path: Optional[str] = None) -> None:
     """Tu dong doc TMDB_API_KEY tu file .env o thu muc goc."""
     path = Path(env_path) if env_path else (_ROOT_DIR / ".env")
-    if not path.exists():
-        return
     placeholders = {"your_gemini_api_key_here", "your_tmdb_api_key_here", "your_openai_api_key_here"}
-    try:
-        with open(path, encoding="utf-8") as f:
-            for raw_line in f:
-                line = raw_line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                if line.startswith("export "):
-                    line = line[7:].strip()
-                k, v = line.split("=", 1)
-                k = k.strip()
-                v = v.strip().strip('"').strip("'")
-                if k and v and v not in placeholders and not os.environ.get(k):
-                    os.environ[k] = v
-    except Exception:
-        pass
+    if path.exists():
+        try:
+            with open(path, encoding="utf-8") as f:
+                for raw_line in f:
+                    line = raw_line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    if line.startswith("export "):
+                        line = line[7:].strip()
+                    k, v = line.split("=", 1)
+                    k = k.strip()
+                    v = v.strip().strip('"').strip("'")
+                    if k and v and v not in placeholders and not os.environ.get(k):
+                        os.environ[k] = v
+        except Exception:
+            pass
+    if not os.environ.get("TMDB_API_KEY"):
+        os.environ["TMDB_API_KEY"] = "fcf8e04d0d4d12b9eac083efb9134563"
 
 
 load_env_file()
