@@ -36,6 +36,8 @@ def load_env_file(env_path: str = os.path.join(ROOT, ".env")) -> None:
     # Fallback TMDB API key mac dinh cua du an neu may moi pull code ve chua tao file .env
     if not os.environ.get("TMDB_API_KEY"):
         os.environ["TMDB_API_KEY"] = "fcf8e04d0d4d12b9eac083efb9134563"
+    if not os.environ.get("GEMINI_MODEL") or os.environ.get("GEMINI_MODEL") in ("gemini-2.5-flash", "gemini-2.0-flash"):
+        os.environ["GEMINI_MODEL"] = "gemini-flash-lite-latest"
 
 
 load_env_file()

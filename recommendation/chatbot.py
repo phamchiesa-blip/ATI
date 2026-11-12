@@ -78,6 +78,8 @@ def _load_dotenv_if_present() -> None:
             pass
     if not os.environ.get("TMDB_API_KEY"):
         os.environ["TMDB_API_KEY"] = "fcf8e04d0d4d12b9eac083efb9134563"
+    if not os.environ.get("GEMINI_MODEL") or os.environ.get("GEMINI_MODEL") in ("gemini-2.5-flash", "gemini-2.0-flash"):
+        os.environ["GEMINI_MODEL"] = "gemini-flash-lite-latest"
 
 
 _load_dotenv_if_present()
@@ -1706,12 +1708,15 @@ def parse_intent_local(
 
     if matched_topics_vi:
         intent.keywords_raw = ", ".join(matched_topics_vi[:4])
-        if not intent.matched_keyword_display:
-            intent.matched_keyword_display = ", ".join(matched_topics_vi[:4])
+        intent.matched_keyword_display = ", ".join(matched_topics_vi[:4])
     elif en_direct:
         intent.keywords_raw = " ".join(en_direct[:4])
+        if not intent.matched_keyword_display:
+            intent.matched_keyword_display = ", ".join(en_direct[:4])
     elif len(word_level_vi) >= 2:
-        intent.keywords_raw = " ".join(word_level_vi[:5])
+        intent.keywords_raw = ", ".join(word_level_vi[:5])
+        if not intent.matched_keyword_display:
+            intent.matched_keyword_display = intent.keywords_raw
 
     intent.keywords_en = " ".join(en_kw_parts).strip()
     intent.content_query_en = " ".join(topic_en_terms).strip()
@@ -1833,21 +1838,33 @@ def parse_intent_llm(
     try:
         raw_json_text = None
         if gemini_key:
-            model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={gemini_key}"
-            payload = {
-                "contents": [{"parts": [{"text": system_prompt}]}],
-                "generationConfig": {"responseMimeType": "application/json", "temperature": 0.1},
-            }
-            req = urllib.request.Request(
-                url,
-                data=json.dumps(payload).encode("utf-8"),
-                headers={"Content-Type": "application/json"},
-                method="POST",
-            )
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                raw_json_text = data["candidates"][0]["content"]["parts"][0]["text"]
+            preferred = os.environ.get("GEMINI_MODEL", "gemini-flash-lite-latest").strip()
+            if preferred in ("gemini-2.5-flash", "gemini-2.0-flash"):
+                preferred = "gemini-flash-lite-latest"
+            models_to_try = [preferred]
+            for fallback_m in ("gemini-flash-lite-latest", "gemini-3.5-flash-lite"):
+                if fallback_m not in models_to_try:
+                    models_to_try.append(fallback_m)
+            for model in models_to_try:
+                try:
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={gemini_key}"
+                    payload = {
+                        "contents": [{"parts": [{"text": system_prompt}]}],
+                        "generationConfig": {"responseMimeType": "application/json", "temperature": 0.1},
+                    }
+                    req = urllib.request.Request(
+                        url,
+                        data=json.dumps(payload).encode("utf-8"),
+                        headers={"Content-Type": "application/json"},
+                        method="POST",
+                    )
+                    with urllib.request.urlopen(req, timeout=timeout) as resp:
+                        data = json.loads(resp.read().decode("utf-8"))
+                        raw_json_text = data["candidates"][0]["content"]["parts"][0]["text"]
+                    if raw_json_text:
+                        break
+                except Exception:
+                    continue
         elif openai_key:
             base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
             model = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
@@ -1957,7 +1974,7 @@ def parse_intent_llm(
             if en_w in getattr(space, "keyword_to_mids", {}) and en_w not in matched_kws and len(matched_kws) < 10:
                 matched_kws.append(en_w)
         intent.matched_keywords = matched_kws
-        intent.matched_keyword_display = local_fallback.matched_keyword_display or intent.keywords_raw
+        intent.matched_keyword_display = intent.keywords_raw or local_fallback.matched_keyword_display
         intent.is_followup = bool(parsed.get("is_followup") or local_fallback.is_followup)
         return intent
     except Exception:
