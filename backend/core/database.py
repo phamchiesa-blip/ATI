@@ -100,7 +100,7 @@ def import_media_csv() -> int:
         ]
     with accounts_db() as c:
         before = c.total_changes
-        c.executemany("INSERT OR IGNORE INTO tmdb_cache VALUES (?, ?, ?, ?, ?)", rows)
+        c.executemany("INSERT OR REPLACE INTO tmdb_cache VALUES (?, ?, ?, ?, ?)", rows)
         return c.total_changes - before
 
 
@@ -116,5 +116,5 @@ def import_overview_vi_csv() -> None:
             if r.get("text")
         ]
     with accounts_db() as c:
-        c.executemany("INSERT OR IGNORE INTO overview_vi VALUES (?, ?, ?, ?)", rows)
+        c.executemany("INSERT OR REPLACE INTO overview_vi VALUES (?, ?, ?, ?)", rows)
 

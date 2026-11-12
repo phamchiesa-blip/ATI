@@ -454,6 +454,32 @@ def fetch_full_movie_from_tmdb(movie_id: int, api_key: str) -> Optional[dict[str
     }
 
 
+def _ensure_extended_movies_columns(db_path: str) -> None:
+    """Dam bao bang movies trong movies.db luon co du 22 cot mo rong (ke ca tren branch feature/chat-bot)."""
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+    existing_cols = {r[1] for r in cur.execute("PRAGMA table_info(movies)").fetchall()}
+    migrations = [
+        ("overview_vi", "TEXT"),
+        ("tagline", "TEXT"),
+        ("keywords", "TEXT"),
+        ("cast_details", "TEXT"),
+        ("crew_details", "TEXT"),
+        ("runtime", "INTEGER"),
+        ("budget", "INTEGER"),
+        ("revenue", "INTEGER"),
+        ("companies", "TEXT"),
+        ("countries", "TEXT"),
+        ("languages", "TEXT"),
+        ("homepage", "TEXT"),
+    ]
+    for col_name, col_type in migrations:
+        if col_name not in existing_cols:
+            cur.execute(f"ALTER TABLE movies ADD COLUMN {col_name} {col_type}")
+    conn.commit()
+    conn.close()
+
+
 def sync_movies_from_tmdb(
     db_path: str = DEFAULT_DB_PATH,
     accounts_db_path: str = DEFAULT_ACCOUNTS_DB,
@@ -477,6 +503,7 @@ def sync_movies_from_tmdb(
 
     t0 = time.time()
     create_schema(db_path)
+    _ensure_extended_movies_columns(db_path)
     vectorizer = IncrementalVectorizer324D(db_path)
 
     candidate_ids = discover_tmdb_movie_ids(
