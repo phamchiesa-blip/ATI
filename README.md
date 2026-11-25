@@ -1,92 +1,86 @@
 # Hệ Thống Gợi Ý Phim (Movie Recommendation System)
 
-Dự án xây dựng hệ thống gợi ý phim cá nhân hóa theo nội dung (Content-Based Filtering), kết hợp kỹ thuật xếp hạng đa mục tiêu (Multi-Objective Ranking) và mô hình học trực tuyến (Online Model Reranking), đi kèm giao diện web tương tác hoàn chỉnh.
+Hệ thống gợi ý phim cá nhân hóa dựa trên nội dung (**Content-Based Filtering**), kết hợp **Xếp hạng đa mục tiêu (Multi-Objective Ranking)**, **Học trực tuyến (Online Model Reranking)**, **Trợ lý AI gợi ý phim theo ngữ cảnh** và khả năng **tự động đồng bộ phim mới từ TMDB API** mà không làm thay đổi không gian vector 324 chiều.
 
 ---
 
-## 1. Yêu Cầu Hệ Thống
+## 1. Tính Năng Nổi Bật
 
-- **Python**: Phiên bản `3.10` trở lên (đã kiểm thử tương thích tốt với Python 3.10 – 3.14).
-- **Node.js**: Phiên bản `18.0` trở lên và `npm` (dành cho giao diện web trong `movie-ui/`).
+- **Biểu diễn phim bằng Vector 324 chiều:** Kết hợp 20 thể loại (multi-hot), 50 đạo diễn phổ biến + Other (one-hot), 200 diễn viên phổ biến (multi-hot), 50 chiều TF-IDF + SVD từ nội dung tóm tắt, và 3 tín hiệu số chuẩn hóa (`vote_average`, `popularity`, `release_year`).
+- **Luồng gợi ý cá nhân hóa 3 tầng:**
+  - **Tầng 0 (Core Content-Based):** Cập nhật `UserProfile` theo tương tác Like/Dislike ($\alpha, \beta$) và tính độ tương đồng Cosine.
+  - **Tầng 1 (Multi-Objective Ranking):** Kết hợp trọng số Cosine Similarity (`0.6`), Rating (`0.2`), Popularity (`0.1`) và Newness (`0.1`).
+  - **Tầng 2 (Online Reranking):** Mô hình Online SGD Logistic Regression (`logit_minmax`) học trực tiếp từ phản hồi của người dùng.
+- **Trợ lý AI ("Hôm nay xem gì?"):** Phân tích ý định tự nhiên bằng tiếng Việt/Anh (hỗ trợ Google Gemini / OpenAI hoặc chế độ cục bộ không cần API key) để gợi ý phim phù hợp.
+- **Đồng bộ phim mới từ TMDB API (`2017–2026`):** Tự động cập nhật phim đang chiếu, xu hướng hoặc theo từng năm vào `movies.db` (kèm poster, trailer YouTube và bản dịch tóm tắt tiếng Việt `overview_vi`) bằng `IncrementalVectorizer324D` — **giữ cố định 100% hệ trục 324 chiều**, không làm lệch hồ sơ người dùng hiện có.
+- **Giao diện Web hiện đại:** Xây dựng trên **React 19 + Vite + Tailwind CSS v4 + Framer Motion**, hỗ trợ đăng ký/đăng nhập, onboarding chọn gu phim, tìm kiếm & lọc nâng cao, xem trailer, phim tương tự và bảng điều khiển đánh giá.
 
 ---
 
-## 2. Hướng Dẫn Cài Đặt & Khởi Chạy (Từng Bước)
+## 2. Yêu Cầu Hệ Thống
 
-### Bước 1: Tạo môi trường ảo Python
+- **Python:** `3.10` trở lên (đã kiểm thử tốt trên Python `3.10 – 3.14`).
+- **Node.js:** `18.0` trở lên và `npm` (cho giao diện web trong `movie-ui/`).
 
-**Trên Windows (PowerShell):**
+---
+
+## 3. Cài Đặt & Khởi Chạy
+
+### Bước 1: Tạo môi trường ảo và cài thư viện Python
+
+**Windows (PowerShell):**
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-```
-
-**Trên Linux / macOS (Bash):**
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
----
-
-### Bước 2: Cài đặt các thư viện phụ thuộc
-
-Cài đặt toàn bộ các thư viện backend cần thiết từ file `requirements.txt` duy nhất ở gốc repository:
-
-```bash
 pip install -r requirements.txt
 ```
 
-*(Các thư viện chính bao gồm: `pandas`, `numpy`, `scikit-learn`, `scipy`, `fastapi`, `uvicorn[standard]`, `pydantic`).*
-
----
-
-### Bước 3: Chuẩn bị dữ liệu phim TMDB 5000
-
-1. Tải bộ dữ liệu **TMDB 5000 Movie Dataset** miễn phí từ Kaggle:
-   - Link: [Kaggle - TMDB 5000 Movie Dataset](https://www.kaggle.com/datasets/tmdb/tmdb-5000-movie-dataset)
-2. Giải nén lấy 2 file:
-   - `tmdb_5000_movies.csv`
-   - `tmdb_5000_credits.csv`
-3. Đặt 2 file CSV này vào thư mục `data/` ở thư mục gốc của dự án (nếu chưa có thư mục, hãy tạo mới `data/`).
-
----
-
-### Bước 4: Tạo cơ sở dữ liệu `movies.db` (Chỉ cần chạy 1 lần)
-
-Chạy pipeline xử lý dữ liệu và trích xuất đặc trưng (feature engineering) để tạo file SQLite `movies.db`:
-
-**Trên Windows (PowerShell):**
-```powershell
-python data_module/src/build_dataset.py --movies data/tmdb_5000_movies.csv --credits data/tmdb_5000_credits.csv --db data_module/src/movies.db
-```
-
-**Trên Linux / macOS (Bash):**
+**Linux / macOS (Bash):**
 ```bash
-python data_module/src/build_dataset.py --movies data/tmdb_5000_movies.csv --credits data/tmdb_5000_credits.csv --db data_module/src/movies.db
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-> **Lưu ý**: Lệnh trên sẽ sinh ra file `data_module/src/movies.db` chứa thông tin phim và ma trận vector đặc trưng 324 chiều. Toàn bộ các module trong hệ thống đều mặc định trỏ tới đường dẫn tuyệt đối này.
+### Bước 2: Cấu hình biến môi trường `.env` (Tùy chọn)
 
----
+Hệ thống vẫn hoạt động bình thường khi không có API key (dùng poster placeholder SVG, trailer tìm kiếm YouTube và chatbot cục bộ). Để bật đầy đủ tính năng AI và TMDB:
 
-### Bước 5: Khởi chạy Backend API (FastAPI)
+1. Sao chép file mẫu `.env.example` thành `.env` ở thư mục gốc:
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+2. Điền các khóa vào `.env`:
+   - `GEMINI_API_KEY` (hoặc `OPENAI_API_KEY`): dùng cho trợ lý AI gợi ý phim.
+   - `TMDB_API_KEY`: dùng để tải poster, trailer YouTube, tóm tắt tiếng Việt và đồng bộ phim mới từ TMDB.
 
-Khởi động máy chủ backend tại cổng `8000`:
+### Bước 3: Khởi tạo cơ sở dữ liệu nền `movies.db` (Chỉ cần chạy 1 lần)
+
+> **Lưu ý:** Nếu trong dự án đã có sẵn file `data_module/src/movies.db`, bạn có thể bỏ qua bước này.
+
+1. Tải bộ dữ liệu **TMDB 5000 Movie Dataset** từ [Kaggle](https://www.kaggle.com/datasets/tmdb/tmdb-5000-movie-dataset).
+2. Đặt 2 file `tmdb_5000_movies.csv` và `tmdb_5000_credits.csv` vào thư mục `data/`.
+3. Chạy pipeline trích xuất đặc trưng 324 chiều để tạo `movies.db`:
+   ```bash
+   python data_module/src/build_dataset.py --movies data/tmdb_5000_movies.csv --credits data/tmdb_5000_credits.csv --db data_module/src/movies.db
+   ```
+
+*(Bộ dữ liệu TMDB 5000 đóng vai trò kho phim nền ~4.800 phim và định nghĩa hệ trục tọa độ 324 chiều ban đầu để các lần đồng bộ phim mới từ TMDB API chiếu vào cùng không gian vector.)*
+
+### Bước 4: Khởi chạy Backend API (FastAPI)
 
 ```bash
-uvicorn api:app --reload --port 8000
+python -m uvicorn api:app --reload --port 8000
 ```
-*(hoặc `python -m uvicorn api:app --reload --port 8000`)*
 
-- Địa chỉ API: `http://localhost:8000`
-- Tài liệu tương tác Swagger UI: `http://localhost:8000/docs`
+- API Base URL: `http://localhost:8000`
+- Swagger UI: `http://localhost:8000/docs`
 
----
+> Khi khởi động, nếu phát hiện `movies.db` có ít hơn 30 phim từ năm `2018` trở đi, backend sẽ tự động chạy tác vụ nền đồng bộ thêm phim mới (`2017–2026`) từ TMDB API.
 
-### Bước 6: Khởi chạy Frontend UI (React + Vite)
+### Bước 5: Khởi chạy Frontend UI (React + Vite)
 
-Mở một cửa sổ dòng lệnh (terminal) mới và khởi động giao diện người dùng:
+Mở một terminal mới:
 
 ```bash
 cd movie-ui
@@ -94,122 +88,135 @@ npm install
 npm run dev
 ```
 
-- Giao diện web sẽ chạy tại: `http://localhost:5173`
-- Mở trình duyệt và truy cập `http://localhost:5173` để trải nghiệm tìm kiếm, onboarding, xem phim tương tự và nhận gợi ý cá nhân hóa.
+- Giao diện Web: `http://localhost:5173`
 
 ---
 
-### Bước 7: Cấu hình Poster & Trailer từ TMDB (Tùy chọn)
+## 4. Đồng Bộ Phim Mới & Tiện Ích Dữ Liệu
 
-Hệ thống được thiết kế để **hoạt động bình thường ngay cả khi không có API key** (sử dụng poster placeholder dạng SVG gradient và trailer dự phòng).
+### Đồng bộ phim mới từ TMDB API
 
-Nếu muốn tải poster và trailer chính thức từ TMDB:
-1. Đăng ký tài khoản và lấy API key miễn phí tại: [TheMovieDB API Settings](https://www.themoviedb.org/settings/api).
-2. Thiết lập biến môi trường `TMDB_API_KEY`:
+- **Qua CLI (`data_module/src/sync_tmdb.py`):**
+  ```bash
+  # Cập nhật phim đang chiếu, phổ biến, xu hướng
+  python data_module/src/sync_tmdb.py --mode recent --limit 40
 
-   **Trên Windows (PowerShell):**
-   ```powershell
-   $env:TMDB_API_KEY="dien_khoa_cua_ban_o_day"
-   ```
+  # Quét phim nổi bật theo từng năm
+  python data_module/src/sync_tmdb.py --mode years --start-year 2017 --end-year 2026 --per-year 15
 
-   **Trên Linux / macOS (Bash):**
-   ```bash
-   export TMDB_API_KEY="dien_khoa_cua_ban_o_day"
-   ```
+  # Đồng bộ theo danh sách TMDB ID cụ thể
+  python data_module/src/sync_tmdb.py --mode ids --ids 299534,299536,157336
+  ```
+- **Qua API:** Gọi `POST /api/movies/sync-tmdb` (hỗ trợ tham số `mode`, `start_year`, `end_year`, `per_year`, `limit`, `force`).
 
-3. *(Tùy chọn)* Chạy script tải sẵn poster vào database cache `accounts.db`:
-   ```bash
-   python fetch_tmdb_posters.py
-   ```
+### Tải trước Poster & Dịch tóm tắt tiếng Việt (Tùy chọn)
 
----
+```bash
+# Tải sẵn poster và trailer vào cache accounts.db
+python scripts/fetch_tmdb_posters.py
 
-## 3. Chạy Kiểm Thử (Tests)
-
-Hệ thống có 3 bộ kiểm thử tự động, có thể chạy trực tiếp từ thư mục gốc của repository:
-
-1. **Kiểm thử logic cốt lõi (không cần database)**:
-   ```bash
-   python recommendation/test_offline.py
-   ```
-   *Kiểm tra tính đúng đắn của phép cập nhật User Profile ($\alpha, \beta$), tính toán Cosine Similarity và trích xuất Top-K.*
-
-2. **Kiểm thử gợi ý trực tiếp trên `movies.db`**:
-   ```bash
-   python recommendation/test_online.py
-   ```
-   *Kiểm tra luồng đọc vector, like phim và sinh gợi ý trực tiếp từ cơ sở dữ liệu.*
-
-3. **Kiểm thử các ca biên (Edge Cases)**:
-   ```bash
-   python ranking_eval/test_edge_cases.py
-   ```
-   *Kiểm tra cơ chế fallback phim phổ biến cho user mới (cold-start), chống loãng profile khi onboarding (chọn Top N), và cơ chế lọc thể loại bị ghét khi user chỉ bấm Dislike.*
+# Dịch tóm tắt phim sang tiếng Việt
+python scripts/translate_overviews.py
+```
 
 ---
 
-## 4. Đánh Giá Hiệu Năng & Offline Benchmark
+## 5. Kiểm Thử & Đánh Giá Hiệu Năng
 
-Hệ thống tích hợp bộ công cụ benchmark toàn diện, mô phỏng 8 nhóm người dùng (Persona) với 5 kịch bản tương tác (từ cold-start $m=0$ đến $m=10$ lượt tương tác Like/Dislike):
+### Chạy bộ kiểm thử tự động
+
+Chạy trực tiếp từ thư mục gốc:
+
+```bash
+# 1. Kiểm thử logic cốt lõi (không cần DB): cập nhật UserProfile, Cosine Similarity, Top-K
+python recommendation/test_offline.py
+
+# 2. Kiểm thử tích hợp trực tiếp trên movies.db
+python recommendation/test_online.py
+
+# 3. Kiểm thử các ca biên: cold-start, onboarding Top-N, lọc thể loại bị Dislike
+python ranking_eval/test_edge_cases.py
+
+# 4. Kiểm thử chatbot gợi ý phim
+python recommendation/test_chatbot.py
+```
+
+### Chạy Offline Benchmark
+
+Mô phỏng 8 nhóm người dùng (Persona) qua 5 kịch bản tương tác ($m = 0 \rightarrow 10$ lượt Like/Dislike):
 
 ```bash
 python -m ranking_eval.run_benchmark --reps 10
 ```
 
-- Toàn bộ dữ liệu giả lập được chạy trên bản sao SQLite tạm thời trong bộ nhớ cache của hệ điều hành và tự động xóa sau khi chạy xong, đảm bảo **an toàn 100% cho `movies.db` và `accounts.db`**.
-- Báo cáo phân tích chuyên sâu kèm kiểm định thống kê Paired Bootstrap 95% Confidence Interval được lưu tự động tại:
+- Toàn bộ quá trình mô phỏng chạy trên bản sao SQLite tạm thời và tự động dọn dẹp, **không ảnh hưởng đến `movies.db` và `accounts.db` thật**.
+- Kết quả kèm kiểm định thống kê Paired Bootstrap 95% CI được xuất tự động vào:
   - `ranking_eval/results/benchmark_report.md`
   - `ranking_eval/results/benchmark_summary.csv`
   - `ranking_eval/results/benchmark_detailed.csv`
 
 ---
 
-## 5. Kiến Trúc Thư Mục Dự Án
+## 6. Kiến Trúc Thư Mục Dự Án
 
 ```text
 ATI/
-├── api.py                    # FastAPI server cung cấp REST API cho Frontend
-├── requirements.txt          # Thư viện Python phụ thuộc duy nhất của dự án
-├── fetch_tmdb_posters.py     # Script tải poster & trailer từ TMDB vào cache
-├── tmdb_client.py            # Client gọi API TheMovieDB
+├── api.py                        # Entrypoint FastAPI (khởi tạo DB, đăng ký routers, startup sync)
+├── requirements.txt              # Danh sách thư viện Python
+├── .env.example                  # Mẫu cấu hình API keys (Gemini, OpenAI, TMDB)
 │
-├── data_module/              # Module xử lý dữ liệu và trích xuất đặc trưng
+├── backend/                      # Backend theo Clean Architecture
+│   ├── core/                     # config.py, database.py, security.py
+│   ├── integrations/             # tmdb_client.py (giao tiếp TMDB API & dịch thuật)
+│   ├── repositories/             # movie_repository.py (cache poster/overview, search index, CSV extra)
+│   ├── schemas/                  # dto.py (Pydantic Request/Response models)
+│   ├── services/                 # auth_service, movie_service, recommendation_service, evaluation_service
+│   └── routers/                  # auth_router, movie_router, recommendation_router, evaluation_router
+│
+├── data/                         # Chứa bộ dữ liệu gốc TMDB 5000 (CSV)
+│   ├── tmdb_5000_movies.csv
+│   └── tmdb_5000_credits.csv
+│
+├── data_module/                  # Pipeline dữ liệu & Feature Engineering 324D
 │   └── src/
-│       ├── build_dataset.py  # Script chạy pipeline tạo movies.db
-│       ├── data_pipeline.py  # Đọc CSV, làm sạch dữ liệu
-│       ├── feature_engineering.py # Xây dựng vector đặc trưng 324 chiều
-│       └── feature_store.py  # Giao tiếp SQLite movies.db và kiểm tra an toàn DB
+│       ├── build_dataset.py      # Build movies.db ban đầu từ CSV TMDB 5000
+│       ├── data_pipeline.py      # Đọc và làm sạch dữ liệu CSV
+│       ├── feature_engineering.py# Trích xuất vector đặc trưng 324 chiều
+│       ├── feature_store.py      # Giao tiếp SQLite movies.db
+│       └── sync_tmdb.py          # Đồng bộ phim mới từ TMDB API giữ nguyên không gian 324D
 │
-├── recommendation/           # Module thuật toán gợi ý cốt lõi (Tầng 0 / Part II)
-│   ├── user_profile.py       # Quản lý Profile vector người dùng (alpha, beta)
-│   ├── similarity.py         # Tính Cosine Similarity
-│   ├── recommender.py        # Public API gợi ý phim
-│   ├── interaction.py        # Lưu lịch sử tương tác Like/Dislike
-│   ├── test_offline.py       # Test unit offline
-│   └── test_online.py        # Test tích hợp với movies.db
+├── recommendation/               # Thuật toán gợi ý cốt lõi (Tầng 0) & Chatbot
+│   ├── user_profile.py           # Quản lý Profile vector người dùng (alpha, beta)
+│   ├── similarity.py             # Tính Cosine Similarity
+│   ├── recommender.py            # Public API gợi ý phim
+│   ├── interaction.py            # Lưu lịch sử tương tác Like/Dislike
+│   ├── chatbot.py                # Trợ lý AI phân tích ý định & gợi ý phim
+│   └── test_*.py                 # Bộ test offline, online, chatbot
 │
-├── ranking_eval/             # Module Xếp hạng đa mục tiêu & Đánh giá (Part III)
-│   ├── ranking.py            # Tầng 1: Xếp hạng theo Cosine, Rating, Popularity, Newness
-│   ├── online_model.py       # Tầng 2: Online SGD Classifier (chế độ logit_minmax)
-│   ├── integration.py        # Tích hợp luồng gợi ý 3 tầng
-│   ├── frontend_service.py   # Dịch vụ cung cấp dữ liệu cho API web
-│   ├── evaluation.py         # Hàm tính Precision@K, Recall@K, F1@K
-│   ├── simulate_users.py     # Giả lập 8 Persona người dùng
-│   ├── run_benchmark.py      # Runner benchmark và xuất báo cáo markdown
-│   └── test_edge_cases.py    # Test các trường hợp biên
+├── ranking_eval/                 # Xếp hạng đa mục tiêu (Tầng 1–2) & Benchmark
+│   ├── ranking.py                # Tầng 1: Cosine + Rating + Popularity + Newness
+│   ├── online_model.py           # Tầng 2: Online SGD Classifier (logit_minmax)
+│   ├── integration.py            # Tích hợp luồng gợi ý 3 tầng
+│   ├── frontend_service.py       # Dịch vụ cung cấp dữ liệu gợi ý cho API
+│   ├── evaluation.py             # Precision@K, Recall@K, F1@K
+│   ├── simulate_users.py         # Giả lập 8 Persona người dùng
+│   ├── run_benchmark.py          # Chạy benchmark và xuất báo cáo
+│   └── test_edge_cases.py        # Kiểm thử các trường hợp biên
 │
-└── movie-ui/                 # Giao diện web người dùng (React 18 + Vite)
-    ├── package.json          # Cấu hình phụ thuộc Node.js
-    └── src/                  # Mã nguồn giao diện (Browse, Recommend, Taste, Detail...)
+├── scripts/                      # Script tiện ích bổ trợ
+│   ├── fetch_tmdb_posters.py     # Tải trước poster & trailer từ TMDB vào cache
+│   └── translate_overviews.py    # Dịch tóm tắt phim sang tiếng Việt
+│
+└── movie-ui/                     # Giao diện web (React 19 + Vite + Tailwind CSS v4)
+    ├── package.json
+    └── src/
 ```
-<!-- python -m uvicorn api:app --reload --port 8000 -->
 
-Lời nhắn chung cho cả nhóm (gửi kèm để AI của mỗi người có đủ ngữ cảnh)
-Dự án: hệ thống gợi ý phim content-based (TMDB 5000, vector phim 324 chiều, user profile cập nhật khi Like/Dislike, ranking = Cosine 0.6 + Rating 0.2 + Popularity 0.1 + Newness 0.1, Tầng 2 là online logistic regression làm reranker). Repo: <link GitHub>.
-Quy tắc: 
-1. Tạo nhánh riêng từ main mới nhất (git pull trước). Không push thẳng main.
-2. Không bao giờ commit API key TMDB, file .db, .env, node_modules. Dùng biến môi trường. Không dùng `git add .`, chỉ add đúng file đã sửa.
-3. Không ghi dữ liệu mô phỏng vào movies.db hay accounts.db thật. Mọi thí nghiệm chạy trên bản sao tạm.
-4. Trước khi mở PR: chạy recommendation/test_offline.py, recommendation/test_online.py, ranking_eval/test_edge_cases.py và chạy thử web.
-5. Báo cáo trung thực: nếu thay đổi không cải thiện thì ghi rõ là không cải thiện. Không chỉnh tham số trên dữ liệu test để số đẹp hơn.
+---
 
+## 7. Quy Ước Phát Triển Nhóm
+
+1. **Quản lý nhánh:** Luôn tạo nhánh riêng từ `main` mới nhất (`git pull` trước), không push trực tiếp lên `main`.
+2. **Bảo mật & Git:** Không commit API key, file `.env`, file `.db` (`movies.db`, `accounts.db`) hoặc `node_modules/`. Không dùng `git add .`, chỉ add đúng các file đã thay đổi.
+3. **An toàn dữ liệu:** Không ghi dữ liệu mô phỏng vào `movies.db` hay `accounts.db` thật; mọi thí nghiệm chạy trên bản sao tạm.
+4. **Kiểm thử trước khi mở PR:** Chạy `recommendation/test_offline.py`, `recommendation/test_online.py`, `ranking_eval/test_edge_cases.py` và kiểm tra trực tiếp trên giao diện web.
